@@ -1,0 +1,16 @@
+# Visual Studio
+/bin/
+/obj/
+/Properties/
+*.config
+*.csproj
+ 
+# Builds
+/build/
+*.bat
+*.apk
+*.app
+*.exe
+
+# Merge files
+*.orig
