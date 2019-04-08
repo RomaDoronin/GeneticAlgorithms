@@ -4,28 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.GenAlg
+namespace GeneticAlgorithms
 {
     abstract class AGenAlg
     {
-        public abstract ISolution Solve(ITask task);
+        protected ISolution _solution;
+        protected IPopulation _population;
+        protected ITask _task;
+
+        public virtual void SetSolution(ref ISolution solution)
+        {
+            _solution = solution;
+        }
+
+        public virtual void SetPopulation(ref IPopulation population)
+        {
+            _population = population;
+        }
+
+        public abstract void Solve(ITask task);
 
         // Создание начальной популяции
-        protected abstract IPopulation doCreatePopulation();
+        protected abstract void CreatePopulation();
 
         // Отбор
-        protected abstract IPopulation doSelect(IPopulation population);
+        protected abstract void Select();
 
         // Проверка на достижение результата
-        protected abstract bool doStop(IPopulation population);
+        protected abstract bool Stop();
 
         // Отбор родителей
-        protected abstract IPopulation doBreed(IPopulation population);
+        protected abstract void SelectParent(ref Individ parent1, ref Individ parent2);
 
         // Скрещивание
-        protected abstract IPopulation doCross(IPopulation population);
+        protected abstract void Сross();
 
         // Мутация
-        protected abstract IPopulation doMutation(IPopulation population);
+        protected abstract void Mutation();
     }
 }
