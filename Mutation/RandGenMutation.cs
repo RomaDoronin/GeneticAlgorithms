@@ -34,8 +34,8 @@ namespace GeneticAlgorithms
                         {
                             List<int> genom = individ.GetGenom();
                             int mutGenNum = rnd.Next(0, 100 * genom.Count) % genom.Count;
-                            Console.WriteLine("Mutation genom: " + mutGen.ToString());
-                            Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
+                            //Console.WriteLine("Mutation genom: " + mutGen.ToString());
+                            //Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
                             if (genom[mutGenNum] == 0)
                             {
                                 genom[mutGenNum] = 1;

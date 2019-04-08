@@ -43,8 +43,8 @@ namespace GeneticAlgorithms
         {
             ITask task = CreateBackpackTask();
             IPopulation population = new StdPopulation();
-            population.SetSizeAfterSelect(20);
-            population.SetStartPopSize(40);
+            population.SetStartPopSize(100);
+            population.SetSizeAfterSelect(70);
 
             AGenAlg genAlg = new GenAlgTest();
             genAlg.SetPopulation(ref population);

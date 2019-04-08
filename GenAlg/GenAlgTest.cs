@@ -13,9 +13,15 @@ namespace GeneticAlgorithms
         Descending
     }
 
+    struct ResultPair
+    {
+        public int maxVal;
+        public Individ individ;
+    }
+
     class GenAlgTest : AGenAlg
     {
-        private int _maxVal;
+        private ResultPair _max;
         private const double ACCURACY = 1;
         private int _stepCount = 0;
 
@@ -72,23 +78,27 @@ namespace GeneticAlgorithms
         {
             _task = task;
             CreatePopulation();
-            _maxVal = task.TargetFunction(_population.GetFirstIndivid());
 
             Select();
             // ## LOG
-            Console.WriteLine("Select"); PrintPopulation(_population);
+            //Console.WriteLine("Select"); PrintPopulation(_population);
 
             while (!Stop())
             {
                 Сross();
                 // ## LOG
-                Console.WriteLine("Cross"); PrintPopulation(_population);
+                //Console.WriteLine("Cross"); PrintPopulation(_population);
                 Mutation();
                 // ## LOG
-                Console.WriteLine("Mutation"); PrintPopulation(_population);
+                //Console.WriteLine("Mutation"); PrintPopulation(_population);
                 Select();
                 // ## LOG
-                Console.WriteLine("Select"); PrintPopulation(_population);
+                //Console.WriteLine("Select"); PrintPopulation(_population);
+
+                if (_max.maxVal == 3343)
+                {
+                    break;
+                }
             }
 
             // Формирование решения
@@ -99,6 +109,8 @@ namespace GeneticAlgorithms
                 _solution.PrintResult();
                 break;
             }
+
+            Console.WriteLine("Max val: " + _max.maxVal.ToString());
         }
 
         // Отбор родителей
@@ -203,8 +215,14 @@ namespace GeneticAlgorithms
             Console.Write("Max:");
             foreach (var res in sortResSelect)
             {
+                if (count == 0 && _max.maxVal < res.Key)
+                {
+                    _max.maxVal = res.Key;
+                    _max.individ = res.Value;
+                    Console.Write(" " + res.Key.ToString());
+                }
+
                 _population.AddIndivid(res.Value);
-                Console.Write(" " + res.Key.ToString());
                 count++;
                 if (count == _population.GetSizeAfterSelect())
                 {
@@ -223,21 +241,8 @@ namespace GeneticAlgorithms
             int maxIterNum = 100;
 
             Console.WriteLine("Population number: " + _stepCount.ToString());
-            //Console.Write("\r" + _stepCount.ToString() + "%");
 
             return _stepCount == maxIterNum;
-
-            /*
-            var sortResSelect = GetSortResultOfSelect(population, task.GetTargetFunction(), SortType.Descending);
-            int maxValPred = _maxVal;
-
-            foreach (var max in sortResSelect)
-            {
-                _maxVal = max.Key;
-                break;
-            }
-
-            return (_maxVal - maxValPred) < ACCURACY;*/
         }
     }
 }

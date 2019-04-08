@@ -27,7 +27,10 @@ namespace GeneticAlgorithms
         private VectorSolution _solution;
 
         // Дополнительный функционал
-        public BackpackTask() => _solution = new VectorSolution();
+        public BackpackTask()
+        {
+            _solution = new VectorSolution();
+        }
 
         public void SetMaxWieght(int maxWeight) => _maxWeight = maxWeight;
 
