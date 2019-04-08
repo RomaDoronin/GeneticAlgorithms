@@ -42,14 +42,17 @@ namespace GeneticAlgorithms
         static void Main(string[] args)
         {
             ITask task = CreateBackpackTask();
-            ISolution solution = new VectorSol();
             IPopulation population = new StdPopulation();
-            
+            population.SetSizeAfterSelect(20);
+            population.SetStartPopSize(40);
+
             AGenAlg genAlg = new GenAlgTest();
             genAlg.SetPopulation(ref population);
-            genAlg.SetSolution(ref solution);
-            genAlg.Solve(task);
-            solution.PrintResult();
+            RandGenMutation randGenMutation = new RandGenMutation();
+            randGenMutation.SetNumOfMutGen(4);
+            genAlg.SetMutation(randGenMutation);
+            genAlg.Solve(ref task);
+            //task.PrintResult();
         }
     }
 }

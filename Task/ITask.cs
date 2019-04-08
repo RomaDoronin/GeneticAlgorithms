@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    delegate int TargetFunction(Individ individ);
-    delegate bool LimitationsFunction(Individ individ);
-
     interface ITask
     {
-        Individ GenerateIndivid();
-        LimitationsFunction GetLimitationsFunction();
+        Individ GenerateInitialSolution();
+        bool LimitationsFunction(Individ individ);
         int GetSize();
-        TargetFunction GetTargetFunction();
+        int TargetFunction(Individ individ);
+        Individ Coder(VectorSolution solution);
+        VectorSolution Decoder(Individ individ);
+        void PrintResult();
     }
 }

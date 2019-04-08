@@ -24,45 +24,79 @@ namespace GeneticAlgorithms
         private List<Object> _objectList;
         private int _maxWeight;
         private int _maxNumOfObject;
+        private VectorSolution _solution;
 
-        public void SetMaxWieght(int maxWeight)
-        {
-            _maxWeight = maxWeight;
-        }
+        // Дополнительный функционал
+        public BackpackTask() => _solution = new VectorSolution();
 
-        public void SetObjectList(List<Object> objectList)
-        {
-            _objectList = objectList;
-        }
+        public void SetMaxWieght(int maxWeight) => _maxWeight = maxWeight;
 
-        public void SetMaxNumOfObject(int maxNumOfObject)
-        {
-            _maxNumOfObject = maxNumOfObject;
-        }
+        public void SetObjectList(List<Object> objectList) => _objectList = objectList;
 
-        private int Log2(int x)
+        public void SetMaxNumOfObject(int maxNumOfObject) => _maxNumOfObject = maxNumOfObject;
+
+        public VectorSolution GetSolution() => _solution;
+
+        // Реализация интерфейса
+        public Individ GenerateInitialSolution()
         {
-            int count = 0;
-            while (x /2 != 0)
+            Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
+            
+            Individ individ;
+            do
             {
-                count++;
-                x /= 2;
+                List<int> preGenom = new List<int>();
+                for (int i = 0; i < _objectList.Count; i++)
+                {
+                    preGenom.Add(rnd.Next(0, 1000) % (_maxNumOfObject + 1));
+                }
+                VectorSolution solution = new VectorSolution();
+                solution.SetResult(preGenom);
+                individ = Coder(solution);
+            } while (!LimitationsFunction(individ));
+
+            Thread.Sleep(100);
+            return individ;
+        }
+
+        public bool LimitationsFunction(Individ individ)
+        {
+            List<int> preGenom = Decoder(individ).GetResult();
+            int weightSum = 0;
+            for (int i = 0; i < preGenom.Count; i++)
+            {
+                weightSum += preGenom[i] * _objectList[i].weight;
             }
 
-            return count;
+            return weightSum <= _maxWeight;
         }
 
-        private List<int> GetGenom(List<int> preGenom)
+        public int GetSize() => _objectList.Count;
+
+        public int TargetFunction(Individ individ)
+        {
+            List<int> preGenom = Decoder(individ).GetResult();
+            int priceSum = 0;
+            for (int i = 0; i < preGenom.Count; i++)
+            {
+                priceSum += preGenom[i] * _objectList[i].price;
+            }
+
+            return priceSum;
+        }
+
+        public Individ Coder(VectorSolution solution)
         {
             List<int> genom = new List<int>();
-            int lenghtOfGen = Log2(_maxNumOfObject) + 1;
+            MathFunction mathFunction = new MathFunction();
+            int lenghtOfGen = mathFunction.Log2(_maxNumOfObject) + 1;
 
-            foreach (var preGen in preGenom)
+            foreach (var preGen in solution.GetResult())
             {
                 CuclNumSys cuclNumSys = new CuclNumSys();
                 String res = cuclNumSys.CulcNumberSystem(preGen.ToString(), _maxNumOfObject + 1, 2);
 
-                while(res.Length < lenghtOfGen)
+                while (res.Length < lenghtOfGen)
                 {
                     res = "0" + res;
                 }
@@ -70,19 +104,23 @@ namespace GeneticAlgorithms
                 for (int i = 0; i < lenghtOfGen; i++)
                 {
                     genom.Add(Int32.Parse(res.Substring(i, 1)));
-                }                
+                }
             }
 
-            return genom;
+            Individ individ = new Individ();
+            individ.SetGenom(genom);
+
+            return individ;
         }
 
-        private List<int> GetPreGenom(List<int> genom)
+        public VectorSolution Decoder(Individ individ)
         {
             List<int> preGenom = new List<int>();
-            int lenghtOfGen = Log2(_maxNumOfObject) + 1;
+            MathFunction mathFunction = new MathFunction();
+            int lenghtOfGen = mathFunction.Log2(_maxNumOfObject) + 1;
             String inVal = "";
 
-            foreach (var gen in genom)
+            foreach (var gen in individ.GetGenom())
             {
                 inVal += gen.ToString();
                 if (inVal.Length < lenghtOfGen)
@@ -98,72 +136,15 @@ namespace GeneticAlgorithms
                 inVal = "";
             }
 
-            return preGenom;
+            VectorSolution vectorSolution = new VectorSolution();
+            vectorSolution.SetResult(preGenom);
+
+            return vectorSolution;
         }
 
-        public bool LimitationsFunctionBackpackTask(Individ individ)
+        public void PrintResult()
         {
-            List<int> genom = individ.GetGenom();
-            List<int> preGenom = GetPreGenom(genom);
-            int weightSum = 0;
-            for (int i = 0; i < preGenom.Count; i++)
-            {
-                weightSum += preGenom[i] * _objectList[i].weight;
-            }
-
-            return weightSum <= _maxWeight;
-        }
-
-        private int TargetFunctionBackpackTask(Individ individ)
-        {
-            List<int> genom = individ.GetGenom();
-            List<int> preGenom = GetPreGenom(genom);
-            int priceSum = 0;
-            for (int i = 0; i < preGenom.Count; i++)
-            {
-                priceSum += preGenom[i] * _objectList[i].price;
-            }
-
-            return priceSum;
-        }
-
-        /// <summary>
-        /// Генерация решения
-        /// </summary>
-        /// <returns>Особь</returns>
-        public Individ GenerateIndivid()
-        {
-            Individ individ = new Individ();
-            List<int> preGenom = new List<int>();
-            Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
-
-            do
-            {
-                preGenom.Clear();
-                for (int i = 0; i < _objectList.Count; i++)
-                {
-                    preGenom.Add(rnd.Next(0, 1000) % (_maxNumOfObject + 1));
-                }
-                individ.SetGenom(GetGenom(preGenom));
-            } while (!LimitationsFunctionBackpackTask(individ));
-
-            Thread.Sleep(100);
-            return individ;
-        }
-
-        public LimitationsFunction GetLimitationsFunction()
-        {
-            return LimitationsFunctionBackpackTask;
-        }
-
-        public int GetSize()
-        {
-            return _objectList.Count;
-        }
-
-        public TargetFunction GetTargetFunction()
-        {
-            return TargetFunctionBackpackTask;
+            _solution.PrintResult();
         }
     }
 }

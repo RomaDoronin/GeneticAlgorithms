@@ -8,21 +8,17 @@ namespace GeneticAlgorithms
 {
     abstract class AGenAlg
     {
-        protected ISolution _solution;
+        protected VectorSolution _solution;
         protected IPopulation _population;
         protected ITask _task;
 
-        public virtual void SetSolution(ref ISolution solution)
-        {
-            _solution = solution;
-        }
+        protected AMutation _mutation;
 
-        public virtual void SetPopulation(ref IPopulation population)
-        {
-            _population = population;
-        }
+        public virtual void SetPopulation(ref IPopulation population) => _population = population;
 
-        public abstract void Solve(ITask task);
+        public void SetMutation(AMutation mutation) => _mutation = mutation;
+
+        public abstract void Solve(ref ITask task);
 
         // Создание начальной популяции
         protected abstract void CreatePopulation();
@@ -34,12 +30,15 @@ namespace GeneticAlgorithms
         protected abstract bool Stop();
 
         // Отбор родителей
-        protected abstract void SelectParent(ref Individ parent1, ref Individ parent2);
+        protected abstract void SelectParent(ref List<int> parentNumbers, ref Individ parent1, ref Individ parent2);
 
         // Скрещивание
         protected abstract void Сross();
 
         // Мутация
-        protected abstract void Mutation();
+        protected virtual void Mutation()
+        {
+            _mutation.Mutation(ref _population, _task);
+        }
     }
 }

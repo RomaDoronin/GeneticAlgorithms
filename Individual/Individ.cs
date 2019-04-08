@@ -11,7 +11,6 @@ namespace GeneticAlgorithms
     /// </summary>
     class Individ
     {
-        // Геном
         private List<int> _genom;
 
         public Individ()

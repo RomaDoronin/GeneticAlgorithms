@@ -14,10 +14,13 @@ namespace GeneticAlgorithms
         bool IsEnd();
 
         int GetStartPopSize();
+        void SetStartPopSize(int startPopSize);
         int GetSizeAfterSelect();
-        int GetCurrSize();
+        void SetSizeAfterSelect(int sizeAfterSelect);
+        void SetPopulationList(List<Individ> popList);
 
         void AddIndivid(Individ individ);
         void ClearOldPopulation();
+        int GetCurrSize();
     }
 }

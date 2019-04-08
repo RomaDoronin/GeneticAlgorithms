@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    interface ISolution
+    abstract class AMutation
     {
-        void PrintResult();
-        void SetResult(Individ individ);
+        public abstract void Mutation(ref IPopulation population, ITask task);
     }
 }
