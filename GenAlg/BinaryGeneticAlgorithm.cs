@@ -67,31 +67,6 @@ namespace GeneticAlgorithms
             Console.WriteLine("Max val: " + _max.maxVal.ToString());
         }
 
-        // Отбор родителей
-        protected override void SelectParent(ref List<int> parentNumbers, ref Individ  parentFirst, ref Individ parentSecond)
-        {
-            Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
-
-            int numParentFirst = rnd.Next(0, parentNumbers.Count);
-            parentNumbers.RemoveAt(numParentFirst);
-            int numParentSecond = rnd.Next(0, parentNumbers.Count);
-            parentNumbers.RemoveAt(numParentSecond);
-
-            /*Console.WriteLine("----------------");
-            Console.WriteLine("numParentFirst: " + numParentFirst.ToString());
-            Console.WriteLine("numParentSecond: " + numParentSecond.ToString());*/
-
-            int count = 0;
-            for (Individ individ = _population.GetFirstIndivid(); ; individ = _population.GetNextIndivid())
-            {
-                if (numParentFirst == count) parentFirst = individ;
-                if (numParentSecond == count) parentSecond = individ;
-
-                count++;
-                if (count >= _population.GetSizeAfterSelect()) break;
-            }
-        }
-
         // Создание начальной популяции
         protected override void CreatePopulation()
         {
@@ -100,11 +75,7 @@ namespace GeneticAlgorithms
                 _population.AddIndivid(_task.GenerateInitialSolution()); // В GenerateIndivid должен заполнять геном
             }
         }
-
         
-
-        
-
         // Остановка
         protected override bool Stop()
         {

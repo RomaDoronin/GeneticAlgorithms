@@ -8,6 +8,6 @@ namespace GeneticAlgorithms
 {
     abstract class ACross
     {
-        public abstract void Cross();
+        public abstract void Cross(ref IPopulation population, ITask task, ASelectParent selectParent);
     }
 }

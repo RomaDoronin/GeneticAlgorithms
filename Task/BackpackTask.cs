@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace GeneticAlgorithms
 {
+    /// <summary>
+    /// Объекты внутри рюкзака
+    /// </summary>
     struct Object
     {
         public int price;
@@ -19,6 +22,9 @@ namespace GeneticAlgorithms
         }
     }
 
+    /// <summary>
+    /// Задача о рюкзаке
+    /// </summary>
     class BackpackTask : ITask
     {
         private List<Object> _objectList;

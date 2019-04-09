@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.Mutation
+namespace GeneticAlgorithms
 {
     /// <summary>
     /// Мутирует целый ген. Внутри гена аллели мутируют с вероятность 50%

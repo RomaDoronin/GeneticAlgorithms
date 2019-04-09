@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.Select
+namespace GeneticAlgorithms
 {
     /// <summary>
     /// Для каждой особи считается значение функции приспособленности и ставится в соответствие ранг

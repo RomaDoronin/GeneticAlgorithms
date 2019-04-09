@@ -23,14 +23,13 @@ namespace GeneticAlgorithms
         protected AMutation _mutation;
         protected ASelect _select;
         protected ACross _cross;
+        protected ASelectParent _selectParent;
 
         public virtual void SetPopulation(ref IPopulation population) => _population = population;
-
         public void SetMutation(AMutation mutation) => _mutation = mutation;
-
         public void SetSelect(ASelect select) => _select = select;
-
         public void SetCross(ACross cross) => _cross = cross;
+        public void SetSelectParent(ASelectParent selectParent) => _selectParent = selectParent;
 
         public abstract void Solve(ref ITask task);
 
@@ -47,12 +46,15 @@ namespace GeneticAlgorithms
         protected abstract bool Stop();
 
         // Отбор родителей
-        protected abstract void SelectParent(ref List<int> parentNumbers, ref Individ parent1, ref Individ parent2);
+        protected virtual void SelectParent(ref List<int> parentNumbers, ref Individ parent1, ref Individ parent2)
+        {
+            _selectParent.SelectParent(ref parentNumbers, ref parent1, ref parent2, _population);
+        }
 
         // Скрещивание
         protected virtual void Сross()
         {
-            _cross.Cross();
+            _cross.Cross(ref _population, _task, _selectParent);
         }
 
         // Мутация

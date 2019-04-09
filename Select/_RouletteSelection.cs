@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.Select
+namespace GeneticAlgorithms
 {
     /// <summary>
     /// Особи для размножения выбираются случайно, но вероятность выбора особи зависит от ее значения функции приспособленности

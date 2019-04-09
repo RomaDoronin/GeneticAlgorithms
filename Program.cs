@@ -42,19 +42,32 @@ namespace GeneticAlgorithms
 
         static void Main(string[] args)
         {
-            ITask task = CreateBackpackTask();
+            // Настройка генетичекого алгоритма
+            AGenAlg genAlg = new BinaryGeneticAlgorithm();
+
+            // Настройка популяции
             IPopulation population = new StdPopulation();
             population.SetStartPopSize(20);
             population.SetSizeAfterSelect(10);
-
-            AGenAlg genAlg = new BinaryGeneticAlgorithm();
             genAlg.SetPopulation(ref population);
+
+            // Настройка мутации
             RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
             randAlleleMutation.SetNumOfMutGen(2);
             genAlg.SetMutation(randAlleleMutation);
+
+            // Настройна селекции
             genAlg.SetSelect(new CuttingSelection());
+
+            // Настройка выбора "родителей"
+            genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
+
+            // Настройка скрещивания
+            genAlg.SetCross(new Krossingover());
+
+            // Выбор задачи
+            ITask task = CreateBackpackTask();
             genAlg.Solve(ref task);
-            //task.PrintResult();
         }
     }
 }

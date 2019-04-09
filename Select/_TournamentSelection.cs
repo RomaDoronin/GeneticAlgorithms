@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.Select
+namespace GeneticAlgorithms
 {
     /// <summary>
     /// Особи разбиваются на подгруппы по 2-3 особи с последующим выбором лучших из подгрупп

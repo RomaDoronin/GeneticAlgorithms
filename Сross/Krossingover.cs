@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms.Сross
+namespace GeneticAlgorithms
 {
+    /// <summary>
+    /// Кроссинговер - делим геном попалам и отдаем по половине потомкам от двух родителей
+    /// TODO: 1. Точки разрыва - задавать в каком месте разобьется геном, возможно рандомно
+    ///       2. Задавать множество точек разрыва
+    /// </summary>
     class Krossingover : ACross
     {
-        public override void Cross(ref IPopulation population, ITask task)
+        public override void Cross(ref IPopulation population, ITask task, ASelectParent selectParent)
         {
             int size = population.GetFirstIndivid().GetGenom().Count;
             List<int> parentNumbers = new List<int>();
@@ -23,7 +28,7 @@ namespace GeneticAlgorithms.Сross
             {
                 Individ parentFirst = new Individ();
                 Individ parentSecond = new Individ();
-                SelectParent(ref parentNumbers, ref parentFirst, ref parentSecond);
+                selectParent.SelectParent(ref parentNumbers, ref parentFirst, ref parentSecond, population);
 
                 var genomFirst = parentFirst.GetGenom();
                 var genomSecond = parentSecond.GetGenom();
