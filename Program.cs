@@ -53,7 +53,7 @@ namespace GeneticAlgorithms
 
             // Настройка мутации
             RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutGen(2);
+            randAlleleMutation.SetNumOfMutAllele(2);
             genAlg.SetMutation(randAlleleMutation);
 
             // Настройна селекции
@@ -63,7 +63,9 @@ namespace GeneticAlgorithms
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
 
             // Настройка скрещивания
-            genAlg.SetCross(new Krossingover());
+            Krossingover krossingover = new Krossingover();
+            //krossingover.SetBreakPoint(new List<double>() { 0.4, 0.7 });
+            genAlg.SetCross(krossingover);
 
             // Выбор задачи
             ITask task = CreateBackpackTask();

@@ -115,7 +115,9 @@ namespace GeneticAlgorithms
                 {
                     alleleList.Add(Int16.Parse(genStr.Substring(i, 1)));
                 }
-                genom.Add(new Gen(alleleList));
+                Gen gen = new Gen();
+                gen.SetAlleleList(alleleList);
+                genom.Add(gen);
             }
 
             Individ individ = new Individ();

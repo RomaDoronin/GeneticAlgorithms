@@ -13,21 +13,21 @@ namespace GeneticAlgorithms
     /// </summary>
     class RandAlleleMutation : AMutation
     {
-        private int _numOfMutGen;
+        private int _numOfMutAllele;
 
         public RandAlleleMutation()
         {
-            _numOfMutGen = 1;
+            _numOfMutAllele = 1;
         }
 
-        public void SetNumOfMutGen(int numOfMutGen) => _numOfMutGen = numOfMutGen;
+        public void SetNumOfMutAllele(int numOfMutAllele) => _numOfMutAllele = numOfMutAllele;
 
         public override void Mutation(ref IPopulation population, ITask task)
         {
             List<Individ> populationList = new List<Individ>();
             Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
             List<int> mutGenomNumList = new List<int>();
-            for (int i = 0; i < _numOfMutGen; i++)
+            for (int i = 0; i < _numOfMutAllele; i++)
             {
                 mutGenomNumList.Add(rnd.Next(0, 100 * population.GetCurrSize()) % population.GetCurrSize());
                 Thread.Sleep(100);
@@ -43,18 +43,35 @@ namespace GeneticAlgorithms
                         {
                             List<Gen> genom = individ.GetGenom();
                             int mutGenNum = rnd.Next(0, 100 * genom.Count) % genom.Count;
-                            int mutAlleleNum = rnd.Next(0, 100 * genom[mutGenNum].alleleList.Count) % genom[mutGenNum].alleleList.Count;
-                            
+                            int mutAlleleNum = rnd.Next(0, 100 * genom[mutGenNum].GetGenSize()) % genom[mutGenNum].GetGenSize();
+
+                            List<short> alleleList = new List<short>();
+                            int alleleCount = 0;
+                            foreach (var allele in genom[mutGenNum].GetAlleleList())
+                            {
+                                if (alleleCount == mutAlleleNum)
+                                {
+                                    if (allele == 0)
+                                    {
+                                        alleleList.Add(1);
+                                    }
+                                    else
+                                    {
+                                        alleleList.Add(0);
+                                    }
+                                }
+                                else
+                                {
+                                    alleleList.Add(allele);
+                                }
+
+                                alleleCount++;
+                            }
+
+                            genom[mutGenNum].SetAlleleList(alleleList);
+
                             //Console.WriteLine("Mutation genom: " + mutGen.ToString());
                             //Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
-                            if (genom[mutGenNum].alleleList[mutAlleleNum] == 0)
-                            {
-                                genom[mutGenNum].alleleList[mutAlleleNum] = 1;
-                            }
-                            else
-                            {
-                                genom[mutGenNum].alleleList[mutAlleleNum] = 0;
-                            }
 
                             individ.SetGenom(genom);
                         } while (!task.LimitationsFunction(individ));

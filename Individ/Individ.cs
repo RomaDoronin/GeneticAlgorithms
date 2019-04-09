@@ -7,35 +7,16 @@ using System.Threading.Tasks;
 namespace GeneticAlgorithms
 {
     /// <summary>
-    /// Ген
-    /// </summary>
-    struct Gen
-    {
-        public List<short> alleleList;
-
-        public Gen(List<short> _alleleList) => alleleList = _alleleList;
-
-        public override string ToString()
-        {
-            String outStr = "";
-
-            foreach (var allele in alleleList)
-            {
-                outStr += allele.ToString();
-            }
-
-            return outStr;
-        }
-    }
-
-    /// <summary>
     /// Особь
     /// </summary>
     class Individ
     {
         private List<Gen> _genom;
 
-        public Individ() => _genom = new List<Gen>();
+        public Individ()
+        {
+            _genom = new List<Gen>();
+        }
 
         public void SetGenom(List<Gen> genom)
         {
