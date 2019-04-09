@@ -90,24 +90,26 @@ namespace GeneticAlgorithms
 
         public Individ Coder(VectorSolution solution)
         {
-            List<int> genom = new List<int>();
+            List<Gen> genom = new List<Gen>();
             MathFunction mathFunction = new MathFunction();
             int lenghtOfGen = mathFunction.Log2(_maxNumOfObject) + 1;
 
-            foreach (var preGen in solution.GetResult())
+            foreach (var val in solution.GetResult())
             {
                 CuclNumSys cuclNumSys = new CuclNumSys();
-                String res = cuclNumSys.CulcNumberSystem(preGen.ToString(), _maxNumOfObject + 1, 2);
+                String genStr = cuclNumSys.CulcNumberSystem(val.ToString(), _maxNumOfObject + 1, 2);
 
-                while (res.Length < lenghtOfGen)
+                while (genStr.Length < lenghtOfGen)
                 {
-                    res = "0" + res;
+                    genStr = "0" + genStr;
                 }
 
+                List<short> alleleList = new List<short>();
                 for (int i = 0; i < lenghtOfGen; i++)
                 {
-                    genom.Add(Int32.Parse(res.Substring(i, 1)));
+                    alleleList.Add(Int16.Parse(genStr.Substring(i, 1)));
                 }
+                genom.Add(new Gen(alleleList));
             }
 
             Individ individ = new Individ();
@@ -125,18 +127,12 @@ namespace GeneticAlgorithms
 
             foreach (var gen in individ.GetGenom())
             {
-                inVal += gen.ToString();
-                if (inVal.Length < lenghtOfGen)
-                {
-                    continue;
-                }
+                inVal = gen.ToString();
 
                 CuclNumSys cuclNumSys = new CuclNumSys();
                 String res = cuclNumSys.CulcNumberSystem(inVal, 2, _maxNumOfObject + 1);
 
                 preGenom.Add(Int32.Parse(res));
-
-                inVal = "";
             }
 
             VectorSolution vectorSolution = new VectorSolution();

@@ -14,7 +14,7 @@ namespace GeneticAlgorithms
 
             List<Object> objectList = new List<Object>();
 
-            /* 0-1 Рюкзак
+            /* 0-1 Рюкзак | Max = 1125
             objectList.Add(new Object(106,12)); objectList.Add(new Object(122,11));
             objectList.Add(new Object(191,16)); objectList.Add(new Object(137,12));
             objectList.Add(new Object(167,12)); objectList.Add(new Object(153,19));
@@ -23,9 +23,10 @@ namespace GeneticAlgorithms
 
             backpackTask.SetObjectList(objectList);
             backpackTask.SetMaxWieght(100);
+            backpackTask.SetMaxNumOfObject(1);
             */
 
-            /* 0-3 Рюкзак */
+            /* 0-3 Рюкзак | Max = 3343 */
             objectList.Add(new Object(152, 15)); objectList.Add(new Object(124, 14));
             objectList.Add(new Object(169, 19)); objectList.Add(new Object(125, 10));
             objectList.Add(new Object(125, 18)); objectList.Add(new Object(120, 18));
@@ -43,14 +44,15 @@ namespace GeneticAlgorithms
         {
             ITask task = CreateBackpackTask();
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(100);
-            population.SetSizeAfterSelect(70);
+            population.SetStartPopSize(20);
+            population.SetSizeAfterSelect(10);
 
-            AGenAlg genAlg = new GenAlgTest();
+            AGenAlg genAlg = new BinaryGeneticAlgorithm();
             genAlg.SetPopulation(ref population);
-            RandGenMutation randGenMutation = new RandGenMutation();
-            randGenMutation.SetNumOfMutGen(4);
-            genAlg.SetMutation(randGenMutation);
+            RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
+            randAlleleMutation.SetNumOfMutGen(2);
+            genAlg.SetMutation(randAlleleMutation);
+            genAlg.SetSelect(new CuttingSelection());
             genAlg.Solve(ref task);
             //task.PrintResult();
         }
