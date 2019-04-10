@@ -44,16 +44,17 @@ namespace GeneticAlgorithms
         {
             // Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm();
+            genAlg.SetMaxIterNum(100);
 
             // Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(20);
-            population.SetSizeAfterSelect(10);
+            population.SetStartPopSize(40);   // Значение должно быть четным
+            population.SetSizeAfterSelect(20); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
             // Настройка мутации
             RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutAllele(2);
+            randAlleleMutation.SetNumOfMutAllele(6);
             genAlg.SetMutation(randAlleleMutation);
 
             // Настройна селекции

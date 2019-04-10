@@ -53,8 +53,8 @@ namespace GeneticAlgorithms
                 Individ parentSecond = new Individ();
                 selectParent.SelectParent(ref parentNumbers, ref parentFirst, ref parentSecond, population);
 
-                var genomFirst = parentFirst.GetGenom();
-                var genomSecond = parentSecond.GetGenom();
+                List<Gen> genomFirst = parentFirst.GetGenom();
+                List<Gen> genomSecond = parentSecond.GetGenom();
 
                 // Кросинговер
                 List<Gen> childGenomFirst = new List<Gen>();

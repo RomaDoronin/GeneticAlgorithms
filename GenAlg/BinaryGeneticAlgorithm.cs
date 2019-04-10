@@ -40,14 +40,13 @@ namespace GeneticAlgorithms
             {
                 Сross();
                 // ## LOG
-                Console.WriteLine("Cross"); PrintPopulation(_population);
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Мутация изменяет слишком много алелей
+                //Console.WriteLine("Cross"); PrintPopulation(_population);
                 Mutation();
                 // ## LOG
-                Console.WriteLine("Mutation"); PrintPopulation(_population);
+                //Console.WriteLine("Mutation"); PrintPopulation(_population);
                 Select();
                 // ## LOG
-                Console.WriteLine("Select"); PrintPopulation(_population);
+                //Console.WriteLine("Select"); PrintPopulation(_population);
 
                 if (_max.maxVal >= 3343)
                 {
@@ -83,11 +82,10 @@ namespace GeneticAlgorithms
         protected override bool Stop()
         {
             _stepCount++;
-            int maxIterNum = 200;
 
             Console.WriteLine("Population number: " + _stepCount.ToString());
 
-            return _stepCount == maxIterNum;
+            return _stepCount == _maxIterNum;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace GeneticAlgorithms
             for (int i = 0; i < _numOfMutAllele; i++)
             {
                 mutGenomNumList.Add(rnd.Next(0, 100 * population.GetCurrSize()) % population.GetCurrSize());
-                Thread.Sleep(100);
+                Thread.Sleep(rnd.Next(0,100));
             }
 
             for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())

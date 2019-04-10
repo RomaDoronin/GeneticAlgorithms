@@ -15,6 +15,7 @@ namespace GeneticAlgorithms
     abstract class AGenAlg
     {
         protected ResultPair _max;
+        protected int _maxIterNum;
 
         protected VectorSolution _solution;
         protected IPopulation _population;
@@ -30,6 +31,7 @@ namespace GeneticAlgorithms
         public void SetSelect(ASelect select) => _select = select;
         public void SetCross(ACross cross) => _cross = cross;
         public void SetSelectParent(ASelectParent selectParent) => _selectParent = selectParent;
+        public void SetMaxIterNum(int maxIterNum) => _maxIterNum = maxIterNum;
 
         public abstract void Solve(ref ITask task);
 

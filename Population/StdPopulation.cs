@@ -27,7 +27,8 @@ namespace GeneticAlgorithms
         {
             _iterator = 0;
             _isEnd = false;
-            return individList[_iterator];
+            Individ individ = new Individ(individList[_iterator]);
+            return individ;
         }
 
         public Individ GetNextIndivid()
@@ -41,7 +42,8 @@ namespace GeneticAlgorithms
                 _isEnd = true;
             }
 
-            return individList[_iterator];
+            Individ individ = new Individ(individList[_iterator]);
+            return individ;
         }
 
         public bool IsEnd() => _isEnd;

@@ -64,7 +64,7 @@ namespace GeneticAlgorithms
                 individ = Coder(solution);
             } while (!LimitationsFunction(individ));
 
-            Thread.Sleep(100);
+            Thread.Sleep(rnd.Next(0, 100));
             return individ;
         }
 

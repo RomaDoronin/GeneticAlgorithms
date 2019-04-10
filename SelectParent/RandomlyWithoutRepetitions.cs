@@ -15,10 +15,12 @@ namespace GeneticAlgorithms
         {
             Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
 
-            int numParentFirst = rnd.Next(0, parentNumbers.Count);
-            parentNumbers.RemoveAt(numParentFirst);
-            int numParentSecond = rnd.Next(0, parentNumbers.Count);
-            parentNumbers.RemoveAt(numParentSecond);
+            int index = rnd.Next(0, parentNumbers.Count);
+            int numParentFirst = parentNumbers[index];
+            parentNumbers.RemoveAt(index);
+            index = rnd.Next(0, parentNumbers.Count);
+            int numParentSecond = parentNumbers[index];
+            parentNumbers.RemoveAt(index);
 
             /*Console.WriteLine("----------------");
             Console.WriteLine("numParentFirst: " + numParentFirst.ToString());
@@ -30,8 +32,8 @@ namespace GeneticAlgorithms
                 if (numParentFirst == count) parentFirst = individ;
                 if (numParentSecond == count) parentSecond = individ;
 
-                count++;
                 if (count >= population.GetSizeAfterSelect()) break;
+                count++;
             }
         }
     }

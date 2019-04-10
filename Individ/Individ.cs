@@ -18,6 +18,16 @@ namespace GeneticAlgorithms
             _genom = new List<Gen>();
         }
 
+        public Individ(Individ individ)
+        {
+            _genom = new List<Gen>();
+
+            foreach (var gen in individ.GetGenom())
+            {
+                _genom.Add(gen);
+            }
+        }
+
         public void SetGenom(List<Gen> genom)
         {
             _genom.Clear();
@@ -32,7 +42,8 @@ namespace GeneticAlgorithms
             List<Gen> genom = new List<Gen>();
             foreach (var gen in _genom)
             {
-                genom.Add(gen);
+                Gen newGen = new Gen(gen);
+                genom.Add(newGen);
             }
 
             return genom;
