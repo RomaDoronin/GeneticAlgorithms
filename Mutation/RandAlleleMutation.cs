@@ -21,69 +21,43 @@ namespace GeneticAlgorithms
 
         public void SetNumOfMutAllele(int numOfMutAllele) => _numOfMutAllele = numOfMutAllele;
 
-        public override void Mutation(ref IPopulation population, ITask task)
+        protected override void SetMutGenomNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutGenomNumList)
         {
-            List<Individ> populationList = new List<Individ>();
-            RNGCSP rngcsp = new RNGCSP();
-            List<int> mutGenomNumList = new List<int>();
             for (int i = 0; i < _numOfMutAllele; i++)
             {
                 mutGenomNumList.Add(rngcsp.GetRandomNum(0, population.GetCurrSize()));
             }
+        }
 
-            for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+        protected override void DoMutation(ref RNGCSP rngcsp, ref List<Gen> genom)
+        {
+            int mutGenNum = rngcsp.GetRandomNum(0, 100 * genom.Count) % genom.Count;
+            int mutAlleleNum = rngcsp.GetRandomNum(0, 100 * genom[mutGenNum].GetGenSize()) % genom[mutGenNum].GetGenSize();
+
+            List<short> alleleList = new List<short>();
+            int alleleCount = 0;
+            foreach (var allele in genom[mutGenNum].GetAlleleList())
             {
-                foreach (var mutGenomNum in mutGenomNumList)
+                if (alleleCount == mutAlleleNum)
                 {
-                    if (mutGenomNum == populationList.Count)
+                    if (allele == 0)
                     {
-                        do
-                        {
-                            List<Gen> genom = individ.GetGenom();
-                            do // Чтобы не заменилась аллель такая что приветел к несуществующему гену
-                            {
-                                int mutGenNum = rngcsp.GetRandomNum(0, 100 * genom.Count) % genom.Count;
-                                int mutAlleleNum = rngcsp.GetRandomNum(0, 100 * genom[mutGenNum].GetGenSize()) % genom[mutGenNum].GetGenSize();
-
-                                List<short> alleleList = new List<short>();
-                                int alleleCount = 0;
-                                foreach (var allele in genom[mutGenNum].GetAlleleList())
-                                {
-                                    if (alleleCount == mutAlleleNum)
-                                    {
-                                        if (allele == 0)
-                                        {
-                                            alleleList.Add(1);
-                                        }
-                                        else
-                                        {
-                                            alleleList.Add(0);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        alleleList.Add(allele);
-                                    }
-
-                                    alleleCount++;
-                                }
-
-                                genom[mutGenNum].SetAlleleList(alleleList);
-
-                                //Console.WriteLine("Mutation genom: " + mutGen.ToString());
-                                //Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
-
-                                individ.SetGenom(genom);
-
-                            } while (!task.CheckIndivid(individ));
-                        } while (!task.LimitationsFunction(individ));
+                        alleleList.Add(1);
+                    }
+                    else
+                    {
+                        alleleList.Add(0);
                     }
                 }
+                else
+                {
+                    alleleList.Add(allele);
+                }
 
-                populationList.Add(individ);
+                alleleCount++;
             }
 
-            population.SetPopulationList(populationList);
+            genom[mutGenNum].SetAlleleList(alleleList);
         }
     }
 }

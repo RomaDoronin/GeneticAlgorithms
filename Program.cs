@@ -8,6 +8,8 @@ namespace GeneticAlgorithms
 {
     class Program
     {
+        private const int INFINITY = -1;
+
         private static ITask CreateBackpackTask()
         {
             BackpackTask backpackTask = new BackpackTask();
@@ -26,8 +28,7 @@ namespace GeneticAlgorithms
             backpackTask.SetMaxNumOfObject(1);
             */
 
-            // 0-3 Рюкзак 
-            // * W = 300 | n = 8 | Max = 3343
+            // * W = 300 | n = 3 | Max = 3343
             // * W = 800 | n = 8 | Max = 8986
             objectList.Add(new Object(152, 15)); objectList.Add(new Object(124, 14));
             objectList.Add(new Object(169, 19)); objectList.Add(new Object(125, 10));
@@ -48,18 +49,21 @@ namespace GeneticAlgorithms
             BinaryGeneticAlgorithm binaryGeneticAlgorithm = new BinaryGeneticAlgorithm();
             binaryGeneticAlgorithm.SetPrintPopulation(false); // Настройка вывода популяции
             AGenAlg genAlg = binaryGeneticAlgorithm;
-            genAlg.SetMaxIterNum(-1);
+            genAlg.SetMaxIterNum(INFINITY);
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(20);   // Значение должно быть четным
-            population.SetSizeAfterSelect(10); // Значение должно быть четным
+            population.SetStartPopSize(40);   // Значение должно быть четным
+            population.SetSizeAfterSelect(20); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
             // ------------------------------------------------------------------------------------ Настройка мутации
-            RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutAllele(4);
-            genAlg.SetMutation(randAlleleMutation);
+            /*RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
+            randAlleleMutation.SetNumOfMutAllele(8);
+            genAlg.SetMutation(randAlleleMutation);*/
+            RandGenMutation randGenMutation = new RandGenMutation();
+            randGenMutation.SetNumOfMutGen(8);
+            genAlg.SetMutation(randGenMutation);
 
             // ------------------------------------------------------------------------------------ Настройна селекции
             genAlg.SetSelect(new CuttingSelection());

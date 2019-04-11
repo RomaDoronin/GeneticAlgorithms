@@ -71,8 +71,8 @@ namespace GeneticAlgorithms
             }
 
             Console.WriteLine("=====================================");
-            Console.WriteLine("Max val:   " + _max.maxVal.ToString());
-            Console.WriteLine("Max genom: " + _max.individ.ToString());
+            Console.WriteLine("Max val:    " + _max.maxVal.ToString());
+            Console.WriteLine("Max result: " + _task.Decoder(_max.individ).ToString());
         }
 
         // Создание начальной популяции

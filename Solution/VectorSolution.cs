@@ -33,5 +33,18 @@ namespace GeneticAlgorithms
 
             return vector;
         }
+
+        public override string ToString()
+        {
+            String outStr = "[ ";
+
+            foreach (var val in _vector)
+            {
+                outStr += val.ToString() + " ";
+            }
+            outStr += "]";
+
+            return outStr;
+        }
     }
 }
