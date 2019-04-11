@@ -26,7 +26,9 @@ namespace GeneticAlgorithms
             backpackTask.SetMaxNumOfObject(1);
             */
 
-            /* 0-3 Рюкзак | Max = 3343 */
+            // 0-3 Рюкзак 
+            // * W = 300 | n = 8 | Max = 3343
+            // * W = 800 | n = 8 | Max = 8986
             objectList.Add(new Object(152, 15)); objectList.Add(new Object(124, 14));
             objectList.Add(new Object(169, 19)); objectList.Add(new Object(125, 10));
             objectList.Add(new Object(125, 18)); objectList.Add(new Object(120, 18));
@@ -42,33 +44,36 @@ namespace GeneticAlgorithms
 
         static void Main(string[] args)
         {
-            // Настройка генетичекого алгоритма
-            AGenAlg genAlg = new BinaryGeneticAlgorithm();
+            // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
+            BinaryGeneticAlgorithm binaryGeneticAlgorithm = new BinaryGeneticAlgorithm();
+            binaryGeneticAlgorithm.SetPrintPopulation(false); // Настройка вывода популяции
+            AGenAlg genAlg = binaryGeneticAlgorithm;
             genAlg.SetMaxIterNum(-1);
 
-            // Настройка популяции
+            // ------------------------------------------------------------------------------------ Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(520);   // Значение должно быть четным
-            population.SetSizeAfterSelect(260); // Значение должно быть четным
+            population.SetStartPopSize(20);   // Значение должно быть четным
+            population.SetSizeAfterSelect(10); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
-            // Настройка мутации
+            // ------------------------------------------------------------------------------------ Настройка мутации
             RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutAllele(70);
+            randAlleleMutation.SetNumOfMutAllele(4);
             genAlg.SetMutation(randAlleleMutation);
 
-            // Настройна селекции
+            // ------------------------------------------------------------------------------------ Настройна селекции
             genAlg.SetSelect(new CuttingSelection());
 
-            // Настройка выбора "родителей"
+            // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
 
-            // Настройка скрещивания
-            Krossingover krossingover = new Krossingover();
-            //krossingover.SetBreakPoint(new List<double>() { 0.3 });
-            genAlg.SetCross(krossingover);
+            // ------------------------------------------------------------------------------------ Настройка скрещивания
+            /*Krossingover krossingover = new Krossingover();
+            krossingover.SetBreakPoint(new List<double>() { 0.3 });
+            genAlg.SetCross(krossingover);*/
+            genAlg.SetCross(new Recombination());
 
-            // Выбор задачи
+            // ------------------------------------------------------------------------------------ Выбор задачи
             ITask task = CreateBackpackTask();
             genAlg.Solve(ref task);
         }

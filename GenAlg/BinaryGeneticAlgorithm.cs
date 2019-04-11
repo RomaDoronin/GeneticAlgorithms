@@ -14,17 +14,24 @@ namespace GeneticAlgorithms
     {
         private const double ACCURACY = 1;
         private int _stepCount = 0;
+        private bool _printPopulation = false;
 
-        private static void PrintPopulation(IPopulation population)
+        private void PrintPopulation(String opName, IPopulation population)
         {
-            int count = 0;
-            for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+            if (_printPopulation)
             {
-                List<Gen> genom = individ.GetGenom();
-                Console.WriteLine("[" + count.ToString() + "] " + individ.ToString());
-                count++;
+                int count = 0;
+                Console.WriteLine(opName);
+                for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+                {
+                    List<Gen> genom = individ.GetGenom();
+                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString());
+                    count++;
+                }
             }
         }
+
+        public void SetPrintPopulation(bool printPopulation) => _printPopulation = printPopulation;
 
         public override void Solve(ref ITask task)
         {
@@ -33,19 +40,19 @@ namespace GeneticAlgorithms
 
             Select();
             // ## LOG
-            Console.WriteLine("Select"); PrintPopulation(_population);
+            PrintPopulation("Select", _population);
 
             while (!Stop())
             {
                 Сross();
                 // ## LOG
-                //Console.WriteLine("Cross"); PrintPopulation(_population);
+                PrintPopulation("Cross", _population);
                 Mutation();
                 // ## LOG
-                //Console.WriteLine("Mutation"); PrintPopulation(_population);
+                PrintPopulation("Mutation", _population);
                 Select();
                 // ## LOG
-                //Console.WriteLine("Select"); PrintPopulation(_population);
+                PrintPopulation("Select", _population);
 
                 if (_max.maxVal >= 8986)
                 {

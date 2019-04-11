@@ -8,13 +8,33 @@ namespace GeneticAlgorithms
 {
     /// <summary>
     /// Рекомбинация
-    /// Если гены в одной позиции у родителей совпадают, то у ребенка будет такой же ген. Если геры различные по случайно выбирается один из них, который достанется ребенку
+    /// Если ген в одной позиции у родителей совпадают, то у ребенка будет такой же ген. Если геры различные по случайно выбирается один из них, который достанется ребенку
     /// </summary>
     class Recombination : ACross
     {
-        public override void Cross(ref IPopulation population, ITask task, ASelectParent selectParent)
+        protected override void DoCross(List<Gen> genomFirst, List<Gen> genomSecond, ref List<Gen> childGenomFirst, ref List<Gen> childGenomSecond)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < genomFirst.Count; i++)
+            {
+                RNGCSP rngcsp = new RNGCSP();
+                if (rngcsp.GetRandomNum(0, 2) == 1)
+                {
+                    childGenomFirst.Add(genomFirst[i]);
+                }
+                else
+                {
+                    childGenomFirst.Add(genomSecond[i]);
+                }
+
+                if (rngcsp.GetRandomNum(0, 2) == 1)
+                {
+                    childGenomSecond.Add(genomFirst[i]);
+                }
+                else
+                {
+                    childGenomSecond.Add(genomSecond[i]);
+                }
+            }
         }
     }
 }
