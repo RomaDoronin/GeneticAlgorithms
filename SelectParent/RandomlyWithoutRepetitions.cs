@@ -13,12 +13,12 @@ namespace GeneticAlgorithms
     {
         public override void SelectParent(ref List<int> parentNumbers, ref Individ parentFirst, ref Individ parentSecond, IPopulation population)
         {
-            Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
+            RNGCSP rngcsp = new RNGCSP();
 
-            int index = rnd.Next(0, parentNumbers.Count);
+            int index = rngcsp.GetRandomNum(0, parentNumbers.Count);
             int numParentFirst = parentNumbers[index];
             parentNumbers.RemoveAt(index);
-            index = rnd.Next(0, parentNumbers.Count);
+            index = rngcsp.GetRandomNum(0, parentNumbers.Count);
             int numParentSecond = parentNumbers[index];
             parentNumbers.RemoveAt(index);
 

@@ -34,8 +34,8 @@ namespace GeneticAlgorithms
             objectList.Add(new Object(145, 11)); objectList.Add(new Object(139, 10));
 
             backpackTask.SetObjectList(objectList);
-            backpackTask.SetMaxWieght(300);
-            backpackTask.SetMaxNumOfObject(3);
+            backpackTask.SetMaxWieght(800);
+            backpackTask.SetMaxNumOfObject(8);
 
             return backpackTask;
         }
@@ -44,17 +44,17 @@ namespace GeneticAlgorithms
         {
             // Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm();
-            genAlg.SetMaxIterNum(100);
+            genAlg.SetMaxIterNum(-1);
 
             // Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(40);   // Значение должно быть четным
-            population.SetSizeAfterSelect(20); // Значение должно быть четным
+            population.SetStartPopSize(520);   // Значение должно быть четным
+            population.SetSizeAfterSelect(260); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
             // Настройка мутации
             RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutAllele(6);
+            randAlleleMutation.SetNumOfMutAllele(70);
             genAlg.SetMutation(randAlleleMutation);
 
             // Настройна селекции
@@ -65,7 +65,7 @@ namespace GeneticAlgorithms
 
             // Настройка скрещивания
             Krossingover krossingover = new Krossingover();
-            //krossingover.SetBreakPoint(new List<double>() { 0.4, 0.7 });
+            //krossingover.SetBreakPoint(new List<double>() { 0.3 });
             genAlg.SetCross(krossingover);
 
             // Выбор задачи

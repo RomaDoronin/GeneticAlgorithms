@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace GeneticAlgorithms
 {
@@ -41,6 +40,7 @@ namespace GeneticAlgorithms
         public void SetMaxWieght(int maxWeight) => _maxWeight = maxWeight;
 
         public void SetObjectList(List<Object> objectList) => _objectList = objectList;
+        public int GetSize() => _objectList.Count;
 
         public void SetMaxNumOfObject(int maxNumOfObject) => _maxNumOfObject = maxNumOfObject;
 
@@ -49,22 +49,21 @@ namespace GeneticAlgorithms
         // Реализация интерфейса
         public Individ GenerateInitialSolution()
         {
-            Random rnd = new Random(DateTime.Now.Millisecond * DateTime.Now.Millisecond);
-            
+            RNGCSP rngcsp = new RNGCSP();
+
             Individ individ;
             do
             {
                 List<int> preGenom = new List<int>();
                 for (int i = 0; i < _objectList.Count; i++)
                 {
-                    preGenom.Add(rnd.Next(0, 1000) % (_maxNumOfObject + 1));
+                    preGenom.Add(rngcsp.GetRandomNum(0, 1000) % (_maxNumOfObject + 1));
                 }
                 VectorSolution solution = new VectorSolution();
                 solution.SetResult(preGenom);
                 individ = Coder(solution);
             } while (!LimitationsFunction(individ));
 
-            Thread.Sleep(rnd.Next(0, 100));
             return individ;
         }
 
@@ -79,8 +78,6 @@ namespace GeneticAlgorithms
 
             return weightSum <= _maxWeight;
         }
-
-        public int GetSize() => _objectList.Count;
 
         public int TargetFunction(Individ individ)
         {
@@ -152,6 +149,21 @@ namespace GeneticAlgorithms
         public void PrintResult()
         {
             _solution.PrintResult();
+        }
+
+        public bool CheckIndivid(Individ individ)
+        {
+            VectorSolution vectorSolution = Decoder(individ);
+
+            foreach (var val in vectorSolution.GetResult())
+            {
+                if (val > _maxNumOfObject)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

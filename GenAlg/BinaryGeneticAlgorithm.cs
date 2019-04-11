@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace GeneticAlgorithms
 {    
@@ -48,7 +47,7 @@ namespace GeneticAlgorithms
                 // ## LOG
                 //Console.WriteLine("Select"); PrintPopulation(_population);
 
-                if (_max.maxVal >= 3343)
+                if (_max.maxVal >= 8986)
                 {
                     break;
                 }

@@ -15,5 +15,6 @@ namespace GeneticAlgorithms
         Individ Coder(VectorSolution solution);
         VectorSolution Decoder(Individ individ);
         void PrintResult();
+        bool CheckIndivid(Individ individ);
     }
 }
