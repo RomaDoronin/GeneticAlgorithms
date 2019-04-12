@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define BACKPACK_300
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,8 +39,13 @@ namespace GeneticAlgorithms
             objectList.Add(new Object(145, 11)); objectList.Add(new Object(139, 10));
 
             backpackTask.SetObjectList(objectList);
+#if BACKPACK_300
+            backpackTask.SetMaxWieght(300);
+            backpackTask.SetMaxNumOfObject(3);
+#else
             backpackTask.SetMaxWieght(800);
             backpackTask.SetMaxNumOfObject(8);
+#endif
 
             return backpackTask;
         }
@@ -53,8 +60,8 @@ namespace GeneticAlgorithms
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(40);   // Значение должно быть четным
-            population.SetSizeAfterSelect(20); // Значение должно быть четным
+            population.SetStartPopSize(60);   // Значение должно быть четным
+            population.SetSizeAfterSelect(30); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
             // ------------------------------------------------------------------------------------ Настройка мутации
@@ -62,11 +69,13 @@ namespace GeneticAlgorithms
             randAlleleMutation.SetNumOfMutAllele(8);
             genAlg.SetMutation(randAlleleMutation);*/
             RandGenMutation randGenMutation = new RandGenMutation();
-            randGenMutation.SetNumOfMutGen(8);
+            randGenMutation.SetNumOfMutGen(4);
             genAlg.SetMutation(randGenMutation);
 
             // ------------------------------------------------------------------------------------ Настройна селекции
-            genAlg.SetSelect(new CuttingSelection());
+            //genAlg.SetSelect(new CuttingSelection());
+            //genAlg.SetSelect(new RouletteSelection());
+            genAlg.SetSelect(new TournamentSelection());
 
             // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());

@@ -8,7 +8,7 @@ namespace GeneticAlgorithms
 {
     class StdPopulation : IPopulation
     {
-        private List<Individ> individList;
+        private List<Individ> _individList;
         private int _sizeAfterSelect;
         private int _startPopSize;
         private int _iterator;
@@ -17,7 +17,7 @@ namespace GeneticAlgorithms
         // Дополнительный функционал
         public StdPopulation()
         {
-            individList = new List<Individ>();
+            _individList = new List<Individ>();
             _sizeAfterSelect = 10;
             _startPopSize = 20;
         }
@@ -27,13 +27,13 @@ namespace GeneticAlgorithms
         {
             _iterator = 0;
             _isEnd = false;
-            Individ individ = new Individ(individList[_iterator]);
+            Individ individ = new Individ(_individList[_iterator]);
             return individ;
         }
 
         public Individ GetNextIndivid()
         {
-            if (_iterator < individList.Count - 1)
+            if (_iterator < _individList.Count - 1)
             {
                 _iterator++;
             }
@@ -42,7 +42,7 @@ namespace GeneticAlgorithms
                 _isEnd = true;
             }
 
-            Individ individ = new Individ(individList[_iterator]);
+            Individ individ = new Individ(_individList[_iterator]);
             return individ;
         }
 
@@ -52,22 +52,32 @@ namespace GeneticAlgorithms
         public void SetStartPopSize(int startPopSize) => _startPopSize = startPopSize;
         public int GetSizeAfterSelect() => _sizeAfterSelect;
         public void SetSizeAfterSelect(int sizeAfterSelect) => _sizeAfterSelect = sizeAfterSelect;
-        public void SetPopulationList(List<Individ> popList) => individList = popList;
+        public List<Individ> GetPopulationList()
+        {
+            List<Individ> individList = new List<Individ>();
+            foreach (var individ in _individList)
+            {
+                individList.Add(new Individ(individ));
+            }
 
-        public void AddIndivid(Individ individ) => individList.Add(individ);
+            return individList;
+        }
+        public void SetPopulationList(List<Individ> popList) => _individList = popList;
+
+        public void AddIndivid(Individ individ) => _individList.Add(individ);
 
         public void ClearOldPopulation()
         {
             List<Individ> _individList = new List<Individ>();
 
-            for (int i = _startPopSize; i < individList.Count; i++)
+            for (int i = _startPopSize; i < this._individList.Count; i++)
             {
-                _individList.Add(individList[i]);
+                _individList.Add(this._individList[i]);
             }
 
-            individList = _individList;
+            this._individList = _individList;
         }
 
-        public int GetCurrSize() => individList.Count;
+        public int GetCurrSize() => _individList.Count;
     }
 }

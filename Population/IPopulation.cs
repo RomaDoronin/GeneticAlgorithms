@@ -17,6 +17,7 @@ namespace GeneticAlgorithms
         void SetStartPopSize(int startPopSize);
         int GetSizeAfterSelect();
         void SetSizeAfterSelect(int sizeAfterSelect);
+        List<Individ> GetPopulationList();
         void SetPopulationList(List<Individ> popList);
 
         void AddIndivid(Individ individ);

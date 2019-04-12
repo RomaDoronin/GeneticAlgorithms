@@ -27,7 +27,7 @@ namespace GeneticAlgorithms
                         max.maxVal = res.Key;
                         max.individ = res.Value;
                     }
-                    Console.Write("Max: " + res.Key.ToString());
+                    //Console.Write("Max: " + res.Key.ToString());
                 }
 
                 population.AddIndivid(res.Value);

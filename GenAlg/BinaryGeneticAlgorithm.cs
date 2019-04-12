@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define BACKPACK_300
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,16 +18,23 @@ namespace GeneticAlgorithms
         private int _stepCount = 0;
         private bool _printPopulation = false;
 
-        private void PrintPopulation(String opName, IPopulation population)
+        private void PrintPopulation(String opName)
         {
             if (_printPopulation)
             {
+                int sum = 0;
+                for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
+                {
+                    sum += _task.TargetFunction(individ);
+                }
+
                 int count = 0;
                 Console.WriteLine(opName);
-                for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+                for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
                 {
                     List<Gen> genom = individ.GetGenom();
-                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString());
+                    int targFuncRes = _task.TargetFunction(individ);
+                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%");
                     count++;
                 }
             }
@@ -40,24 +49,27 @@ namespace GeneticAlgorithms
 
             Select();
             // ## LOG
-            PrintPopulation("Select", _population);
+            PrintPopulation("Select");
 
             while (!Stop())
             {
                 Сross();
                 // ## LOG
-                PrintPopulation("Cross", _population);
+                PrintPopulation("Cross");
                 Mutation();
                 // ## LOG
-                PrintPopulation("Mutation", _population);
+                PrintPopulation("Mutation");
                 Select();
                 // ## LOG
-                PrintPopulation("Select", _population);
+                PrintPopulation("Select");
 
-                if (_max.maxVal >= 8986)
-                {
-                    break;
-                }
+                Console.WriteLine("Max: " + _max.maxVal.ToString());
+
+#if BACKPACK_300
+                if (_max.maxVal >= 3343) break;
+#else
+                if (_max.maxVal >= 8986) break;
+#endif
             }
 
             // Формирование решения
