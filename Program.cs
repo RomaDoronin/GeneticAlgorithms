@@ -60,8 +60,8 @@ namespace GeneticAlgorithms
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             IPopulation population = new StdPopulation();
-            population.SetStartPopSize(60);   // Значение должно быть четным
-            population.SetSizeAfterSelect(30); // Значение должно быть четным
+            population.SetStartPopSize(40);   // Значение должно быть четным
+            population.SetSizeAfterSelect(20); // Значение должно быть четным
             genAlg.SetPopulation(ref population);
 
             // ------------------------------------------------------------------------------------ Настройка мутации
@@ -74,8 +74,10 @@ namespace GeneticAlgorithms
 
             // ------------------------------------------------------------------------------------ Настройна селекции
             //genAlg.SetSelect(new CuttingSelection());
-            //genAlg.SetSelect(new RouletteSelection());
-            genAlg.SetSelect(new TournamentSelection());
+            RouletteSelection rouletteSelection = new RouletteSelection();
+            rouletteSelection.SetIsRemoveSelectIndividFromSelectPool(false);
+            genAlg.SetSelect(rouletteSelection);
+            //genAlg.SetSelect(new TournamentSelection());
 
             // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());

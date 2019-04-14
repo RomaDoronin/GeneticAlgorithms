@@ -27,6 +27,15 @@ namespace GeneticAlgorithms
     /// </summary>
     class RouletteSelection : ASelect
     {
+        private bool _isRemoveSelectIndividFromSelectPool;
+
+        public void SetIsRemoveSelectIndividFromSelectPool(bool isRemoveSelectIndividFromSelectPool) => _isRemoveSelectIndividFromSelectPool = isRemoveSelectIndividFromSelectPool;
+
+        public RouletteSelection()
+        {
+            _isRemoveSelectIndividFromSelectPool = true;
+        }
+
         public override void Select(ref IPopulation population, ITask task, ref ResultPair max)
         {
             List<IndividPlusInt> valueFitnessFunction = new List<IndividPlusInt>();
@@ -69,16 +78,19 @@ namespace GeneticAlgorithms
                         else
                         {
                             previousVal = indPI.GetSumVal();
-                            newValueFitnessFunction.Add(indPI);
+                            if (_isRemoveSelectIndividFromSelectPool)
+                                newValueFitnessFunction.Add(indPI);
                         }
                     }
                     else
                     {
-                        newValueFitnessFunction.Add(new IndividPlusInt(indPI.GetIndivid(), indPI.GetSumVal() - additive));
+                        if (_isRemoveSelectIndividFromSelectPool)
+                            newValueFitnessFunction.Add(new IndividPlusInt(indPI.GetIndivid(), indPI.GetSumVal() - additive));
                     }
                 }
 
-                valueFitnessFunction = newValueFitnessFunction;
+                if (_isRemoveSelectIndividFromSelectPool)
+                    valueFitnessFunction = newValueFitnessFunction;
 
             } while (popList.Count < population.GetSizeAfterSelect());
 

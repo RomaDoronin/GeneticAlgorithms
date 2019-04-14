@@ -21,12 +21,12 @@ namespace GeneticAlgorithms
 
         public void SetNumOfMutGen(int numOfMutGen) => _numOfMutGen = numOfMutGen;
 
-        protected override void DoMutation(ref RNGCSP rngcsp, ref List<Gen> genom)
+        protected override void DoMutation(ref RNGCSP rngcsp, ref List<Gen> chromosome)
         {
-            int mutGenNum = rngcsp.GetRandomNum(0, genom.Count);
+            int mutGenNum = rngcsp.GetRandomNum(0, chromosome.Count);
 
             List<short> alleleList = new List<short>();
-            foreach (var allele in genom[mutGenNum].GetAlleleList())
+            foreach (var allele in chromosome[mutGenNum].GetAlleleList())
             {
                 if (rngcsp.GetRandomNum(0, 2) == 0)
                 {
@@ -46,20 +46,20 @@ namespace GeneticAlgorithms
             }
 
             // На самом деле можно было бы просто написать
-            //for (int i = 0; i < genom[mutGenNum].GetAlleleList().Count; i++)
+            //for (int i = 0; i < chromosome[mutGenNum].GetAlleleList().Count; i++)
             //{
             //    alleleList.Add((short)rngcsp.GetRandomNum(0, 2));
             //}
             // Потому что в случае бинарного представления это однозначно
 
-            genom[mutGenNum].SetAlleleList(alleleList);
+            chromosome[mutGenNum].SetAlleleList(alleleList);
         }
 
-        protected override void SetMutGenomNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutGenomNumList)
+        protected override void SetMutchromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList)
         {
             for (int i = 0; i < _numOfMutGen; i++)
             {
-                mutGenomNumList.Add(rngcsp.GetRandomNum(0, population.GetCurrSize()));
+                mutchromosomeNumList.Add(rngcsp.GetRandomNum(0, population.GetCurrSize()));
             }
         }
     }

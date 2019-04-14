@@ -25,19 +25,36 @@ namespace GeneticAlgorithms
                 int sum = 0;
                 for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
                 {
-                    sum += _task.TargetFunction(individ);
+                    sum += FitnessFunction(individ);
                 }
 
                 int count = 0;
                 Console.WriteLine(opName);
                 for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
                 {
-                    List<Gen> genom = individ.GetGenom();
-                    int targFuncRes = _task.TargetFunction(individ);
+                    List<Gen> chromosome = individ.GetChromosome();
+                    int targFuncRes = FitnessFunction(individ);
                     Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%");
                     count++;
                 }
             }
+        }
+
+        private int CurrMaxInPopulation()
+        {
+            int currMax = 0;
+
+            for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
+            {
+                int fitnessFucnRes = FitnessFunction(individ);
+
+                if (currMax < fitnessFucnRes)
+                {
+                    currMax = fitnessFucnRes;
+                }
+            }
+
+            return currMax;
         }
 
         public void SetPrintPopulation(bool printPopulation) => _printPopulation = printPopulation;
@@ -63,7 +80,8 @@ namespace GeneticAlgorithms
                 // ## LOG
                 PrintPopulation("Select");
 
-                Console.WriteLine("Max: " + _max.maxVal.ToString());
+                Console.WriteLine("Current Max: " + CurrMaxInPopulation().ToString());
+                Console.WriteLine("Max:         " + _max.maxVal.ToString());
 
 #if BACKPACK_300
                 if (_max.maxVal >= 3343) break;

@@ -8,34 +8,34 @@ namespace GeneticAlgorithms
 {
     abstract class AMutation
     {
-        protected abstract void DoMutation(ref RNGCSP rngcsp, ref List<Gen> genom);
+        protected abstract void DoMutation(ref RNGCSP rngcsp, ref List<Gen> chromosome);
 
-        protected abstract void SetMutGenomNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutGenomNumList);
+        protected abstract void SetMutchromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList);
 
         public virtual void Mutation(ref IPopulation population, ITask task)
         {
             List<Individ> populationList = new List<Individ>();
             RNGCSP rngcsp = new RNGCSP();
-            List<int> mutGenomNumList = new List<int>();
-            SetMutGenomNumList(population, ref rngcsp, ref mutGenomNumList);
+            List<int> mutchromosomeNumList = new List<int>();
+            SetMutchromosomeNumList(population, ref rngcsp, ref mutchromosomeNumList);
 
             for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
             {
-                foreach (var mutGenomNum in mutGenomNumList)
+                foreach (var mutchromosomeNum in mutchromosomeNumList)
                 {
-                    if (mutGenomNum == populationList.Count)
+                    if (mutchromosomeNum == populationList.Count)
                     {
                         do
                         {
-                            List<Gen> genom = individ.GetGenom();
+                            List<Gen> chromosome = individ.GetChromosome();
                             do // Чтобы не заменилась аллель такая что приветел к несуществующему гену
                             {
-                                DoMutation(ref rngcsp, ref genom);
+                                DoMutation(ref rngcsp, ref chromosome);
 
-                                //Console.WriteLine("Mutation genom: " + mutGen.ToString());
+                                //Console.WriteLine("Mutation chromosome: " + mutGen.ToString());
                                 //Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
 
-                                individ.SetGenom(genom);
+                                individ.SetChromosome(chromosome);
 
                             } while (!task.CheckIndivid(individ));
                         } while (!task.LimitationsFunction(individ));

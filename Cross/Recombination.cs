@@ -12,27 +12,27 @@ namespace GeneticAlgorithms
     /// </summary>
     class Recombination : ACross
     {
-        protected override void DoCross(List<Gen> genomFirst, List<Gen> genomSecond, ref List<Gen> childGenomFirst, ref List<Gen> childGenomSecond)
+        protected override void DoCross(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
         {
-            for (int i = 0; i < genomFirst.Count; i++)
+            for (int i = 0; i < chromosomeFirst.Count; i++)
             {
                 RNGCSP rngcsp = new RNGCSP();
                 if (rngcsp.GetRandomNum(0, 2) == 1)
                 {
-                    childGenomFirst.Add(genomFirst[i]);
+                    childchromosomeFirst.Add(chromosomeFirst[i]);
                 }
                 else
                 {
-                    childGenomFirst.Add(genomSecond[i]);
+                    childchromosomeFirst.Add(chromosomeSecond[i]);
                 }
 
                 if (rngcsp.GetRandomNum(0, 2) == 1)
                 {
-                    childGenomSecond.Add(genomFirst[i]);
+                    childchromosomeSecond.Add(chromosomeFirst[i]);
                 }
                 else
                 {
-                    childGenomSecond.Add(genomSecond[i]);
+                    childchromosomeSecond.Add(chromosomeSecond[i]);
                 }
             }
         }

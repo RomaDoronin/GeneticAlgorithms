@@ -8,7 +8,7 @@ namespace GeneticAlgorithms
 {
     abstract class ACross
     {
-        protected abstract void DoCross(List<Gen> genomFirst, List<Gen> genomSecond, ref List<Gen> childGenomFirst, ref List<Gen> childGenomSecond);
+        protected abstract void DoCross(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond);
 
         public virtual void Cross(ref IPopulation population, ITask task, ASelectParent selectParent)
         {
@@ -26,23 +26,23 @@ namespace GeneticAlgorithms
                 Individ parentSecond = new Individ();
                 selectParent.SelectParent(ref parentNumbers, ref parentFirst, ref parentSecond, population);
 
-                List<Gen> genomFirst = parentFirst.GetGenom();
-                List<Gen> genomSecond = parentSecond.GetGenom();
+                List<Gen> chromosomeFirst = parentFirst.GetChromosome();
+                List<Gen> chromosomeSecond = parentSecond.GetChromosome();
 
-                List<Gen> childGenomFirst = new List<Gen>();
-                List<Gen> childGenomSecond = new List<Gen>();
+                List<Gen> childchromosomeFirst = new List<Gen>();
+                List<Gen> childchromosomeSecond = new List<Gen>();
 
-                DoCross(genomFirst, genomSecond, ref childGenomFirst, ref childGenomSecond);
+                DoCross(chromosomeFirst, chromosomeSecond, ref childchromosomeFirst, ref childchromosomeSecond);
 
                 Individ childFirst = new Individ();
-                childFirst.SetGenom(childGenomFirst);
+                childFirst.SetChromosome(childchromosomeFirst);
                 if (task.LimitationsFunction(childFirst))
                 {
                     population.AddIndivid(childFirst);
                 }
 
                 Individ childSecond = new Individ();
-                childSecond.SetGenom(childGenomSecond);
+                childSecond.SetChromosome(childchromosomeSecond);
                 if (task.LimitationsFunction(childSecond))
                 {
                     population.AddIndivid(childSecond);

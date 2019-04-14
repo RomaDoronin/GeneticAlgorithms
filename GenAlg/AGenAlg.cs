@@ -21,9 +21,9 @@ namespace GeneticAlgorithms
         protected IPopulation _population;
         protected ITask _task;
 
-        protected AMutation _mutation;
-        protected ASelect _select;
-        protected ACross _cross;
+        private AMutation _mutation;
+        private ASelect _select;
+        private ACross _cross;
         protected ASelectParent _selectParent;
 
         public virtual void SetPopulation(ref IPopulation population) => _population = population;
@@ -34,6 +34,11 @@ namespace GeneticAlgorithms
         public void SetMaxIterNum(int maxIterNum) => _maxIterNum = maxIterNum;
 
         public abstract void Solve(ref ITask task);
+
+        protected int FitnessFunction(Individ individ)
+        {
+            return _task.TargetFunction(individ);
+        }
 
         // Создание начальной популяции
         protected abstract void CreatePopulation();
@@ -52,14 +57,20 @@ namespace GeneticAlgorithms
         {
             _selectParent.SelectParent(ref parentNumbers, ref parent1, ref parent2, _population);
         }
-
-        // Скрещивание
+        
+        /// <summary>
+        /// Скрещивание
+        /// Добавить вероятность скрещивания
+        /// </summary>
         protected virtual void Сross()
         {
             _cross.Cross(ref _population, _task, _selectParent);
         }
-
-        // Мутация
+        
+        /// <summary>
+        /// Мутация
+        /// Добавить вероятность мутации
+        /// </summary>
         protected virtual void Mutation()
         {
             _mutation.Mutation(ref _population, _task);

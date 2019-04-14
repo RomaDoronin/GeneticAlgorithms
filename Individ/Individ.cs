@@ -8,52 +8,56 @@ namespace GeneticAlgorithms
 {
     /// <summary>
     /// Особь
+    /// Может обладать одной хромосомой или несколькими
     /// </summary>
     class Individ
     {
-        private List<Gen> _genom;
+        /// <summary>
+        /// Локус - позиция гена в хромосоме
+        /// </summary>
+        private List<Gen> _chromosome;
 
         public Individ()
         {
-            _genom = new List<Gen>();
+            _chromosome = new List<Gen>();
         }
 
         public Individ(Individ individ)
         {
-            _genom = new List<Gen>();
+            _chromosome = new List<Gen>();
 
-            foreach (var gen in individ.GetGenom())
+            foreach (var gen in individ.GetChromosome())
             {
-                _genom.Add(gen);
+                _chromosome.Add(gen);
             }
         }
 
-        public void SetGenom(List<Gen> genom)
+        public void SetChromosome(List<Gen> chromosome)
         {
-            _genom.Clear();
-            foreach (var gen in genom)
+            _chromosome.Clear();
+            foreach (var gen in chromosome)
             {
-                _genom.Add(gen);
+                _chromosome.Add(gen);
             }
         }
 
-        public List<Gen> GetGenom()
+        public List<Gen> GetChromosome()
         {
-            List<Gen> genom = new List<Gen>();
-            foreach (var gen in _genom)
+            List<Gen> chromosome = new List<Gen>();
+            foreach (var gen in _chromosome)
             {
                 Gen newGen = new Gen(gen);
-                genom.Add(newGen);
+                chromosome.Add(newGen);
             }
 
-            return genom;
+            return chromosome;
         }
 
         public override string ToString()
         {
             String outStr = "";
 
-            foreach(var gen in _genom)
+            foreach(var gen in _chromosome)
             {
                 outStr += gen.ToString() + " ";
             }

@@ -36,9 +36,9 @@ namespace GeneticAlgorithms
             _breakPointList.Add(1);
         }        
 
-        protected override void DoCross(List<Gen> genomFirst, List<Gen> genomSecond, ref List<Gen> childGenomFirst, ref List<Gen> childGenomSecond)
+        protected override void DoCross(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
         {
-            int size = genomFirst.Count;
+            int size = chromosomeFirst.Count;
 
             // Кросинговер
             for (int i = 0; i < _breakPointList.Count - 1; i++)
@@ -50,13 +50,13 @@ namespace GeneticAlgorithms
                 {
                     if (i % 2 == 0)
                     {
-                        childGenomFirst.Add(genomFirst[j]);
-                        childGenomSecond.Add(genomSecond[j]);
+                        childchromosomeFirst.Add(chromosomeFirst[j]);
+                        childchromosomeSecond.Add(chromosomeSecond[j]);
                     }
                     else
                     {
-                        childGenomFirst.Add(genomSecond[j]);
-                        childGenomSecond.Add(genomFirst[j]);
+                        childchromosomeFirst.Add(chromosomeSecond[j]);
+                        childchromosomeSecond.Add(chromosomeFirst[j]);
                     }
                 }
             }
