@@ -11,7 +11,7 @@ namespace GeneticAlgorithms
     /// </summary>
     class RandomlyWithoutRepetitions : ASelectParent
     {
-        public override void SelectParent(ref List<int> parentNumbers, ref Individ parentFirst, ref Individ parentSecond, IPopulation population)
+        public override void SelectParent(ref List<int> parentNumbers, ref Individ parentFirst, ref Individ parentSecond, IPopulation population, int matingPoolSize)
         {
             RNGCSP rngcsp = new RNGCSP();
 
@@ -27,12 +27,19 @@ namespace GeneticAlgorithms
             Console.WriteLine("numParentSecond: " + numParentSecond.ToString());*/
 
             int count = 0;
-            for (Individ individ = population.GetFirstIndivid(); ; individ = population.GetNextIndivid())
+            List<Individ> iteratorPopList = population.GetPopulationList();
+            foreach (var individ in iteratorPopList)
             {
-                if (numParentFirst == count) parentFirst = individ;
-                if (numParentSecond == count) parentSecond = individ;
+                if (numParentFirst == count)
+                {
+                    parentFirst = individ;
+                }
 
-                if (count >= population.GetSizeAfterSelect()) break;
+                if (numParentSecond == count)
+                {
+                    parentSecond = individ;
+                }
+
                 count++;
             }
         }

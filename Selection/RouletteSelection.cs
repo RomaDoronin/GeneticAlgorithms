@@ -25,7 +25,7 @@ namespace GeneticAlgorithms
     /// <summary>
     /// Особи для размножения выбираются случайно, но вероятность выбора особи зависит от ее значения функции приспособленности
     /// </summary>
-    class RouletteSelection : ASelect
+    class RouletteSelection : ASelection
     {
         private bool _isRemoveSelectIndividFromSelectPool;
 
@@ -36,15 +36,16 @@ namespace GeneticAlgorithms
             _isRemoveSelectIndividFromSelectPool = true;
         }
 
-        public override void Select(ref IPopulation population, ITask task, ref ResultPair max)
+        public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
         {
             List<IndividPlusInt> valueFitnessFunction = new List<IndividPlusInt>();
 
             int valueFitnessFunctionSum = 0;
 
-            for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+            List<Individ> iteratorPopList = currPopulation.GetPopulationList();
+            foreach (var individ in iteratorPopList)
             {
-                int targetFunctionRes = task.TargetFunction(individ);
+                int targetFunctionRes = FitnessFunction(individ);
                 if (max.maxVal < targetFunctionRes)
                 {
                     max.maxVal = targetFunctionRes;
@@ -92,9 +93,10 @@ namespace GeneticAlgorithms
                 if (_isRemoveSelectIndividFromSelectPool)
                     valueFitnessFunction = newValueFitnessFunction;
 
-            } while (popList.Count < population.GetSizeAfterSelect());
+            } while (popList.Count < matingPoolSize);
 
-            population.SetPopulationList(popList);
+            currPopulation.SetPopulationList(popList);
+            return currPopulation;
         }
     }
 }

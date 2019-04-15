@@ -14,6 +14,7 @@ namespace GeneticAlgorithms
     {
         /// <summary>
         /// Локус - позиция гена в хромосоме
+        /// Хромосома
         /// </summary>
         private List<Gen> _chromosome;
 

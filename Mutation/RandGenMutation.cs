@@ -55,11 +55,12 @@ namespace GeneticAlgorithms
             chromosome[mutGenNum].SetAlleleList(alleleList);
         }
 
-        protected override void SetMutchromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList)
+        protected override void SetMutChromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutChromosomeNumList)
         {
+            int popSize = population.GetCurrSize();
             for (int i = 0; i < _numOfMutGen; i++)
             {
-                mutchromosomeNumList.Add(rngcsp.GetRandomNum(0, population.GetCurrSize()));
+                mutChromosomeNumList.Add(rngcsp.GetRandomNum(0, popSize));
             }
         }
     }

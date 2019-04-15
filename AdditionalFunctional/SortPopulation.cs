@@ -14,13 +14,14 @@ namespace GeneticAlgorithms
 
     class SortPopulation
     {
-        public IOrderedEnumerable<KeyValuePair<int, Individ>> GetSortResultOfSelect(SortType sortType, IPopulation population, ITask task)
+        public IOrderedEnumerable<KeyValuePair<int, Individ>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
         {
             Dictionary<int, Individ> resSelect = new Dictionary<int, Individ>();
 
-            for (Individ individ = population.GetFirstIndivid(); !population.IsEnd(); individ = population.GetNextIndivid())
+            List<Individ> iteratorPopList = population.GetPopulationList();
+            foreach (var individ in iteratorPopList)
             {
-                resSelect[task.TargetFunction(individ)] = individ;
+                resSelect[FitnessFunction(individ)] = individ;
             }
 
             if (sortType == SortType.Descending)

@@ -9,19 +9,16 @@ namespace GeneticAlgorithms
     interface IPopulation
     {
         // Итератор
-        Individ GetFirstIndivid();
-        Individ GetNextIndivid();
-        bool IsEnd();
+        //Individ GetFirstIndivid();
+        //Individ GetNextIndivid();
+        //bool IsEnd();
 
-        int GetStartPopSize();
-        void SetStartPopSize(int startPopSize);
-        int GetSizeAfterSelect();
-        void SetSizeAfterSelect(int sizeAfterSelect);
         List<Individ> GetPopulationList();
         void SetPopulationList(List<Individ> popList);
 
         void AddIndivid(Individ individ);
-        void ClearOldPopulation();
         int GetCurrSize();
+
+        IPopulation GetInterfaceCopy();
     }
 }

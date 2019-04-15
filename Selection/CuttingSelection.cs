@@ -10,12 +10,13 @@ namespace GeneticAlgorithms
     /// Выбор из популяции лучших особей по значению функции приспособления
     /// Количество остающихся осособей после выбора хранится в population
     /// </summary>
-    class CuttingSelection : ASelect
+    class CuttingSelection : ASelection
     {
-        public override void Select(ref IPopulation population, ITask task, ref ResultPair max)
+        public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
         {
             SortPopulation sortPopulation = new SortPopulation();
-            var sortResSelect = sortPopulation.GetSortResultOfSelect(SortType.Descending, population, task);
+            var sortResSelect = sortPopulation.GetSortResultOfSelect(SortType.Descending, currPopulation, FitnessFunction);
+            List<Individ> popList = new List<Individ>();
 
             int count = 0;
             foreach (var res in sortResSelect)
@@ -27,19 +28,20 @@ namespace GeneticAlgorithms
                         max.maxVal = res.Key;
                         max.individ = res.Value;
                     }
-                    //Console.Write("Max: " + res.Key.ToString());
                 }
 
-                population.AddIndivid(res.Value);
+                popList.Add(res.Value);
                 count++;
-                if (count == population.GetSizeAfterSelect())
+                if (count >= matingPoolSize)
                 {
                     break;
                 }
             }
             Console.WriteLine();
 
-            population.ClearOldPopulation();
+            IPopulation population = currPopulation.GetInterfaceCopy();
+            population.SetPopulationList(popList);
+            return population;
         }
     }
 }

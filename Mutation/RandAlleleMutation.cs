@@ -21,7 +21,7 @@ namespace GeneticAlgorithms
 
         public void SetNumOfMutAllele(int numOfMutAllele) => _numOfMutAllele = numOfMutAllele;
 
-        protected override void SetMutchromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList)
+        protected override void SetMutChromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList)
         {
             for (int i = 0; i < _numOfMutAllele; i++)
             {

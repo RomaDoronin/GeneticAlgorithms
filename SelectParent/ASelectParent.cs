@@ -8,6 +8,6 @@ namespace GeneticAlgorithms
 {
     abstract class ASelectParent
     {
-        public abstract void SelectParent(ref List<int> parentNumbers, ref Individ parentFirst, ref Individ parentSecond, IPopulation population);
+        public abstract void SelectParent(ref List<int> parentNumbers, ref Individ parentFirst, ref Individ parentSecond, IPopulation population, int matingPoolSize);
     }
 }

@@ -18,23 +18,24 @@ namespace GeneticAlgorithms
         private int _stepCount = 0;
         private bool _printPopulation = false;
 
-        private void PrintPopulation(String opName)
+        private void PrintPopulation(String opName, IPopulation population)
         {
             if (_printPopulation)
             {
                 int sum = 0;
-                for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
+                List<Individ> iteratorPopList = population.GetPopulationList();
+                foreach (var individ in iteratorPopList)
                 {
                     sum += FitnessFunction(individ);
                 }
 
                 int count = 0;
                 Console.WriteLine(opName);
-                for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
+                foreach (var individ in iteratorPopList)
                 {
                     List<Gen> chromosome = individ.GetChromosome();
                     int targFuncRes = FitnessFunction(individ);
-                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%");
+                    Console.WriteLine(/*"[" + count.ToString() + "] " +*/ individ.ToString() /*+ " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%"*/);
                     count++;
                 }
             }
@@ -44,7 +45,8 @@ namespace GeneticAlgorithms
         {
             int currMax = 0;
 
-            for (Individ individ = _population.GetFirstIndivid(); !_population.IsEnd(); individ = _population.GetNextIndivid())
+            List<Individ> iteratorPopList = _population.GetPopulationList();
+            foreach (var individ in iteratorPopList)
             {
                 int fitnessFucnRes = FitnessFunction(individ);
 
@@ -62,23 +64,23 @@ namespace GeneticAlgorithms
         public override void Solve(ref ITask task)
         {
             _task = task;
-            CreatePopulation();
-
-            Select();
-            // ## LOG
-            PrintPopulation("Select");
+            IPopulation currPopulation = CreatePopulation();
+            PrintPopulation("CreatePopulation", currPopulation);
 
             while (!Stop())
             {
-                Сross();
-                // ## LOG
-                PrintPopulation("Cross");
-                Mutation();
-                // ## LOG
-                PrintPopulation("Mutation");
-                Select();
-                // ## LOG
-                PrintPopulation("Select");
+                IPopulation matingPool = Selection(currPopulation);
+                PrintPopulation("Selection", matingPool);
+
+                IPopulation children = Сrossover(matingPool);
+                PrintPopulation("Crossover", children);
+
+                Mutation(ref currPopulation, ref children);
+                PrintPopulation("Mutation", currPopulation);
+                PrintPopulation("Mutation", children);
+
+                currPopulation = FormationNewPopulation(currPopulation, children);
+                PrintPopulation("Formation New Population", currPopulation);
 
                 Console.WriteLine("Current Max: " + CurrMaxInPopulation().ToString());
                 Console.WriteLine("Max:         " + _max.maxVal.ToString());
@@ -92,7 +94,7 @@ namespace GeneticAlgorithms
 
             // Формирование решения
             SortPopulation sortPopulation = new SortPopulation();
-            var result = sortPopulation.GetSortResultOfSelect(SortType.Descending, _population, _task);
+            var result = sortPopulation.GetSortResultOfSelect(SortType.Descending, _population, _task.TargetFunction);
             foreach (var res in result)
             {
                 _solution = _task.Decoder(res.Value);
@@ -106,12 +108,14 @@ namespace GeneticAlgorithms
         }
 
         // Создание начальной популяции
-        protected override void CreatePopulation()
+        protected override IPopulation CreatePopulation()
         {
-            for (int i = 0; i < _population.GetStartPopSize(); i++)
+            do
             {
                 _population.AddIndivid(_task.GenerateInitialSolution()); // В GenerateIndivid должен заполнять геном
-            }
+            } while (_population.GetCurrSize() < GetPopulationSize());
+
+            return _population;
         }
         
         // Остановка

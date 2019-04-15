@@ -11,7 +11,7 @@ namespace GeneticAlgorithms
     /// Разбивать можно случайно - любая особь может попасть в любую подгруппу сколько угодно раз,
     /// можно детерминированно - одна особь попадает ровно в одну подгруппу
     /// </summary>
-    class TournamentSelection : ASelect
+    class TournamentSelection : ASelection
     {
         private int _subgroupSize;
         private bool _isDeterministicPartitioning;
@@ -25,14 +25,14 @@ namespace GeneticAlgorithms
             _isDeterministicPartitioning = true;
         }
 
-        private Individ BestInList(ITask task, List<Individ> subgroup, ref ResultPair max)
+        private Individ BestInList(FitnessFunctionDel FitnessFunction, List<Individ> subgroup, ref ResultPair max)
         {
             Individ bestIndivid = subgroup[0];
-            int maxValFitnessFunction = task.TargetFunction(subgroup[0]);
+            int maxValFitnessFunction = FitnessFunction(subgroup[0]);
 
             foreach (var individ in subgroup)
             {
-                int fitnessFunctionRes = task.TargetFunction(individ);
+                int fitnessFunctionRes = FitnessFunction(individ);
 
                 if (fitnessFunctionRes > maxValFitnessFunction)
                 {
@@ -50,10 +50,10 @@ namespace GeneticAlgorithms
             return bestIndivid;
         }
 
-        public override void Select(ref IPopulation population, ITask task, ref ResultPair max)
+        public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
         {
             List<Individ> populationList = new List<Individ>();
-            List<Individ> popList = population.GetPopulationList();
+            List<Individ> popList = currPopulation.GetPopulationList();
             RNGCSP rngcsp = new RNGCSP();
 
             do
@@ -69,11 +69,12 @@ namespace GeneticAlgorithms
                     }
                 }
 
-                populationList.Add(BestInList(task, subgroup, ref max));
+                populationList.Add(BestInList(FitnessFunction, subgroup, ref max));
 
-            } while (populationList.Count != population.GetSizeAfterSelect());
+            } while (populationList.Count != matingPoolSize);
 
-            population.SetPopulationList(populationList);
+            currPopulation.SetPopulationList(populationList);
+            return currPopulation;
         }
     }
 }

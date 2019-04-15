@@ -10,9 +10,9 @@ namespace GeneticAlgorithms
     /// Рекомбинация
     /// Если ген в одной позиции у родителей совпадают, то у ребенка будет такой же ген. Если геры различные по случайно выбирается один из них, который достанется ребенку
     /// </summary>
-    class Recombination : ACross
+    class Recombination : ACrossover
     {
-        protected override void DoCross(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
+        protected override void DoCrossover(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
         {
             for (int i = 0; i < chromosomeFirst.Count; i++)
             {

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
+    delegate int FitnessFunctionDel(Individ individ);
+    delegate bool LimitationsFunctionDel(Individ individ);
+
     interface ITask
     {
         Individ GenerateInitialSolution();

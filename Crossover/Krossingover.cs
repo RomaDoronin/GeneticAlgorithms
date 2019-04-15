@@ -11,8 +11,10 @@ namespace GeneticAlgorithms
     /// 1. Точки разрыва - задавать в каком месте разобьется геном, возможно рандомно
     /// 2. Задавать множество точек разрыва
     /// </summary>
-    class Krossingover : ACross
+    class Krossingover : ACrossover
     {
+        public const int RAND_SET_BREAK_POINT = -1;
+
         private List<double> _breakPointList;
 
         public Krossingover()
@@ -27,16 +29,26 @@ namespace GeneticAlgorithms
         public void SetBreakPoint(List<double> breakPointList)
         {
             _breakPointList.Clear();
-
             _breakPointList.Add(0);
-            foreach (var breakPoint in breakPointList)
+
+            if (breakPointList[0] == RAND_SET_BREAK_POINT)
             {
-                _breakPointList.Add(breakPoint);
+                RNGCSP rngcsp = new RNGCSP();
+                int rnd = rngcsp.GetRandomNum(1, 100);
+                _breakPointList.Add(rnd / 100.0);
             }
+            else
+            {
+                foreach (var breakPoint in breakPointList)
+                {
+                    _breakPointList.Add(breakPoint);
+                }
+            }
+            
             _breakPointList.Add(1);
         }        
 
-        protected override void DoCross(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
+        protected override void DoCrossover(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childChromosomeFirst, ref List<Gen> childChromosomeSecond)
         {
             int size = chromosomeFirst.Count;
 
@@ -50,13 +62,13 @@ namespace GeneticAlgorithms
                 {
                     if (i % 2 == 0)
                     {
-                        childchromosomeFirst.Add(chromosomeFirst[j]);
-                        childchromosomeSecond.Add(chromosomeSecond[j]);
+                        childChromosomeFirst.Add(chromosomeFirst[j]);
+                        childChromosomeSecond.Add(chromosomeSecond[j]);
                     }
                     else
                     {
-                        childchromosomeFirst.Add(chromosomeSecond[j]);
-                        childchromosomeSecond.Add(chromosomeFirst[j]);
+                        childChromosomeFirst.Add(chromosomeSecond[j]);
+                        childChromosomeSecond.Add(chromosomeFirst[j]);
                     }
                 }
             }

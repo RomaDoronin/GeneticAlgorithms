@@ -9,49 +9,45 @@ namespace GeneticAlgorithms
     class StdPopulation : IPopulation
     {
         private List<Individ> _individList;
-        private int _sizeAfterSelect;
-        private int _startPopSize;
-        private int _iterator;
-        private bool _isEnd;
+        //private int _iterator;
+        //private bool _isEnd;
 
         // Дополнительный функционал
         public StdPopulation()
         {
             _individList = new List<Individ>();
-            _sizeAfterSelect = 10;
-            _startPopSize = 20;
         }
 
         // Реализация интерфейса
-        public Individ GetFirstIndivid()
-        {
-            _iterator = 0;
-            _isEnd = false;
-            Individ individ = new Individ(_individList[_iterator]);
-            return individ;
-        }
 
-        public Individ GetNextIndivid()
-        {
-            if (_iterator < _individList.Count - 1)
-            {
-                _iterator++;
-            }
-            else
-            {
-                _isEnd = true;
-            }
+        // Внешний итератор
+        //public Individ GetFirstIndivid()
+        //{
+        //    _iterator = 0;
+        //    _isEnd = false;
+        //    Individ individ = new Individ(_individList[_iterator]);
+        //    return individ;
+        //}        
+        //public Individ GetNextIndivid()
+        //{
+        //    _iterator++;
+        //    Individ individ;
 
-            Individ individ = new Individ(_individList[_iterator]);
-            return individ;
-        }
+        //    if (_iterator == _individList.Count)
+        //    {
+        //        _isEnd = true;
+        //        individ = new Individ();
+        //    }
+        //    else
+        //    {
+        //        individ = new Individ(_individList[_iterator]);
+        //    }
 
-        public bool IsEnd() => _isEnd;
-
-        public int GetStartPopSize() => _startPopSize;
-        public void SetStartPopSize(int startPopSize) => _startPopSize = startPopSize;
-        public int GetSizeAfterSelect() => _sizeAfterSelect;
-        public void SetSizeAfterSelect(int sizeAfterSelect) => _sizeAfterSelect = sizeAfterSelect;
+             
+        //    return individ;
+        //}
+        //public bool IsEnd() => _isEnd;
+        
         public List<Individ> GetPopulationList()
         {
             List<Individ> individList = new List<Individ>();
@@ -66,18 +62,19 @@ namespace GeneticAlgorithms
 
         public void AddIndivid(Individ individ) => _individList.Add(individ);
 
-        public void ClearOldPopulation()
-        {
-            List<Individ> _individList = new List<Individ>();
+        public int GetCurrSize() => _individList.Count;
 
-            for (int i = _startPopSize; i < this._individList.Count; i++)
+        public IPopulation GetInterfaceCopy()
+        {
+            List<Individ> individList = new List<Individ>();
+            foreach (var individ in _individList)
             {
-                _individList.Add(this._individList[i]);
+                individList.Add(individ);
             }
 
-            this._individList = _individList;
+            StdPopulation population = new StdPopulation();
+            population.SetPopulationList(individList);
+            return population;
         }
-
-        public int GetCurrSize() => _individList.Count;
     }
 }
