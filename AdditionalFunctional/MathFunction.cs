@@ -8,7 +8,7 @@ namespace GeneticAlgorithms
 {
     class MathFunction
     {
-        public int Log2(int x)
+        public static int Log2(int x)
         {
             int count = 0;
             while (x / 2 != 0)

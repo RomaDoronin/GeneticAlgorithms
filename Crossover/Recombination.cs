@@ -16,8 +16,7 @@ namespace GeneticAlgorithms
         {
             for (int i = 0; i < chromosomeFirst.Count; i++)
             {
-                RNGCSP rngcsp = new RNGCSP();
-                if (rngcsp.GetRandomNum(0, 2) == 1)
+                if (RNGCSP.GetRandomNum(0, 2) == 1)
                 {
                     childchromosomeFirst.Add(chromosomeFirst[i]);
                 }
@@ -26,7 +25,7 @@ namespace GeneticAlgorithms
                     childchromosomeFirst.Add(chromosomeSecond[i]);
                 }
 
-                if (rngcsp.GetRandomNum(0, 2) == 1)
+                if (RNGCSP.GetRandomNum(0, 2) == 1)
                 {
                     childchromosomeSecond.Add(chromosomeFirst[i]);
                 }

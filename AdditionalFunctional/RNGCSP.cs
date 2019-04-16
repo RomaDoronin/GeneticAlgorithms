@@ -17,7 +17,7 @@ namespace GeneticAlgorithms
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
         /// <returns></returns>
-        public int GetRandomNum(int minValue, int maxValue)
+        public static int GetRandomNum(int minValue, int maxValue)
         {
             int result;
 

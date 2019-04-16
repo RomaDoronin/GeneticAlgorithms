@@ -79,7 +79,7 @@ namespace GeneticAlgorithms
             return Reverse(outVal);
         }
 
-        private void DeleteFirstZero(ref String str)
+        private static void DeleteFirstZero(ref String str)
         {
             String resStr = "";
             bool first = false;
@@ -99,7 +99,7 @@ namespace GeneticAlgorithms
             str = resStr;
         }
 
-        public String CulcNumberSystem(String inVal, int firstNumSys, int secondNumSys)
+        public static String CulcNumberSystem(String inVal, int firstNumSys, int secondNumSys)
         {
             DeleteFirstZero(ref inVal);
             if (inVal.Length == 0)
@@ -140,13 +140,13 @@ namespace GeneticAlgorithms
             return true;
         }
 
-        public int Culc(int inVal, int firstNumSys, int secondNumSys)
+        /*public int Culc(int inVal, int firstNumSys, int secondNumSys)
         {
             String inValStr = inVal.ToString();
 
             String outValStr = CulcNumberSystem(inValStr, firstNumSys, secondNumSys);
 
             return Int32.Parse(outValStr);
-        }
+        }*/
     }
 }

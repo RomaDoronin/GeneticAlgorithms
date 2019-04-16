@@ -14,7 +14,7 @@ namespace GeneticAlgorithms
 
     class SortPopulation
     {
-        public IOrderedEnumerable<KeyValuePair<int, Individ>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
+        public static IOrderedEnumerable<KeyValuePair<int, Individ>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
         {
             Dictionary<int, Individ> resSelect = new Dictionary<int, Individ>();
 

@@ -60,33 +60,25 @@ namespace GeneticAlgorithms
             genAlg.SetPoolsSize(40, 20, 10);
 
             // ------------------------------------------------------------------------------------ Настройка популяции
-            IPopulation population = new StdPopulation();
-            genAlg.SetPopulation(ref population);
+            genAlg.SetPopulation(new StdPopulation());
 
             // ------------------------------------------------------------------------------------ Настройка мутации
-            /*RandAlleleMutation randAlleleMutation = new RandAlleleMutation();
-            randAlleleMutation.SetNumOfMutAllele(8);
-            genAlg.SetMutation(randAlleleMutation);*/
-            RandGenMutation randGenMutation = new RandGenMutation();
-            randGenMutation.SetNumOfMutGen(3);
-            randGenMutation.SetMutationProbability(100);
-            genAlg.SetMutation(randGenMutation);
+            //genAlg.SetMutation(new RandAlleleMutation(50, OPERATION_TARGET.ALL, 8));
+            genAlg.SetMutation(new RandGenMutation(100, OPERATION_TARGET.ALL, 3));
 
             // ------------------------------------------------------------------------------------ Настройна селекции
-            genAlg.SetSelect(new CuttingSelection());
-            /*RouletteSelection rouletteSelection = new RouletteSelection();
-            rouletteSelection.SetIsRemoveSelectIndividFromSelectPool(false);
-            genAlg.SetSelect(rouletteSelection);*/
-            //genAlg.SetSelect(new TournamentSelection());
+            //genAlg.SetSelect(new CuttingSelection());
+            //genAlg.SetSelect(new RouletteSelection(false));
+            genAlg.SetSelect(new TournamentSelection(2, true));
 
             // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
 
             // ------------------------------------------------------------------------------------ Настройка скрещивания
-            Krossingover krossingover = new Krossingover();
+            /*Krossingover krossingover = new Krossingover();
             krossingover.SetBreakPoint(new List<double>() { Krossingover.RAND_SET_BREAK_POINT });
-            genAlg.SetCross(krossingover);
-            //genAlg.SetCross(new Recombination());
+            genAlg.SetCross(krossingover);*/
+            genAlg.SetCross(new Recombination());
 
             // ------------------------------------------------------------------------------------ Настройка выбора новой популяции
             genAlg.SetFormationNewPopulation(new LeaveBest());

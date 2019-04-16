@@ -56,7 +56,7 @@ namespace GeneticAlgorithms
 
         public override string ToString()
         {
-            String outStr = "";
+            String outStr = " ";
 
             foreach(var gen in _chromosome)
             {

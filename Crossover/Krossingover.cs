@@ -33,8 +33,7 @@ namespace GeneticAlgorithms
 
             if (breakPointList[0] == RAND_SET_BREAK_POINT)
             {
-                RNGCSP rngcsp = new RNGCSP();
-                int rnd = rngcsp.GetRandomNum(1, 100);
+                int rnd = RNGCSP.GetRandomNum(1, 100);
                 _breakPointList.Add(rnd / 100.0);
             }
             else

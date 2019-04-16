@@ -8,36 +8,61 @@ namespace GeneticAlgorithms
 {
     /// <summary>
     /// Особи разбиваются на подгруппы по 2-3 особи с последующим выбором лучших из подгрупп
-    /// Разбивать можно случайно - любая особь может попасть в любую подгруппу сколько угодно раз,
-    /// можно детерминированно - одна особь попадает ровно в одну подгруппу
+    /// Различается два способа выбрать: Детерминированый и случайный:
+    /// 1. Детерминированный - Выбор осуществляется с вероятностью 1
+    /// 2. Случайный с вероятность меньше единицы
     /// </summary>
     class TournamentSelection : ASelection
     {
-        private int _subgroupSize;
-        private bool _isDeterministicPartitioning;
-        
-        public void SetSubgroupSize(int subgroupSize) => _subgroupSize = subgroupSize;
-        public void SetIsDeterministicPartitioning(bool isDeterministicPartitioning) => _isDeterministicPartitioning = isDeterministicPartitioning;
+        private int _tournamentSize;
+        private bool _isDeterministicChoice;
 
-        public TournamentSelection()
+        public TournamentSelection(int tournamentSize, bool isDeterministicChoice)
         {
-            _subgroupSize = 2;
-            _isDeterministicPartitioning = true;
+            _tournamentSize = tournamentSize;
+            _isDeterministicChoice = isDeterministicChoice;
         }
 
-        private Individ BestInList(FitnessFunctionDel FitnessFunction, List<Individ> subgroup, ref ResultPair max)
+        private Individ BestInList(FitnessFunctionDel FitnessFunction, List<Individ> tournamentGroup, ref ResultPair max)
         {
-            Individ bestIndivid = subgroup[0];
-            int maxValFitnessFunction = FitnessFunction(subgroup[0]);
+            Individ bestIndivid = tournamentGroup[0];
+            int maxValFitnessFunction = FitnessFunction(tournamentGroup[0]);
 
-            foreach (var individ in subgroup)
+            if (_isDeterministicChoice)
             {
-                int fitnessFunctionRes = FitnessFunction(individ);
-
-                if (fitnessFunctionRes > maxValFitnessFunction)
+                foreach (var individ in tournamentGroup)
                 {
-                    maxValFitnessFunction = fitnessFunctionRes;
-                    bestIndivid = individ;
+                    int fitnessFunctionRes = FitnessFunction(individ);
+
+                    if (fitnessFunctionRes > maxValFitnessFunction)
+                    {
+                        maxValFitnessFunction = fitnessFunctionRes;
+                        bestIndivid = individ;
+                    }
+                }
+            }
+            else
+            {
+                List<int> sumValFitnessFunctionList = new List<int>();
+                int sumValFitnessFunction = 0;
+                foreach (var individ in tournamentGroup)
+                {
+                    sumValFitnessFunction += FitnessFunction(individ);
+                    sumValFitnessFunctionList.Add(sumValFitnessFunction);
+                }
+                
+                int rnd = RNGCSP.GetRandomNum(0, sumValFitnessFunction);
+
+                for (int i = 0; i < sumValFitnessFunctionList.Count; i++)
+                {
+                    if (sumValFitnessFunctionList[i] >= rnd)
+                    {
+                        if (i != 0)
+                            maxValFitnessFunction = sumValFitnessFunctionList[i] - sumValFitnessFunctionList[i - 1];
+                        else
+                            maxValFitnessFunction = sumValFitnessFunctionList[i];
+                        bestIndivid = tournamentGroup[i];
+                    }
                 }
             }
 
@@ -54,27 +79,24 @@ namespace GeneticAlgorithms
         {
             List<Individ> populationList = new List<Individ>();
             List<Individ> popList = currPopulation.GetPopulationList();
-            RNGCSP rngcsp = new RNGCSP();
 
             do
             {
-                List<Individ> subgroup = new List<Individ>();
-                for (int i = 0; i < _subgroupSize; i++)
+                List<Individ> tournamentGroup = new List<Individ>();
+                for (int i = 0; i < _tournamentSize; i++)
                 {
-                    int index = rngcsp.GetRandomNum(0, popList.Count);
-                    subgroup.Add(popList[index]);
-                    if (_isDeterministicPartitioning)
-                    {
-                        popList.Remove(popList[index]);
-                    }
+                    int index = RNGCSP.GetRandomNum(0, popList.Count);
+                    tournamentGroup.Add(popList[index]);
+                    popList.Remove(popList[index]);
                 }
 
-                populationList.Add(BestInList(FitnessFunction, subgroup, ref max));
+                populationList.Add(BestInList(FitnessFunction, tournamentGroup, ref max));
 
             } while (populationList.Count != matingPoolSize);
 
-            currPopulation.SetPopulationList(populationList);
-            return currPopulation;
+            IPopulation population = currPopulation.GetInterfaceCopy();
+            population.SetPopulationList(populationList);
+            return population;
         }
     }
 }

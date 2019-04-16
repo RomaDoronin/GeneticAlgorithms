@@ -82,9 +82,6 @@ namespace GeneticAlgorithms
                 currPopulation = FormationNewPopulation(currPopulation, children);
                 PrintPopulation("Formation New Population", currPopulation);
 
-                Console.WriteLine("Current Max: " + CurrMaxInPopulation().ToString());
-                Console.WriteLine("Max:         " + _max.maxVal.ToString());
-
 #if BACKPACK_300
                 if (_max.maxVal >= 3343) break;
 #else
@@ -92,19 +89,23 @@ namespace GeneticAlgorithms
 #endif
             }
 
-            // Формирование решения
-            SortPopulation sortPopulation = new SortPopulation();
-            var result = sortPopulation.GetSortResultOfSelect(SortType.Descending, _population, _task.TargetFunction);
+            // Выбор "наилучшего" решения
+            ChoosingBestSolution();
+
+            Console.WriteLine("\n=====================================");
+            Console.WriteLine("Max val:    " + _max.maxVal.ToString());
+            Console.WriteLine("Max result: " + _task.Decoder(_max.individ).ToString());
+        }
+
+        private void ChoosingBestSolution()
+        {
+            var result = SortPopulation.GetSortResultOfSelect(SortType.Descending, _population, _task.TargetFunction);
             foreach (var res in result)
             {
                 _solution = _task.Decoder(res.Value);
-                _solution.PrintResult();
+                //_solution.PrintResult();
                 break;
             }
-
-            Console.WriteLine("=====================================");
-            Console.WriteLine("Max val:    " + _max.maxVal.ToString());
-            Console.WriteLine("Max result: " + _task.Decoder(_max.individ).ToString());
         }
 
         // Создание начальной популяции
@@ -122,10 +123,24 @@ namespace GeneticAlgorithms
         protected override bool Stop()
         {
             _stepCount++;
-
-            Console.WriteLine("Population number: " + _stepCount.ToString());
+            PrintStatistic();
 
             return _stepCount == _maxIterNum;
+        }
+
+        private void PrintStatistic()
+        {
+            if ((_stepCount - 1) % 100 != 0)
+            {
+                Console.Write("\r");
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+            Console.Write("Population number: " + _stepCount.ToString());
+            Console.Write(" | Current Max: " + CurrMaxInPopulation().ToString());
+            Console.Write(" | Max: " + _max.maxVal.ToString());
         }
     }
 }

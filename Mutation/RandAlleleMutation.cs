@@ -14,25 +14,23 @@ namespace GeneticAlgorithms
     {
         private int _numOfMutAllele;
 
-        public RandAlleleMutation()
+        public RandAlleleMutation(int mutationProbability, OPERATION_TARGET mutationTarget, int numOfMutAllele) : base(mutationProbability, mutationTarget)
         {
-            _numOfMutAllele = 1;
+            _numOfMutAllele = numOfMutAllele;
         }
 
-        public void SetNumOfMutAllele(int numOfMutAllele) => _numOfMutAllele = numOfMutAllele;
-
-        protected override void SetMutChromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutchromosomeNumList)
+        protected override void SetMutChromosomeNumList(IPopulation population, ref List<int> mutchromosomeNumList)
         {
             for (int i = 0; i < _numOfMutAllele; i++)
             {
-                mutchromosomeNumList.Add(rngcsp.GetRandomNum(0, population.GetCurrSize()));
+                mutchromosomeNumList.Add(RNGCSP.GetRandomNum(0, population.GetCurrSize()));
             }
         }
 
-        protected override void DoMutation(ref RNGCSP rngcsp, ref List<Gen> chromosome)
+        protected override void DoMutation(ref List<Gen> chromosome)
         {
-            int mutGenNum = rngcsp.GetRandomNum(0, 100 * chromosome.Count) % chromosome.Count;
-            int mutAlleleNum = rngcsp.GetRandomNum(0, 100 * chromosome[mutGenNum].GetGenSize()) % chromosome[mutGenNum].GetGenSize();
+            int mutGenNum = RNGCSP.GetRandomNum(0, 100 * chromosome.Count) % chromosome.Count;
+            int mutAlleleNum = RNGCSP.GetRandomNum(0, 100 * chromosome[mutGenNum].GetGenSize()) % chromosome[mutGenNum].GetGenSize();
 
             List<short> alleleList = new List<short>();
             int alleleCount = 0;

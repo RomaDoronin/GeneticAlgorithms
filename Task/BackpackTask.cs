@@ -49,15 +49,13 @@ namespace GeneticAlgorithms
         // Реализация интерфейса
         public Individ GenerateInitialSolution()
         {
-            RNGCSP rngcsp = new RNGCSP();
-
             Individ individ;
             do
             {
                 List<int> prechromosome = new List<int>();
                 for (int i = 0; i < _objectList.Count; i++)
                 {
-                    prechromosome.Add(rngcsp.GetRandomNum(0, 1000) % (_maxNumOfObject + 1));
+                    prechromosome.Add(RNGCSP.GetRandomNum(0, 1000) % (_maxNumOfObject + 1));
                 }
                 VectorSolution solution = new VectorSolution();
                 solution.SetResult(prechromosome);
@@ -94,13 +92,11 @@ namespace GeneticAlgorithms
         public Individ Coder(VectorSolution solution)
         {
             List<Gen> chromosome = new List<Gen>();
-            MathFunction mathFunction = new MathFunction();
-            int lenghtOfGen = mathFunction.Log2(_maxNumOfObject) + 1;
+            int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
 
             foreach (var val in solution.GetResult())
             {
-                CuclNumSys cuclNumSys = new CuclNumSys();
-                String genStr = cuclNumSys.CulcNumberSystem(val.ToString(), _maxNumOfObject + 1, 2);
+                String genStr = CuclNumSys.CulcNumberSystem(val.ToString(), _maxNumOfObject + 1, 2);
 
                 while (genStr.Length < lenghtOfGen)
                 {
@@ -126,16 +122,14 @@ namespace GeneticAlgorithms
         public VectorSolution Decoder(Individ individ)
         {
             List<int> prechromosome = new List<int>();
-            MathFunction mathFunction = new MathFunction();
-            int lenghtOfGen = mathFunction.Log2(_maxNumOfObject) + 1;
+            int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
             String inVal = "";
 
             foreach (var gen in individ.GetChromosome())
             {
                 inVal = gen.ToString();
-
-                CuclNumSys cuclNumSys = new CuclNumSys();
-                String res = cuclNumSys.CulcNumberSystem(inVal, 2, _maxNumOfObject + 1);
+                
+                String res = CuclNumSys.CulcNumberSystem(inVal, 2, _maxNumOfObject + 1);
 
                 prechromosome.Add(Int32.Parse(res));
             }

@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
+    public enum OPERATION_TARGET
+    {
+        CHILDREN = 1,
+        PARENTS = 2,
+        ALL = 3
+    }
+
     struct ResultPair
     {
         public int maxVal;
@@ -23,7 +30,7 @@ namespace GeneticAlgorithms
         protected ITask _task;
         protected IPopulation _population;
 
-        public void SetPopulation(ref IPopulation population) => _population = population;
+        public void SetPopulation(IPopulation population) => _population = population;
 
         private int _populationSize;
         private int _matingPoolSize;

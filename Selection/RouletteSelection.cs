@@ -29,11 +29,9 @@ namespace GeneticAlgorithms
     {
         private bool _isRemoveSelectIndividFromSelectPool;
 
-        public void SetIsRemoveSelectIndividFromSelectPool(bool isRemoveSelectIndividFromSelectPool) => _isRemoveSelectIndividFromSelectPool = isRemoveSelectIndividFromSelectPool;
-
-        public RouletteSelection()
+        public RouletteSelection(bool isRemoveSelectIndividFromSelectPool)
         {
-            _isRemoveSelectIndividFromSelectPool = true;
+            _isRemoveSelectIndividFromSelectPool = isRemoveSelectIndividFromSelectPool;
         }
 
         public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
@@ -54,13 +52,12 @@ namespace GeneticAlgorithms
                 valueFitnessFunctionSum += targetFunctionRes;
                 valueFitnessFunction.Add(new IndividPlusInt(individ, valueFitnessFunctionSum));
             }
-
-            RNGCSP rngcsp = new RNGCSP();
+            
             List<Individ> popList = new List<Individ>();
 
             do
             {
-                int rnd = rngcsp.GetRandomNum(0, valueFitnessFunction[valueFitnessFunction.Count - 1].GetSumVal());
+                int rnd = RNGCSP.GetRandomNum(0, valueFitnessFunction[valueFitnessFunction.Count - 1].GetSumVal());
                 List<IndividPlusInt> newValueFitnessFunction = new List<IndividPlusInt>();
                 bool isFind = false;
                 int additive = 0;

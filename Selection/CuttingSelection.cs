@@ -14,8 +14,7 @@ namespace GeneticAlgorithms
     {
         public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
         {
-            SortPopulation sortPopulation = new SortPopulation();
-            var sortResSelect = sortPopulation.GetSortResultOfSelect(SortType.Descending, currPopulation, FitnessFunction);
+            var sortResSelect = SortPopulation.GetSortResultOfSelect(SortType.Descending, currPopulation, FitnessFunction);
             List<Individ> popList = new List<Individ>();
 
             int count = 0;
@@ -37,7 +36,7 @@ namespace GeneticAlgorithms
                     break;
                 }
             }
-            Console.WriteLine();
+            //Console.WriteLine();
 
             IPopulation population = currPopulation.GetInterfaceCopy();
             population.SetPopulationList(popList);

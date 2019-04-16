@@ -14,21 +14,19 @@ namespace GeneticAlgorithms
     {
         private int _numOfMutGen;
 
-        public RandGenMutation()
+        public RandGenMutation(int mutationProbability, OPERATION_TARGET mutationTarget, int numOfMutGen) : base(mutationProbability, mutationTarget)
         {
-            _numOfMutGen = 1;
+            _numOfMutGen = numOfMutGen;
         }
 
-        public void SetNumOfMutGen(int numOfMutGen) => _numOfMutGen = numOfMutGen;
-
-        protected override void DoMutation(ref RNGCSP rngcsp, ref List<Gen> chromosome)
+        protected override void DoMutation(ref List<Gen> chromosome)
         {
-            int mutGenNum = rngcsp.GetRandomNum(0, chromosome.Count);
+            int mutGenNum = RNGCSP.GetRandomNum(0, chromosome.Count);
 
             List<short> alleleList = new List<short>();
             foreach (var allele in chromosome[mutGenNum].GetAlleleList())
             {
-                if (rngcsp.GetRandomNum(0, 2) == 0)
+                if (RNGCSP.GetRandomNum(0, 2) == 0)
                 {
                     alleleList.Add(allele);
                 }
@@ -55,12 +53,12 @@ namespace GeneticAlgorithms
             chromosome[mutGenNum].SetAlleleList(alleleList);
         }
 
-        protected override void SetMutChromosomeNumList(IPopulation population, ref RNGCSP rngcsp, ref List<int> mutChromosomeNumList)
+        protected override void SetMutChromosomeNumList(IPopulation population, ref List<int> mutChromosomeNumList)
         {
             int popSize = population.GetCurrSize();
             for (int i = 0; i < _numOfMutGen; i++)
             {
-                mutChromosomeNumList.Add(rngcsp.GetRandomNum(0, popSize));
+                mutChromosomeNumList.Add(RNGCSP.GetRandomNum(0, popSize));
             }
         }
     }

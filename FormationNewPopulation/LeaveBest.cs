@@ -17,9 +17,8 @@ namespace GeneticAlgorithms
             {
                 matingPool.AddIndivid(individ);
             }
-
-            SortPopulation sortPopulation = new SortPopulation();
-            var result = sortPopulation.GetSortResultOfSelect(SortType.Descending, matingPool, FitnessFunction);
+            
+            var result = SortPopulation.GetSortResultOfSelect(SortType.Descending, matingPool, FitnessFunction);
             int count = 0;
             foreach (var res in result)
             {
