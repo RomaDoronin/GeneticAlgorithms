@@ -53,31 +53,52 @@ namespace GeneticAlgorithms
         static void Main(string[] args)
         {
             // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
-            BinaryGeneticAlgorithm binaryGeneticAlgorithm = new BinaryGeneticAlgorithm();
-            binaryGeneticAlgorithm.SetPrintPopulation(false); // Настройка вывода популяции
-            AGenAlg genAlg = binaryGeneticAlgorithm;
-            genAlg.SetMaxIterNum(INFINITY);
-            genAlg.SetPoolsSize(40, 20, 10);
+            AGenAlg genAlg = new BinaryGeneticAlgorithm(
+                false // Настройка вывода популяции
+                );
+            genAlg.SetMaxIterNum(INFINITY); // Настройка количества итераций генетического алгоритма
+            genAlg.SetPoolsSize(
+                40, // Размер популяции
+                20, // Размер родительского пула
+                10  // Количество получаемых потомков после скрещивания
+                );
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             genAlg.SetPopulation(new StdPopulation());
 
             // ------------------------------------------------------------------------------------ Настройка мутации
-            //genAlg.SetMutation(new RandAlleleMutation(50, OPERATION_TARGET.ALL, 8));
-            genAlg.SetMutation(new RandGenMutation(100, OPERATION_TARGET.ALL, 3));
+            /*genAlg.SetMutation(new RandAlleleMutation(
+                50, // Вероятность мутации
+                OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
+                8 // Количество мутирующих аллелей
+                ));*/
+
+            genAlg.SetMutation(new RandGenMutation(
+                100, // Вероятность мутации
+                OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
+                3 // Количество мутирующих генов
+                ));
 
             // ------------------------------------------------------------------------------------ Настройна селекции
-            //genAlg.SetSelect(new CuttingSelection());
-            //genAlg.SetSelect(new RouletteSelection(false));
-            genAlg.SetSelect(new TournamentSelection(2, true));
+            /*genAlg.SetSelect(new CuttingSelection());*/
+
+            /*genAlg.SetSelect(new RouletteSelection(
+                false // Выбывают ли участники из рулетки, после их выбора
+                ));*/
+
+            genAlg.SetSelect(new TournamentSelection(
+                2, // Размер турнирной группы
+                true // Детерминированный выбор или нет. При детерминированном выборе из группы берется "лучший" с вероятность 1, при недетерминированном выборе выбирается "лучший" по принцципу рулетки
+                ));
 
             // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
 
             // ------------------------------------------------------------------------------------ Настройка скрещивания
-            /*Krossingover krossingover = new Krossingover();
-            krossingover.SetBreakPoint(new List<double>() { Krossingover.RAND_SET_BREAK_POINT });
-            genAlg.SetCross(krossingover);*/
+            /*genAlg.SetCross(new Krossingover(
+                new List<double>() { Krossingover.RAND_SET_BREAK_POINT } // Список точек для разбиения при кросинговере. Указываются числа от 0 до 1 невключительно. Хромасома делится на доли указанные в спике.
+                ));*/
+
             genAlg.SetCross(new Recombination());
 
             // ------------------------------------------------------------------------------------ Настройка выбора новой популяции

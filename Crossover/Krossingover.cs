@@ -17,16 +17,11 @@ namespace GeneticAlgorithms
 
         private List<double> _breakPointList;
 
-        public Krossingover()
-        {
-            _breakPointList = new List<double>() { 0.0, 0.5, 1.0 };
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="breakPointList">([x1, x2, x3, ...]) xi ∈ (0,1)</param>
-        public void SetBreakPoint(List<double> breakPointList)
+        public Krossingover(List<double> breakPointList)
         {
             _breakPointList.Clear();
             _breakPointList.Add(0);
@@ -43,9 +38,9 @@ namespace GeneticAlgorithms
                     _breakPointList.Add(breakPoint);
                 }
             }
-            
+
             _breakPointList.Add(1);
-        }        
+        }      
 
         protected override void DoCrossover(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childChromosomeFirst, ref List<Gen> childChromosomeSecond)
         {

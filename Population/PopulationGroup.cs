@@ -22,6 +22,8 @@ namespace GeneticAlgorithms
         // Поддержка интерфейса IPopulation
         public void AddIndivid(Individ individ)
         {
+            Console.WriteLine("[ WARNING ] : При добавление к группе особи(individ) она добавляется в первую популяцию в группе");
+
             throw new NotImplementedException();
         }
 
@@ -94,6 +96,7 @@ namespace GeneticAlgorithms
                     popListLoc.Add(popList[popListCount]);
                     popListCount++;
                 }
+                // QUESTION: _populationList[j] - Возвращает копию объекта, правильно ли происходит Set?
                 _populationList[j].SetPopulationList(popListLoc);
             }
         }

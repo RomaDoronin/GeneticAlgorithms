@@ -18,6 +18,11 @@ namespace GeneticAlgorithms
         private int _stepCount = 0;
         private bool _printPopulation = false;
 
+        public BinaryGeneticAlgorithm(bool printPopulation)
+        {
+            _printPopulation = printPopulation;
+        }
+
         private void PrintPopulation(String opName, IPopulation population)
         {
             if (_printPopulation)
@@ -58,8 +63,6 @@ namespace GeneticAlgorithms
 
             return currMax;
         }
-
-        public void SetPrintPopulation(bool printPopulation) => _printPopulation = printPopulation;
 
         public override void Solve(ref ITask task)
         {

@@ -19,12 +19,37 @@ namespace GeneticAlgorithms.Task
             {
                 for (int j = i; j < _distancesMatrix.GetMatrixSize(); j++)
                 {
-                    if (_distancesMatrix.GetVal(i,j) != 0)
+                    if (_distancesMatrix.GetVal(i, j) != 0)
                     {
                         edgeSize++;
                     }
                 }
             }
+        }
+
+        private SymmetricMatrix IndividToDistancesMatrix(Individ individ)
+        {
+            List<int> result = Decoder(individ).GetResult();
+            int resultCount = 0;
+
+            SymmetricMatrix distancesMatrix = new SymmetricMatrix(GetSize());
+            for (int i = 0; i < _distancesMatrix.GetMatrixSize(); i++)
+            {
+                for (int j = i; j < _distancesMatrix.GetMatrixSize(); j++)
+                {
+                    int val = _distancesMatrix.GetVal(i, j);
+                    if (val != 0)
+                    {
+                        if (result[resultCount] == 1)
+                        {
+                            distancesMatrix.SetVal(i, j, val);
+                        }
+                        resultCount++;
+                    }
+                }
+            }
+
+            return distancesMatrix;
         }
 
         // Реализация интерфейса ITask
@@ -91,7 +116,16 @@ namespace GeneticAlgorithms.Task
         {
             // Проверка на то что решение образует остовное дерево
 
-            throw new NotImplementedException();
+            // Инициализируем новую матрицу растояний
+            SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
+
+            // НЕОБХОДИМО ТЕСТИРОВАНИЕ
+            if (!GraphOperation.CheckGraphIsTree(distancesMatrix))
+                return false;
+            if (!GraphOperation.CheckGraphIsSkeleton(distancesMatrix))
+                return false;
+
+            return true;
         }
 
         public void PrintResult()
@@ -101,29 +135,11 @@ namespace GeneticAlgorithms.Task
 
         public int TargetFunction(Individ individ)
         {
-            List<int> result = Decoder(individ).GetResult();
-            int resultCount = 0;
-
             // Инициализируем новую матрицу растояний
-            SymmetricMatrix distancesMatrix = new SymmetricMatrix(GetSize());
-            for (int i = 0; i < _distancesMatrix.GetMatrixSize(); i++)
-            {
-                for (int j = i; j < _distancesMatrix.GetMatrixSize(); j++)
-                {
-                    int val = _distancesMatrix.GetVal(i, j);
-                    if (val != 0)
-                    {
-                        if (result[resultCount] == 1)
-                        {
-                            distancesMatrix.SetVal(i, j, val);
-                        }
-                        resultCount++;
-                    }
-                }
-            }
+            SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
 
             // Считаем матрицу минимальных путей
-            SymmetricMatrix shortestDistancesMatrix = DijkstraAlgorithm.GetShortestDistancesMatrix(distancesMatrix);
+            SymmetricMatrix shortestDistancesMatrix = GraphOperation.GetShortestDistancesMatrix(distancesMatrix);
 
             // Поиск минимума в матрице
             return MatrixOperation.FindMinValInMatrix(shortestDistancesMatrix);
