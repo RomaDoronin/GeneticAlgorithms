@@ -1,4 +1,5 @@
 ﻿//#define BACKPACK_300
+//#define UNIT_TESTS
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace GeneticAlgorithms
 {
     class Program
     {
-        private const int INFINITY = -1;
+        public const int INFINITY = Int32.MaxValue;
 
         private static ITask CreateBackpackTask()
         {
@@ -49,9 +50,13 @@ namespace GeneticAlgorithms
 
             return backpackTask;
         }
-
+        
         static void Main(string[] args)
         {
+#if UNIT_TESTS
+            UnitTests.UTGraphOperation.UnitTestsStart();
+#else
+
             // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm(
                 false // Настройка вывода популяции
@@ -62,6 +67,8 @@ namespace GeneticAlgorithms
                 20, // Размер родительского пула
                 10  // Количество получаемых потомков после скрещивания
                 );
+
+            AGenAlg genAlg = new BuildingMinumumSpanningTree()
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             genAlg.SetPopulation(new StdPopulation());
@@ -107,6 +114,7 @@ namespace GeneticAlgorithms
             // ------------------------------------------------------------------------------------ Выбор задачи
             ITask task = CreateBackpackTask();
             genAlg.Solve(ref task);
+#endif
         }
     }
 }

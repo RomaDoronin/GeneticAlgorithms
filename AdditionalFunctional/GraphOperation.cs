@@ -9,9 +9,52 @@ namespace GeneticAlgorithms
     class GraphOperation
     {
         // Алгоритм Дейкстры
-        private static List<int> DijkstraAlgorithm(SymmetricMatrix distancesMatrix, int vertex)
+        private static void DijkstraAlgorithmRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, ref List<int> shortestDistancesFromVertex, int currVertex, int startVertexNum)
         {
-            throw new NotImplementedException();
+            visitedVertex[currVertex] = true;
+            int min = Program.INFINITY;
+            int index = -1;
+
+            for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
+            {
+                int dist = distancesMatrix.GetVal(currVertex, j);
+                if (dist != 0 && j != currVertex)
+                {
+                    int allDist = dist + shortestDistancesFromVertex[currVertex];
+                    if (allDist < shortestDistancesFromVertex[j])
+                    {
+                        shortestDistancesFromVertex[j] = allDist;
+                    }
+                }
+
+                if (min > shortestDistancesFromVertex[j] && !visitedVertex[j])
+                {
+                    min = shortestDistancesFromVertex[j];
+                    index = j;
+                }
+            }
+
+            if (index != -1)
+            {
+                DijkstraAlgorithmRec(distancesMatrix, ref visitedVertex, ref shortestDistancesFromVertex, index, startVertexNum);
+            }
+        }
+
+        private static List<int> DijkstraAlgorithm(SymmetricMatrix distancesMatrix, int startVertexNum)
+        {
+            List<bool> visitedVertex = new List<bool>();
+            List<int> shortestDistancesFromVertex = new List<int>();
+
+            for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
+            {
+                visitedVertex.Add(false);
+                shortestDistancesFromVertex.Add(Program.INFINITY);
+            }
+            shortestDistancesFromVertex[startVertexNum] = 0;
+
+            DijkstraAlgorithmRec(distancesMatrix, ref visitedVertex, ref shortestDistancesFromVertex, startVertexNum, startVertexNum);
+
+            return shortestDistancesFromVertex;
         }
 
         public static SymmetricMatrix GetShortestDistancesMatrix(SymmetricMatrix distancesMatrix)

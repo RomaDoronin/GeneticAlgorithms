@@ -13,10 +13,11 @@ namespace GeneticAlgorithms
 
         public SymmetricMatrix(int matrixSize)
         {
+            _matrix = new List<int>();
             _matrixSize = matrixSize;
             for (int i = 0; i < _matrixSize; i++)
             {
-                for (int j = i; j < _matrixSize; j++)
+                for (int j = 0; j < _matrixSize; j++)
                 {
                     _matrix.Add(0);
                 }
