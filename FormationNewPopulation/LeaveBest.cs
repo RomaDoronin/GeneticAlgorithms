@@ -22,7 +22,7 @@ namespace GeneticAlgorithms
             int count = 0;
             foreach (var res in result)
             {
-                popList.Add(res.Value);
+                popList.Add(res.Key);
                 count++;
 
                 if (count == populationSize)

@@ -14,20 +14,22 @@ namespace GeneticAlgorithms
 
     class SortPopulation
     {
-        public static IOrderedEnumerable<KeyValuePair<int, Individ>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
+        public static IOrderedEnumerable<KeyValuePair<Individ, int>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
         {
-            Dictionary<int, Individ> resSelect = new Dictionary<int, Individ>();
+            // WARNING: Уязвимое место (!) Есть возможно что если будет много одинаковых решений, то просто нехватит осоьей на популяцию
+            //Dictionary<int, Individ> resSelect = new Dictionary<int, Individ>();
+            Dictionary<Individ, int> resSelect = new Dictionary<Individ, int>();
 
             List<Individ> iteratorPopList = population.GetPopulationList();
             foreach (var individ in iteratorPopList)
             {
-                resSelect[FitnessFunction(individ)] = individ;
+                resSelect[individ] = FitnessFunction(individ);
             }
 
             if (sortType == SortType.Descending)
             {
                 var sortResSelect = from individ in resSelect
-                                    orderby individ.Key descending
+                                    orderby individ.Value descending
                                     select individ;
 
                 return sortResSelect;
@@ -35,7 +37,7 @@ namespace GeneticAlgorithms
             else //if (sortType == SortType.Ascending)
             {
                 var sortResSelect = from individ in resSelect
-                                    orderby individ.Key ascending
+                                    orderby individ.Value ascending
                                     select individ;
 
                 return sortResSelect;

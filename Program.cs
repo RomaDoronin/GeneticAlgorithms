@@ -1,5 +1,6 @@
 ﻿//#define BACKPACK_300
-//#define UNIT_TESTS
+//#define BACKPACK_800
+#define UNIT_TESTS
 
 using System;
 using System.Collections.Generic;
@@ -43,14 +44,28 @@ namespace GeneticAlgorithms
 #if BACKPACK_300
             backpackTask.SetMaxWieght(300);
             backpackTask.SetMaxNumOfObject(3);
-#else
+#elif BACKPACK_800
             backpackTask.SetMaxWieght(800);
             backpackTask.SetMaxNumOfObject(8);
 #endif
 
             return backpackTask;
         }
-        
+
+        private static ITask CreateBuildingMinumumSpanningTree()
+        {
+            int matrixSize = 8;
+            SymmetricMatrix distancesMatrix = new SymmetricMatrix(matrixSize);
+            
+            distancesMatrix.SetVal(0, 1, 6); distancesMatrix.SetVal(0, 2, 8);
+            distancesMatrix.SetVal(1, 2, 8); distancesMatrix.SetVal(1, 3, 8); distancesMatrix.SetVal(1, 4, 5);
+            distancesMatrix.SetVal(2, 4, 2); distancesMatrix.SetVal(2, 7, 2);
+            distancesMatrix.SetVal(3, 4, 10); distancesMatrix.SetVal(3, 5, 4); distancesMatrix.SetVal(3, 6, 6);
+            distancesMatrix.SetVal(4, 5, 3); distancesMatrix.SetVal(4, 7, 1);
+
+            return new BuildingMinumumSpanningTree(distancesMatrix);
+        }
+
         static void Main(string[] args)
         {
 #if UNIT_TESTS
@@ -67,8 +82,6 @@ namespace GeneticAlgorithms
                 20, // Размер родительского пула
                 10  // Количество получаемых потомков после скрещивания
                 );
-
-            AGenAlg genAlg = new BuildingMinumumSpanningTree()
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             genAlg.SetPopulation(new StdPopulation());
@@ -112,7 +125,9 @@ namespace GeneticAlgorithms
             genAlg.SetFormationNewPopulation(new LeaveBest());
 
             // ------------------------------------------------------------------------------------ Выбор задачи
-            ITask task = CreateBackpackTask();
+            //ITask task = CreateBackpackTask();
+            ITask task = CreateBuildingMinumumSpanningTree();
+
             genAlg.Solve(ref task);
 #endif
         }

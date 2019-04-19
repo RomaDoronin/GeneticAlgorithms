@@ -1,4 +1,5 @@
 ﻿//#define BACKPACK_300
+//#define BACKPACK_800
 
 using System;
 using System.Collections.Generic;
@@ -87,9 +88,10 @@ namespace GeneticAlgorithms
 
 #if BACKPACK_300
                 if (_max.maxVal >= 3343) break;
-#else
+#elif BACKPACK_600
                 if (_max.maxVal >= 8986) break;
 #endif
+
             }
 
             // Выбор "наилучшего" решения
@@ -105,7 +107,7 @@ namespace GeneticAlgorithms
             var result = SortPopulation.GetSortResultOfSelect(SortType.Descending, _population, _task.TargetFunction);
             foreach (var res in result)
             {
-                _solution = _task.Decoder(res.Value);
+                _solution = _task.Decoder(res.Key);
                 //_solution.PrintResult();
                 break;
             }

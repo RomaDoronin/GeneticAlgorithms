@@ -47,7 +47,7 @@ namespace GeneticAlgorithms
 
             for (int i = 0; i < symmetricMatrix.GetMatrixSize(); i++)
             {
-                for (int j = i; j < symmetricMatrix.GetMatrixSize(); j++)
+                for (int j = i + 1; j < symmetricMatrix.GetMatrixSize(); j++)
                 {
                     if (min > symmetricMatrix.GetVal(i, j))
                     {

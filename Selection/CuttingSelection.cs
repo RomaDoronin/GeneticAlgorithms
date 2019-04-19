@@ -22,14 +22,14 @@ namespace GeneticAlgorithms
             {
                 if (count == 0)
                 {
-                    if (max.maxVal < res.Key)
+                    if (max.maxVal < res.Value)
                     {
-                        max.maxVal = res.Key;
-                        max.individ = res.Value;
+                        max.maxVal = res.Value;
+                        max.individ = res.Key;
                     }
                 }
 
-                popList.Add(res.Value);
+                popList.Add(res.Key);
                 count++;
                 if (count >= matingPoolSize)
                 {

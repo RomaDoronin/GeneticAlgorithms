@@ -74,7 +74,7 @@ namespace GeneticAlgorithms
             return shortestDistancesMatrix;
         }
 
-        // Проверка что граф является деревом
+        // Проверка что граф является деревом // Хотя на самом деле проверка что нет циклов
         private static bool CheckGraphIsTreeRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int previousVertex, int currVertex)
         {
             visitedVertex[currVertex] = true;
@@ -99,6 +99,21 @@ namespace GeneticAlgorithms
                 }
             }
 
+            if (previousVertex == currVertex)
+            {
+                for (int vertex = currVertex; vertex < visitedVertex.Count; vertex++)
+                {
+                    if (!visitedVertex[vertex])
+                    {
+                        if (!CheckGraphIsTreeRec(distancesMatrix, ref visitedVertex, vertex, vertex))
+                        {
+                            return false;
+                        }
+                        break;
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -111,6 +126,44 @@ namespace GeneticAlgorithms
             }
 
             return CheckGraphIsTreeRec(distancesMatrix, ref visitedVertex, 0, 0);
+        }
+
+        // Проверка что граф является связным
+        private static void BypassInDepthRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int currVertex)
+        {
+            visitedVertex[currVertex] = true;
+
+            for (int vertexCount = 0; vertexCount < distancesMatrix.GetMatrixSize(); vertexCount++)
+            {
+                if (!visitedVertex[vertexCount])
+                {
+                    if (0 != distancesMatrix.GetVal(currVertex, vertexCount))
+                    {
+                        BypassInDepthRec(distancesMatrix, ref visitedVertex, vertexCount);
+                    }
+                }
+            }
+        }
+
+        public static bool CheckGraphIsConnected(SymmetricMatrix distancesMatrix)
+        {
+            List<bool> visitedVertex = new List<bool>();
+            for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
+            {
+                visitedVertex.Add(false);
+            }
+
+            BypassInDepthRec(distancesMatrix, ref visitedVertex, 0);
+
+            foreach (var vertex in visitedVertex)
+            {
+                if (!vertex)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // Проверка что граф является остовным

@@ -32,7 +32,7 @@ namespace GeneticAlgorithms
             List<int> result = Decoder(individ).GetResult();
             int resultCount = 0;
 
-            SymmetricMatrix distancesMatrix = new SymmetricMatrix(GetSize());
+            SymmetricMatrix distancesMatrix = new SymmetricMatrix(_distancesMatrix.GetMatrixSize());
             for (int i = 0; i < _distancesMatrix.GetMatrixSize(); i++)
             {
                 for (int j = i; j < _distancesMatrix.GetMatrixSize(); j++)
@@ -91,19 +91,68 @@ namespace GeneticAlgorithms
             return vectorSolution;
         }
 
+        private void InitRandList(ref List<int> randList)
+        {
+            for (int i = 0; i < GetSize(); i++)
+            {
+                randList.Add(i);
+            }
+        }
+
         public Individ GenerateInitialSolution()
         {
-            List<Gen> chromosome = new List<Gen>();
+            //Console.WriteLine("GenerateInitialSolution start");
+            Individ individ = new Individ();
 
+            List<Gen> chromosome = new List<Gen>();
             for (int i = 0; i < GetSize(); i++)
             {
                 Gen gen = new Gen();
-                gen.SetAlleleList(new List<short>() { (short)RNGCSP.GetRandomNum(0,2) });
+                gen.SetAlleleList(new List<short>() { 0 });
                 chromosome.Add(gen);
             }
 
-            Individ individ = new Individ();
-            individ.SetChromosome(chromosome);
+            List<int> randList = new List<int>();
+            InitRandList(ref randList);
+
+            while (true)
+            {
+                Gen gen = new Gen();
+                gen.SetAlleleList(new List<short>() { 1 });
+
+                int randListIndex = RNGCSP.GetRandomNum(0, randList.Count);
+                int randGenNum = randList[randListIndex];
+                //Console.Write(randGenNum.ToString());
+                randList.RemoveAt(randListIndex);
+                chromosome[randGenNum] = gen;
+                individ.SetChromosome(chromosome);
+
+                SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
+
+                if (GraphOperation.CheckGraphIsTree(distancesMatrix))
+                {
+                    //Console.Write(" +");
+                    if (GraphOperation.CheckGraphIsSkeleton(distancesMatrix))
+                    {
+                        //Console.Write(" +");
+                        if (GraphOperation.CheckGraphIsConnected(distancesMatrix))
+                        {
+                            //Console.Write(" +");
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //Console.Write(" -");
+                    // Возможно надо будет вообще убирать ребро из пула выбора
+                    gen.SetAlleleList(new List<short>() { 0 });
+                    chromosome[randGenNum] = gen;
+                }
+
+                //Console.WriteLine();
+            }
+
             return individ;
         }
 
@@ -118,11 +167,8 @@ namespace GeneticAlgorithms
 
             // Инициализируем новую матрицу растояний
             SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
-
-            // НЕОБХОДИМО ТЕСТИРОВАНИЕ
-            if (!GraphOperation.CheckGraphIsTree(distancesMatrix))
-                return false;
-            if (!GraphOperation.CheckGraphIsSkeleton(distancesMatrix))
+            
+            if (!GraphOperation.CheckGraphIsTree(distancesMatrix) || !GraphOperation.CheckGraphIsSkeleton(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
                 return false;
 
             return true;
