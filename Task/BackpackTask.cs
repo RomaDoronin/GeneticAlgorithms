@@ -29,12 +29,12 @@ namespace GeneticAlgorithms
         private List<Object> _objectList;
         private int _maxWeight;
         private int _maxNumOfObject;
-        private VectorSolution _solution;
+        private VectorSolutionInt _solution;
 
         // Дополнительный функционал
         public BackpackTask()
         {
-            _solution = new VectorSolution();
+            _solution = new VectorSolutionInt();
         }
 
         public void SetMaxWieght(int maxWeight) => _maxWeight = maxWeight;
@@ -44,7 +44,7 @@ namespace GeneticAlgorithms
 
         public void SetMaxNumOfObject(int maxNumOfObject) => _maxNumOfObject = maxNumOfObject;
 
-        public VectorSolution GetSolution() => _solution;
+        public VectorSolutionInt GetSolution() => _solution;
 
         // Реализация интерфейса
         public Individ GenerateInitialSolution()
@@ -57,7 +57,7 @@ namespace GeneticAlgorithms
                 {
                     prechromosome.Add(RNGCSP.GetRandomNum(0, 1000) % (_maxNumOfObject + 1));
                 }
-                VectorSolution solution = new VectorSolution();
+                VectorSolutionInt solution = new VectorSolutionInt();
                 solution.SetResult(prechromosome);
                 individ = Coder(solution);
             } while (!LimitationsFunction(individ));
@@ -77,7 +77,7 @@ namespace GeneticAlgorithms
             return weightSum <= _maxWeight;
         }
 
-        public int TargetFunction(Individ individ)
+        public double TargetFunction(Individ individ)
         {
             List<int> prechromosome = Decoder(individ).GetResult();
             int priceSum = 0;
@@ -89,7 +89,7 @@ namespace GeneticAlgorithms
             return priceSum;
         }
 
-        public Individ Coder(VectorSolution solution)
+        public Individ Coder(VectorSolutionInt solution)
         {
             List<Gen> chromosome = new List<Gen>();
             int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
@@ -119,7 +119,7 @@ namespace GeneticAlgorithms
             return individ;
         }
 
-        public VectorSolution Decoder(Individ individ)
+        public VectorSolutionInt Decoder(Individ individ)
         {
             List<int> prechromosome = new List<int>();
             int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
@@ -134,7 +134,7 @@ namespace GeneticAlgorithms
                 prechromosome.Add(Int32.Parse(res));
             }
 
-            VectorSolution vectorSolution = new VectorSolution();
+            VectorSolutionInt vectorSolution = new VectorSolutionInt();
             vectorSolution.SetResult(prechromosome);
 
             return vectorSolution;
@@ -147,7 +147,7 @@ namespace GeneticAlgorithms
 
         public bool CheckIndivid(Individ individ)
         {
-            VectorSolution vectorSolution = Decoder(individ);
+            VectorSolutionInt vectorSolution = Decoder(individ);
 
             foreach (var val in vectorSolution.GetResult())
             {

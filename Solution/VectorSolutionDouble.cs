@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeneticAlgorithms
+namespace GeneticAlgorithms.Solution
 {
-    class VectorSolution
+    class VectorSolutionDouble
     {
-        private List<int> _vector;
+        private List<double> _vector;
 
         public void PrintResult()
         {
@@ -17,16 +17,16 @@ namespace GeneticAlgorithms
             {
                 Console.Write(_vector[i].ToString() + ", ");
             }
-            
+
             Console.Write(_vector[_vector.Count - 1].ToString() + "]\n");
         }
 
-        public void SetResult(List<int> result) => _vector = result;
+        public void SetResult(List<double> result) => _vector = result;
 
-        public List<int> GetResult()
+        public List<double> GetResult()
         {
-            List<int> vector = new List<int>();
-            foreach(var val in _vector)
+            List<double> vector = new List<double>();
+            foreach (var val in _vector)
             {
                 vector.Add(val);
             }

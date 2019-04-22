@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    class BuildingMinumumSpanningTree : ITask
+    /// <summary>
+    /// В задаче мы имеем кабельную сеть. Кадный камель имеет свою скорость передачи данных. Требуется максимизировать минимальную скорость передачи среди всех клиентов/узлов/вершин
+    /// </summary>
+    class WorstClientTask : ITask
     {
+        /// <summary>
+        /// Входная матрица растояний сети
+        /// </summary>
         private SymmetricMatrix _distancesMatrix;
+        /// <summary>
+        /// Количество ребер
+        /// </summary>
         private int edgeSize;
 
-        public BuildingMinumumSpanningTree(SymmetricMatrix distancesMatrix)
+        public WorstClientTask(SymmetricMatrix distancesMatrix)
         {
             _distancesMatrix = distancesMatrix;
             edgeSize = 0;
@@ -27,6 +36,11 @@ namespace GeneticAlgorithms
             }
         }
 
+        /// <summary>
+        /// Функция перевода данных из особи в матрицу расстояний
+        /// </summary>
+        /// <param name="individ"></param>
+        /// <returns></returns>
         private SymmetricMatrix IndividToDistancesMatrix(Individ individ)
         {
             List<int> result = Decoder(individ).GetResult();
@@ -37,7 +51,7 @@ namespace GeneticAlgorithms
             {
                 for (int j = i; j < _distancesMatrix.GetMatrixSize(); j++)
                 {
-                    int val = _distancesMatrix.GetVal(i, j);
+                    double val = _distancesMatrix.GetVal(i, j);
                     if (val != 0)
                     {
                         if (result[resultCount] == 1)
@@ -53,12 +67,19 @@ namespace GeneticAlgorithms
         }
 
         // Реализация интерфейса ITask
+
+        /// <summary>
+        /// Данная задача в дополнительных проверках особи не нуждается
+        /// </summary>
         public bool CheckIndivid(Individ individ)
         {
             return true;
         }
 
-        public Individ Coder(VectorSolution solution)
+        /// <summary>
+        /// Кодирование варианта решения в хромосому
+        /// </summary>
+        public Individ Coder(VectorSolutionInt solution)
         {
             List<Gen> chromosome = new List<Gen>();
 
@@ -74,7 +95,10 @@ namespace GeneticAlgorithms
             return individ;
         }
 
-        public VectorSolution Decoder(Individ individ)
+        /// <summary>
+        /// Декодирование варианта решения в хромосому
+        /// </summary>
+        public VectorSolutionInt Decoder(Individ individ)
         {
             List<int> result = new List<int>();
 
@@ -86,7 +110,7 @@ namespace GeneticAlgorithms
                 }
             }
 
-            VectorSolution vectorSolution = new VectorSolution();
+            VectorSolutionInt vectorSolution = new VectorSolutionInt();
             vectorSolution.SetResult(result);
             return vectorSolution;
         }
@@ -99,6 +123,9 @@ namespace GeneticAlgorithms
             }
         }
 
+        /// <summary>
+        /// Генерация решения
+        /// </summary>
         public Individ GenerateInitialSolution()
         {
             //Console.WriteLine("GenerateInitialSolution start");
@@ -129,7 +156,7 @@ namespace GeneticAlgorithms
 
                 SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
 
-                if (GraphOperation.CheckGraphIsTree(distancesMatrix))
+                if (GraphOperation.CheckNoCyclesInGraph(distancesMatrix))
                 {
                     //Console.Write(" +");
                     if (GraphOperation.CheckGraphIsSkeleton(distancesMatrix))
@@ -168,7 +195,7 @@ namespace GeneticAlgorithms
             // Инициализируем новую матрицу растояний
             SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);
             
-            if (!GraphOperation.CheckGraphIsTree(distancesMatrix) || !GraphOperation.CheckGraphIsSkeleton(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
+            if (!GraphOperation.CheckNoCyclesInGraph(distancesMatrix) || !GraphOperation.CheckGraphIsSkeleton(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
                 return false;
 
             return true;
@@ -179,7 +206,7 @@ namespace GeneticAlgorithms
             Console.WriteLine("PrintResult +");
         }
 
-        public int TargetFunction(Individ individ)
+        public double TargetFunction(Individ individ)
         {
             // Инициализируем новую матрицу растояний
             SymmetricMatrix distancesMatrix = IndividToDistancesMatrix(individ);

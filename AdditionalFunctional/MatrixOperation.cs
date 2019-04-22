@@ -41,9 +41,9 @@ namespace GeneticAlgorithms
             }
         }
 
-        public static int FindMinValInMatrix(SymmetricMatrix symmetricMatrix)
+        public static double FindMinValInMatrix(SymmetricMatrix symmetricMatrix)
         {
-            int min = Int32.MaxValue;
+            double min = Int32.MaxValue;
 
             for (int i = 0; i < symmetricMatrix.GetMatrixSize(); i++)
             {

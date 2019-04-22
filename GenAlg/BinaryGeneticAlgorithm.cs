@@ -28,7 +28,7 @@ namespace GeneticAlgorithms
         {
             if (_printPopulation)
             {
-                int sum = 0;
+                double sum = 0;
                 List<Individ> iteratorPopList = population.GetPopulationList();
                 foreach (var individ in iteratorPopList)
                 {
@@ -40,21 +40,21 @@ namespace GeneticAlgorithms
                 foreach (var individ in iteratorPopList)
                 {
                     List<Gen> chromosome = individ.GetChromosome();
-                    int targFuncRes = FitnessFunction(individ);
+                    double targFuncRes = FitnessFunction(individ);
                     Console.WriteLine(/*"[" + count.ToString() + "] " +*/ individ.ToString() /*+ " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%"*/);
                     count++;
                 }
             }
         }
 
-        private int CurrMaxInPopulation()
+        private double CurrMaxInPopulation()
         {
-            int currMax = 0;
+            double currMax = 0;
 
             List<Individ> iteratorPopList = _population.GetPopulationList();
             foreach (var individ in iteratorPopList)
             {
-                int fitnessFucnRes = FitnessFunction(individ);
+                double fitnessFucnRes = FitnessFunction(individ);
 
                 if (currMax < fitnessFucnRes)
                 {

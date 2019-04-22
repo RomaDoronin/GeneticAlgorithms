@@ -9,22 +9,22 @@ namespace GeneticAlgorithms
     class SymmetricMatrix
     {
         private int _matrixSize;
-        private List<int> _matrix;
+        private List<double> _matrix;
 
         public SymmetricMatrix(int matrixSize)
         {
-            _matrix = new List<int>();
+            _matrix = new List<double>();
             _matrixSize = matrixSize;
             for (int i = 0; i < _matrixSize; i++)
             {
                 for (int j = 0; j < _matrixSize; j++)
                 {
-                    _matrix.Add(0);
+                    _matrix.Add(0.0);
                 }
             }
         }
 
-        public void SetVal(int indexI, int indexJ, int val)
+        public void SetVal(int indexI, int indexJ, double val)
         {
             if (indexI > indexJ)
             {
@@ -36,7 +36,7 @@ namespace GeneticAlgorithms
             _matrix[indexI * _matrixSize + indexJ] = val;
         }
 
-        public int GetVal(int indexI, int indexJ)
+        public double GetVal(int indexI, int indexJ)
         {
             if (indexI > indexJ)
             {

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    struct IndividPlusInt
+    struct IndividPlusDouble
     {
         private Individ _individ;
-        private int _sumVal;
+        private double _sumVal;
 
         public Individ GetIndivid() => new Individ(_individ);
-        public int GetSumVal() => _sumVal;
+        public double GetSumVal() => _sumVal;
         public void SetSumVal(int sumVal) => _sumVal = sumVal;
 
-        public IndividPlusInt(Individ individ, int sumVal)
+        public IndividPlusDouble(Individ individ, double sumVal)
         {
             _individ = individ;
             _sumVal = sumVal;
@@ -29,6 +29,8 @@ namespace GeneticAlgorithms
     {
         private bool _isRemoveSelectIndividFromSelectPool;
 
+        private const int DIFFERENCE_ORDER = 1000000;
+
         public RouletteSelection(bool isRemoveSelectIndividFromSelectPool)
         {
             _isRemoveSelectIndividFromSelectPool = isRemoveSelectIndividFromSelectPool;
@@ -36,38 +38,69 @@ namespace GeneticAlgorithms
 
         public override IPopulation Selection(IPopulation currPopulation, FitnessFunctionDel FitnessFunction, ref ResultPair max, int matingPoolSize)
         {
-            List<IndividPlusInt> valueFitnessFunction = new List<IndividPlusInt>();
+            List<IndividPlusDouble> valueFitnessFunction = new List<IndividPlusDouble>();
 
-            int valueFitnessFunctionSum = 0;
+            double valueFitnessFunctionSum = 0.0;
 
             List<Individ> iteratorPopList = currPopulation.GetPopulationList();
+            double minDiff = Program.INFINITY;
+            double maxDiff = -1;
             foreach (var individ in iteratorPopList)
             {
-                int targetFunctionRes = FitnessFunction(individ);
+                double targetFunctionRes = FitnessFunction(individ);
                 if (max.maxVal < targetFunctionRes)
                 {
                     max.maxVal = targetFunctionRes;
                     max.individ = individ;
                 }
                 valueFitnessFunctionSum += targetFunctionRes;
-                valueFitnessFunction.Add(new IndividPlusInt(individ, valueFitnessFunctionSum));
+                valueFitnessFunction.Add(new IndividPlusDouble(individ, valueFitnessFunctionSum));
+
+                if (valueFitnessFunction.Count > 1)
+                {
+                    double diff = valueFitnessFunction[valueFitnessFunction.Count - 1].GetSumVal() - valueFitnessFunction[valueFitnessFunction.Count - 2].GetSumVal();
+
+                    if (minDiff > diff)
+                    {
+                        minDiff = diff;
+                    }
+
+                    if (maxDiff < diff)
+                    {
+                        maxDiff = diff;
+                    }
+                }
             }
             
             List<Individ> popList = new List<Individ>();
 
+            // Проверяем разницу между минимумом и максимумом для избежания проблем
+            if (maxDiff > minDiff * DIFFERENCE_ORDER)
+            {
+                Console.WriteLine("RouletteSelection::Selection : maxDiff > minDiff * DIFFERENCE_ORDER");
+                throw new InvalidProgramException();
+            }
+
+            int multiplier = 1;
+            while (minDiff > 10) // 10 - "2" -> количество знаков в целых числах рулетки
+            {
+                multiplier *= 10;
+                minDiff *= 10;
+            }
+
             do
             {
-                int rnd = RNGCSP.GetRandomNum(0, valueFitnessFunction[valueFitnessFunction.Count - 1].GetSumVal());
-                List<IndividPlusInt> newValueFitnessFunction = new List<IndividPlusInt>();
+                int rnd = RNGCSP.GetRandomNum(0, (int)(valueFitnessFunction[valueFitnessFunction.Count - 1].GetSumVal() * multiplier));
+                List<IndividPlusDouble> newValueFitnessFunction = new List<IndividPlusDouble>();
                 bool isFind = false;
-                int additive = 0;
-                int previousVal = 0;
+                double additive = 0.0;
+                double previousVal = 0.0;
 
                 foreach (var indPI in valueFitnessFunction)
                 {
                     if (!isFind)
                     {
-                        if (indPI.GetSumVal() > rnd)
+                        if ((int)(indPI.GetSumVal() * multiplier) > rnd)
                         {
                             popList.Add(indPI.GetIndivid());
                             additive = indPI.GetSumVal() - previousVal;
@@ -83,7 +116,7 @@ namespace GeneticAlgorithms
                     else
                     {
                         if (_isRemoveSelectIndividFromSelectPool)
-                            newValueFitnessFunction.Add(new IndividPlusInt(indPI.GetIndivid(), indPI.GetSumVal() - additive));
+                            newValueFitnessFunction.Add(new IndividPlusDouble(indPI.GetIndivid(), indPI.GetSumVal() - additive));
                     }
                 }
 

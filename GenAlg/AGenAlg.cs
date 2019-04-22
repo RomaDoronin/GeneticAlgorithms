@@ -15,18 +15,18 @@ namespace GeneticAlgorithms
 
     struct ResultPair
     {
-        public int maxVal;
+        public double maxVal;
         public Individ individ;
     }
 
     abstract class AGenAlg
     {
         protected ResultPair _max;
-        protected int _maxIterNum;
+        protected double _maxIterNum;
 
         public void SetMaxIterNum(int maxIterNum) => _maxIterNum = maxIterNum;
 
-        protected VectorSolution _solution;
+        protected VectorSolutionInt _solution;
         protected ITask _task;
         protected IPopulation _population;
 
@@ -61,7 +61,7 @@ namespace GeneticAlgorithms
 
         public abstract void Solve(ref ITask task);
 
-        protected int FitnessFunction(Individ individ)
+        protected double FitnessFunction(Individ individ)
         {
             return _task.TargetFunction(individ);
         }

@@ -6,55 +6,30 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
+    enum TARGET
+    {
+        MAX,
+        MIN
+    }
+
     class GraphOperation
     {
-        // Алгоритм Дейкстры
-        private static void DijkstraAlgorithmRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, ref List<int> shortestDistancesFromVertex, int currVertex, int startVertexNum)
+        public static SymmetricMatrix GetMaxSpeedMatrix(SymmetricMatrix speedMatrix)
         {
-            visitedVertex[currVertex] = true;
-            int min = Program.INFINITY;
-            int index = -1;
+            SymmetricMatrix maxSpeedMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
 
-            for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
+            for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
             {
-                int dist = distancesMatrix.GetVal(currVertex, j);
-                if (dist != 0 && j != currVertex)
-                {
-                    int allDist = dist + shortestDistancesFromVertex[currVertex];
-                    if (allDist < shortestDistancesFromVertex[j])
-                    {
-                        shortestDistancesFromVertex[j] = allDist;
-                    }
-                }
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(TARGET.MAX, new SumFunctionSpeed());
+                List<double> speedList = dijkstraAlgorithm.DoDijkstraAlgorithm(speedMatrix, i);
 
-                if (min > shortestDistancesFromVertex[j] && !visitedVertex[j])
+                for (int j = 0; j < speedList.Count; j++)
                 {
-                    min = shortestDistancesFromVertex[j];
-                    index = j;
+                    maxSpeedMatrix.SetVal(i, j, speedList[j]);
                 }
             }
 
-            if (index != -1)
-            {
-                DijkstraAlgorithmRec(distancesMatrix, ref visitedVertex, ref shortestDistancesFromVertex, index, startVertexNum);
-            }
-        }
-
-        private static List<int> DijkstraAlgorithm(SymmetricMatrix distancesMatrix, int startVertexNum)
-        {
-            List<bool> visitedVertex = new List<bool>();
-            List<int> shortestDistancesFromVertex = new List<int>();
-
-            for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
-            {
-                visitedVertex.Add(false);
-                shortestDistancesFromVertex.Add(Program.INFINITY);
-            }
-            shortestDistancesFromVertex[startVertexNum] = 0;
-
-            DijkstraAlgorithmRec(distancesMatrix, ref visitedVertex, ref shortestDistancesFromVertex, startVertexNum, startVertexNum);
-
-            return shortestDistancesFromVertex;
+            return maxSpeedMatrix;
         }
 
         public static SymmetricMatrix GetShortestDistancesMatrix(SymmetricMatrix distancesMatrix)
@@ -63,7 +38,8 @@ namespace GeneticAlgorithms
 
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
             {
-                List<int> distanceList = DijkstraAlgorithm(distancesMatrix, i);
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(TARGET.MIN, new SumFunctionStd());
+                List<double> distanceList = dijkstraAlgorithm.DoDijkstraAlgorithm(distancesMatrix, i);
 
                 for (int j = 0; j < distanceList.Count; j++)
                 {
@@ -73,9 +49,16 @@ namespace GeneticAlgorithms
 
             return shortestDistancesMatrix;
         }
-
-        // Проверка что граф является деревом // Хотя на самом деле проверка что нет циклов
-        private static bool CheckGraphIsTreeRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int previousVertex, int currVertex)
+        
+        /// <summary>
+        /// Рекурсивная часть проверки что в графе нет циклов
+        /// </summary>
+        /// <param name="distancesMatrix">Матриц растояний</param>
+        /// <param name="visitedVertex">Массив посещенных вершин</param>
+        /// <param name="previousVertex">Предыдущая вершина</param>
+        /// <param name="currVertex">текущая вершина</param>
+        /// <returns></returns>
+        private static bool CheckNoCyclesInGraph(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int previousVertex, int currVertex)
         {
             visitedVertex[currVertex] = true;
             for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
@@ -90,7 +73,7 @@ namespace GeneticAlgorithms
                         }
                         else
                         {
-                            if (!CheckGraphIsTreeRec(distancesMatrix, ref visitedVertex, currVertex, j))
+                            if (!CheckNoCyclesInGraph(distancesMatrix, ref visitedVertex, currVertex, j))
                             {
                                 return false;
                             }
@@ -105,7 +88,7 @@ namespace GeneticAlgorithms
                 {
                     if (!visitedVertex[vertex])
                     {
-                        if (!CheckGraphIsTreeRec(distancesMatrix, ref visitedVertex, vertex, vertex))
+                        if (!CheckNoCyclesInGraph(distancesMatrix, ref visitedVertex, vertex, vertex))
                         {
                             return false;
                         }
@@ -117,7 +100,10 @@ namespace GeneticAlgorithms
             return true;
         }
 
-        public static bool CheckGraphIsTree(SymmetricMatrix distancesMatrix)
+        /// <summary>
+        /// Проверка что в граф нет циклов. Граф может быть не связным
+        /// </summary>
+        public static bool CheckNoCyclesInGraph(SymmetricMatrix distancesMatrix)
         {
             List<bool> visitedVertex = new List<bool>();
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
@@ -125,10 +111,9 @@ namespace GeneticAlgorithms
                 visitedVertex.Add(false);
             }
 
-            return CheckGraphIsTreeRec(distancesMatrix, ref visitedVertex, 0, 0);
+            return CheckNoCyclesInGraph(distancesMatrix, ref visitedVertex, 0, 0);
         }
-
-        // Проверка что граф является связным
+        
         private static void BypassInDepthRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int currVertex)
         {
             visitedVertex[currVertex] = true;
@@ -145,6 +130,12 @@ namespace GeneticAlgorithms
             }
         }
 
+        /// <summary>
+        /// Проверка что граф является связным
+        /// </summary>
+        /// <param name="distancesMatrix"></param>
+        /// <param name="visitedVertex"></param>
+        /// <param name="currVertex"></param>
         public static bool CheckGraphIsConnected(SymmetricMatrix distancesMatrix)
         {
             List<bool> visitedVertex = new List<bool>();
@@ -165,8 +156,12 @@ namespace GeneticAlgorithms
 
             return true;
         }
-
-        // Проверка что граф является остовным
+        
+        /// <summary>
+        /// Проверка что граф является остовным
+        /// </summary>
+        /// <param name="distancesMatrix"></param>
+        /// <returns></returns>
         public static bool CheckGraphIsSkeleton(SymmetricMatrix distancesMatrix)
         {
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)

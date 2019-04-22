@@ -29,6 +29,10 @@ namespace GeneticAlgorithms.UnitTests
                 shortestDistancesMatrix1.SetVal(5, 6, 10); shortestDistancesMatrix1.SetVal(5, 7, 4);
                 shortestDistancesMatrix1.SetVal(6, 7, 14);
             }
+            SymmetricMatrix maxSpeedMatrix1 = new SymmetricMatrix(8);
+            {
+
+            }
 
             // Граф
             SymmetricMatrix matrix2 = new SymmetricMatrix(8);
@@ -49,8 +53,12 @@ namespace GeneticAlgorithms.UnitTests
                 shortestDistancesMatrix2.SetVal(5, 6, 10); shortestDistancesMatrix2.SetVal(5, 7, 4);
                 shortestDistancesMatrix2.SetVal(6, 7, 14);
             }
+            SymmetricMatrix maxSpeedMatrix2 = new SymmetricMatrix(8);
+            {
 
-            // Не остовный граф
+            }
+
+            // Неостовный граф
             SymmetricMatrix matrix3 = new SymmetricMatrix(8);
             {
                 matrix3.SetVal(0, 1, 6); matrix3.SetVal(0, 2, 8);
@@ -67,6 +75,10 @@ namespace GeneticAlgorithms.UnitTests
                 shortestDistancesMatrix3.SetVal(4, 5, Program.INFINITY); shortestDistancesMatrix3.SetVal(4, 6, Program.INFINITY); shortestDistancesMatrix3.SetVal(4, 7, Program.INFINITY);
                 shortestDistancesMatrix3.SetVal(5, 6, 10); shortestDistancesMatrix3.SetVal(5, 7, 22);
                 shortestDistancesMatrix3.SetVal(6, 7, 24);
+            }
+            SymmetricMatrix maxSpeedMatrix3 = new SymmetricMatrix(8);
+            {
+
             }
 
             // Граф
@@ -96,13 +108,21 @@ namespace GeneticAlgorithms.UnitTests
                 Console.WriteLine("TEST 3 : " + (MatrixOperation.CompareMatrix(GraphOperation.GetShortestDistancesMatrix(matrix3), shortestDistancesMatrix3)).ToString());
             }
 
+            // Матрица максимальных скоростей
+            Console.WriteLine("GetShortestDistancesMatrix");
+            {
+                Console.WriteLine("TEST 1 : " + (MatrixOperation.CompareMatrix(GraphOperation.GetMaxSpeedMatrix(matrix1), maxSpeedMatrix1)).ToString());
+                Console.WriteLine("TEST 2 : " + (MatrixOperation.CompareMatrix(GraphOperation.GetMaxSpeedMatrix(matrix2), maxSpeedMatrix2)).ToString());
+                Console.WriteLine("TEST 3 : " + (MatrixOperation.CompareMatrix(GraphOperation.GetMaxSpeedMatrix(matrix3), maxSpeedMatrix3)).ToString());
+            }
+
             // Проверка на дерево
             Console.WriteLine("CheckGraphIsTree");
             {
-                Console.WriteLine("TEST 1 : " + (GraphOperation.CheckGraphIsTree(matrix1) == true).ToString());
-                Console.WriteLine("TEST 2 : " + (GraphOperation.CheckGraphIsTree(matrix2) == false).ToString());
-                Console.WriteLine("TEST 3 : " + (GraphOperation.CheckGraphIsTree(matrix3) == false).ToString());
-                Console.WriteLine("TEST 4 : " + (GraphOperation.CheckGraphIsTree(matrix4) == false).ToString());
+                Console.WriteLine("TEST 1 : " + (GraphOperation.CheckNoCyclesInGraph(matrix1) == true).ToString());
+                Console.WriteLine("TEST 2 : " + (GraphOperation.CheckNoCyclesInGraph(matrix2) == false).ToString());
+                Console.WriteLine("TEST 3 : " + (GraphOperation.CheckNoCyclesInGraph(matrix3) == false).ToString());
+                Console.WriteLine("TEST 4 : " + (GraphOperation.CheckNoCyclesInGraph(matrix4) == false).ToString());
             }
 
             // Проверка на остов

@@ -14,11 +14,11 @@ namespace GeneticAlgorithms
 
     class SortPopulation
     {
-        public static IOrderedEnumerable<KeyValuePair<Individ, int>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
+        public static IOrderedEnumerable<KeyValuePair<Individ, double>> GetSortResultOfSelect(SortType sortType, IPopulation population, FitnessFunctionDel FitnessFunction)
         {
             // WARNING: Уязвимое место (!) Есть возможно что если будет много одинаковых решений, то просто нехватит осоьей на популяцию
             //Dictionary<int, Individ> resSelect = new Dictionary<int, Individ>();
-            Dictionary<Individ, int> resSelect = new Dictionary<Individ, int>();
+            Dictionary<Individ, double> resSelect = new Dictionary<Individ, double>();
 
             List<Individ> iteratorPopList = population.GetPopulationList();
             foreach (var individ in iteratorPopList)

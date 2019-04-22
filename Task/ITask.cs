@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    delegate int FitnessFunctionDel(Individ individ);
+    delegate double FitnessFunctionDel(Individ individ);
     delegate bool LimitationsFunctionDel(Individ individ);
 
     interface ITask
@@ -14,9 +14,9 @@ namespace GeneticAlgorithms
         Individ GenerateInitialSolution();
         bool LimitationsFunction(Individ individ);
         int GetSize();
-        int TargetFunction(Individ individ);
-        Individ Coder(VectorSolution solution);
-        VectorSolution Decoder(Individ individ);
+        double TargetFunction(Individ individ);
+        Individ Coder(VectorSolutionInt solution);
+        VectorSolutionInt Decoder(Individ individ);
         void PrintResult();
         bool CheckIndivid(Individ individ);
     }

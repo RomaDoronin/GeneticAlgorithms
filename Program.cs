@@ -52,7 +52,7 @@ namespace GeneticAlgorithms
             return backpackTask;
         }
 
-        private static ITask CreateBuildingMinumumSpanningTree()
+        private static ITask CreateWorstClientTask()
         {
             int matrixSize = 8;
             SymmetricMatrix distancesMatrix = new SymmetricMatrix(matrixSize);
@@ -63,7 +63,7 @@ namespace GeneticAlgorithms
             distancesMatrix.SetVal(3, 4, 10); distancesMatrix.SetVal(3, 5, 4); distancesMatrix.SetVal(3, 6, 6);
             distancesMatrix.SetVal(4, 5, 3); distancesMatrix.SetVal(4, 7, 1);
 
-            return new BuildingMinumumSpanningTree(distancesMatrix);
+            return new WorstClientTask(distancesMatrix);
         }
 
         static void Main(string[] args)
@@ -125,8 +125,11 @@ namespace GeneticAlgorithms
             genAlg.SetFormationNewPopulation(new LeaveBest());
 
             // ------------------------------------------------------------------------------------ Выбор задачи
-            //ITask task = CreateBackpackTask();
-            ITask task = CreateBuildingMinumumSpanningTree();
+#if BACKPACK_300 || BACKPACK_800
+            ITask task = CreateBackpackTask();
+#else
+            ITask task = CreateWorstClientTask();
+#endif
 
             genAlg.Solve(ref task);
 #endif
