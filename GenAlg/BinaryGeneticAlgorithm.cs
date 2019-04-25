@@ -41,7 +41,7 @@ namespace GeneticAlgorithms
                 {
                     List<Gen> chromosome = individ.GetChromosome();
                     double targFuncRes = FitnessFunction(individ);
-                    Console.WriteLine(/*"[" + count.ToString() + "] " +*/ individ.ToString() /*+ " - " + targFuncRes.ToString() + " - " + ((targFuncRes * 100) / sum).ToString() + "%"*/);
+                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + (((int)(targFuncRes * 1000)) / 1000.0).ToString() + " - " + ((int)((targFuncRes * 100) / sum)).ToString() + "%");
                     count++;
                 }
             }
@@ -90,8 +90,9 @@ namespace GeneticAlgorithms
                 if (_max.maxVal >= 3343) break;
 #elif BACKPACK_600
                 if (_max.maxVal >= 8986) break;
+#else
+                if (_max.maxVal > 100) break;
 #endif
-
             }
 
             // Выбор "наилучшего" решения

@@ -1,6 +1,6 @@
 ﻿//#define BACKPACK_300
 //#define BACKPACK_800
-#define UNIT_TESTS
+//#define UNIT_TESTS
 
 using System;
 using System.Collections.Generic;
@@ -52,16 +52,125 @@ namespace GeneticAlgorithms
             return backpackTask;
         }
 
+        struct VertexCount
+        {
+            public int vertexNum;
+            public int vertexCount;
+
+            public VertexCount(int vertexNum, int vertexCount)
+            {
+                this.vertexNum = vertexNum;
+                this.vertexCount = vertexCount;
+            }
+
+            public void DecVertexCount()
+            {
+                vertexCount--;
+            }
+        };
+
+        private static int RunRoulette(List<int> sectorList)
+        {
+            List<int> sumList = new List<int>();
+            int sum = 0;
+            foreach (var val in sectorList)
+            {
+                sum += val;
+                sumList.Add(sum);
+            }
+
+            int rnd = RNGCSP.GetRandomNum(0, sum);
+            int count = 0;
+            foreach (var val in sumList)
+            {
+                if (rnd < val)
+                {
+                    break;
+                }
+                count++;
+            }
+
+            return count;
+        }
+
+        private static List<int> DecValInList(List<int> list, int index)
+        {
+            List<int> resList = new List<int>();
+
+            int count = 0;
+            foreach (var val in list)
+            {
+                if (count == index)
+                {
+                    resList.Add(val - 1);
+                }
+                else
+                {
+                    resList.Add(val);
+                }
+
+                count++;
+            }
+
+            return resList;
+        }
+
         private static ITask CreateWorstClientTask()
         {
-            int matrixSize = 8;
-            SymmetricMatrix distancesMatrix = new SymmetricMatrix(matrixSize);
-            
+            int matrixSize;
+            SymmetricMatrix distancesMatrix;
+
+            // Первый вариант, Ответ 1
+            /*matrixSize = 8;
+            distancesMatrix = new SymmetricMatrix(matrixSize);
             distancesMatrix.SetVal(0, 1, 6); distancesMatrix.SetVal(0, 2, 8);
             distancesMatrix.SetVal(1, 2, 8); distancesMatrix.SetVal(1, 3, 8); distancesMatrix.SetVal(1, 4, 5);
             distancesMatrix.SetVal(2, 4, 2); distancesMatrix.SetVal(2, 7, 2);
             distancesMatrix.SetVal(3, 4, 10); distancesMatrix.SetVal(3, 5, 4); distancesMatrix.SetVal(3, 6, 6);
-            distancesMatrix.SetVal(4, 5, 3); distancesMatrix.SetVal(4, 7, 1);
+            distancesMatrix.SetVal(4, 5, 3); distancesMatrix.SetVal(4, 7, 1);*/
+
+            // Второй вариант
+            // В реальных задачах каждая вершина имеет 2-5 ребер
+            matrixSize = 10;
+            int maxNumVertexEdge = 5;
+            int diapUp = 3;
+            int diapDown = 6;
+
+            distancesMatrix = new SymmetricMatrix(matrixSize);
+            
+            List<int> sectorList = new List<int>();
+            for (int i = 0; i < matrixSize; i++)
+            {
+                sectorList.Add(maxNumVertexEdge);
+            }
+
+            int edgeNum = 0;
+
+            for (int i = 0; i < matrixSize; i++)
+            {
+                for (int rnd = RNGCSP.GetRandomNum(diapDown, diapUp); rnd > 0; rnd--)
+                {
+                    if (sectorList[i] == 0) break;
+
+                    int index = 0;
+                    int debugCount = 0;
+
+                    do {
+                        if (debugCount > 10) break;
+                        debugCount++;
+                        index = RunRoulette(sectorList);
+                    } while (index == i || distancesMatrix.GetVal(i, index) != 0);
+
+                    sectorList = DecValInList(sectorList, i);
+                    sectorList = DecValInList(sectorList, index);
+
+                    distancesMatrix.SetVal(i, index, RNGCSP.GetRandomNum(10, 31));
+                    edgeNum++;
+                    Console.Write("\r" + "Vertex: " + i + " | Edge Num: " + edgeNum);
+                }
+            }
+
+            //distancesMatrix.PrintMatrix();
 
             return new WorstClientTask(distancesMatrix);
         }

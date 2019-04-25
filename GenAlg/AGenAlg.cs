@@ -26,7 +26,7 @@ namespace GeneticAlgorithms
 
         public void SetMaxIterNum(int maxIterNum) => _maxIterNum = maxIterNum;
 
-        protected VectorSolutionInt _solution;
+        protected VectorSolutionDouble _solution;
         protected ITask _task;
         protected IPopulation _population;
 

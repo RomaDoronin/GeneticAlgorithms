@@ -10,6 +10,8 @@ namespace GeneticAlgorithms
     {
         public static bool CompareMatrix(SymmetricMatrix symmetricMatrix1, SymmetricMatrix symmetricMatrix2)
         {
+            double accuracy = 0.000001;
+
             if (symmetricMatrix1.GetMatrixSize() != symmetricMatrix2.GetMatrixSize())
             {
                 return false;
@@ -19,7 +21,8 @@ namespace GeneticAlgorithms
             {
                 for (int j = i; j < symmetricMatrix1.GetMatrixSize(); j++)
                 {
-                    if (symmetricMatrix1.GetVal(i,j) != symmetricMatrix2.GetVal(i,j))
+                    //Console.WriteLine(symmetricMatrix1.GetVal(i, j) + " vs " + symmetricMatrix2.GetVal(i, j));
+                    if (Math.Abs(symmetricMatrix1.GetVal(i,j) - symmetricMatrix2.GetVal(i,j)) > accuracy)
                     {
                         return false;
                     }
@@ -43,7 +46,7 @@ namespace GeneticAlgorithms
 
         public static double FindMinValInMatrix(SymmetricMatrix symmetricMatrix)
         {
-            double min = Int32.MaxValue;
+            double min = Program.INFINITY;
 
             for (int i = 0; i < symmetricMatrix.GetMatrixSize(); i++)
             {

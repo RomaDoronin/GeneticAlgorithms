@@ -52,5 +52,20 @@ namespace GeneticAlgorithms
         {
             return _matrixSize;
         }
+
+        public void PrintMatrix()
+        {
+            for (int i = 0; i < _matrixSize; i++)
+            {
+                for (int j = 0; j < _matrixSize; j++)
+                {
+                    if (j >= i)
+                        Console.Write(_matrix[i * _matrixSize + j].ToString() + "	");
+                    else
+                        Console.Write(_matrix[j * _matrixSize + i].ToString() + "	");
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }

@@ -8,12 +8,10 @@ namespace GeneticAlgorithms
 {
     class DijkstraAlgorithm
     {
-        private TARGET _target;
         private ASumFunction _sumFunction;
 
-        public DijkstraAlgorithm(TARGET target, ASumFunction sumFunction)
+        public DijkstraAlgorithm(ASumFunction sumFunction)
         {
-            _target = target;
             _sumFunction = sumFunction;
         }
 
@@ -24,54 +22,27 @@ namespace GeneticAlgorithms
         {
             visitedVertex[currVertex] = true;
 
-            double limit;
-            if (_target == TARGET.MIN)
-            {
-                limit = Program.INFINITY;
-            }
-            else
-            {
-                limit = -1;
-            }
+            double min;
+            min = Program.INFINITY;
 
             int index = -1;
 
             for (int j = 0; j < weightsMatrix.GetMatrixSize(); j++)
             {
                 double dist = weightsMatrix.GetVal(currVertex, j);
-                if (dist != 0 && j != currVertex && !visitedVertex[j]) // ?
+                if (dist != 0 && j != currVertex && !visitedVertex[j])
                 {
-                    double allDist = _sumFunction.SumFunc(dist, weightsFromVertex[currVertex]); //dist + weightsFromVertex[currVertex];
-
-                    bool result;
-                    if (_target == TARGET.MIN)
-                    {
-                        result = allDist < weightsFromVertex[j];
-                    }
-                    else
-                    {
-                        result = allDist > weightsFromVertex[j];
-                    }
-
-                    if (result)
+                    double allDist = _sumFunction.SumFunc(dist, weightsFromVertex[currVertex]);
+                    
+                    if (allDist < weightsFromVertex[j])
                     {
                         weightsFromVertex[j] = allDist;
                     }
                 }
 
-                bool resultForMax;
-                if (_target == TARGET.MIN)
+                if (min > weightsFromVertex[j] && !visitedVertex[j])
                 {
-                    resultForMax = limit > weightsFromVertex[j] && !visitedVertex[j];
-                }
-                else
-                {
-                    resultForMax = limit < weightsFromVertex[j] && !visitedVertex[j];
-                }
-
-                if (resultForMax)
-                {
-                    limit = weightsFromVertex[j];
+                    min = weightsFromVertex[j];
                     index = j;
                 }
             }
@@ -95,14 +66,7 @@ namespace GeneticAlgorithms
             for (int i = 0; i < weightsMatrix.GetMatrixSize(); i++)
             {
                 visitedVertex.Add(false);
-                if (_target == TARGET.MIN)
-                {
-                    weightsFromVertex.Add(Program.INFINITY);
-                }
-                else
-                {
-                    weightsFromVertex.Add(-1);
-                }
+                weightsFromVertex.Add(Program.INFINITY);
             }
             weightsFromVertex[startVertexNum] = 0;
 

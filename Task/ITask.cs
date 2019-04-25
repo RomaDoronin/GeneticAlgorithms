@@ -15,8 +15,8 @@ namespace GeneticAlgorithms
         bool LimitationsFunction(Individ individ);
         int GetSize();
         double TargetFunction(Individ individ);
-        Individ Coder(VectorSolutionInt solution);
-        VectorSolutionInt Decoder(Individ individ);
+        Individ Coder(VectorSolutionDouble solution);
+        VectorSolutionDouble Decoder(Individ individ);
         void PrintResult();
         bool CheckIndivid(Individ individ);
     }

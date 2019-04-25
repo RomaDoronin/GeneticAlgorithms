@@ -29,12 +29,12 @@ namespace GeneticAlgorithms
         private List<Object> _objectList;
         private int _maxWeight;
         private int _maxNumOfObject;
-        private VectorSolutionInt _solution;
+        private VectorSolutionDouble _solution;
 
         // Дополнительный функционал
         public BackpackTask()
         {
-            _solution = new VectorSolutionInt();
+            _solution = new VectorSolutionDouble();
         }
 
         public void SetMaxWieght(int maxWeight) => _maxWeight = maxWeight;
@@ -44,7 +44,7 @@ namespace GeneticAlgorithms
 
         public void SetMaxNumOfObject(int maxNumOfObject) => _maxNumOfObject = maxNumOfObject;
 
-        public VectorSolutionInt GetSolution() => _solution;
+        public VectorSolutionDouble GetSolution() => _solution;
 
         // Реализация интерфейса
         public Individ GenerateInitialSolution()
@@ -52,12 +52,12 @@ namespace GeneticAlgorithms
             Individ individ;
             do
             {
-                List<int> prechromosome = new List<int>();
+                List<double> prechromosome = new List<double>();
                 for (int i = 0; i < _objectList.Count; i++)
                 {
                     prechromosome.Add(RNGCSP.GetRandomNum(0, 1000) % (_maxNumOfObject + 1));
                 }
-                VectorSolutionInt solution = new VectorSolutionInt();
+                VectorSolutionDouble solution = new VectorSolutionDouble();
                 solution.SetResult(prechromosome);
                 individ = Coder(solution);
             } while (!LimitationsFunction(individ));
@@ -67,8 +67,8 @@ namespace GeneticAlgorithms
 
         public bool LimitationsFunction(Individ individ)
         {
-            List<int> prechromosome = Decoder(individ).GetResult();
-            int weightSum = 0;
+            List<double> prechromosome = Decoder(individ).GetResult();
+            double weightSum = 0.0;
             for (int i = 0; i < prechromosome.Count; i++)
             {
                 weightSum += prechromosome[i] * _objectList[i].weight;
@@ -79,8 +79,8 @@ namespace GeneticAlgorithms
 
         public double TargetFunction(Individ individ)
         {
-            List<int> prechromosome = Decoder(individ).GetResult();
-            int priceSum = 0;
+            List<double> prechromosome = Decoder(individ).GetResult();
+            double priceSum = 0.0;
             for (int i = 0; i < prechromosome.Count; i++)
             {
                 priceSum += prechromosome[i] * _objectList[i].price;
@@ -89,7 +89,7 @@ namespace GeneticAlgorithms
             return priceSum;
         }
 
-        public Individ Coder(VectorSolutionInt solution)
+        public Individ Coder(VectorSolutionDouble solution)
         {
             List<Gen> chromosome = new List<Gen>();
             int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
@@ -119,9 +119,9 @@ namespace GeneticAlgorithms
             return individ;
         }
 
-        public VectorSolutionInt Decoder(Individ individ)
+        public VectorSolutionDouble Decoder(Individ individ)
         {
-            List<int> prechromosome = new List<int>();
+            List<double> prechromosome = new List<double>();
             int lenghtOfGen = MathFunction.Log2(_maxNumOfObject) + 1;
             String inVal = "";
 
@@ -134,7 +134,7 @@ namespace GeneticAlgorithms
                 prechromosome.Add(Int32.Parse(res));
             }
 
-            VectorSolutionInt vectorSolution = new VectorSolutionInt();
+            VectorSolutionDouble vectorSolution = new VectorSolutionDouble();
             vectorSolution.SetResult(prechromosome);
 
             return vectorSolution;
@@ -147,7 +147,7 @@ namespace GeneticAlgorithms
 
         public bool CheckIndivid(Individ individ)
         {
-            VectorSolutionInt vectorSolution = Decoder(individ);
+            VectorSolutionDouble vectorSolution = Decoder(individ);
 
             foreach (var val in vectorSolution.GetResult())
             {

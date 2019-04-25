@@ -6,26 +6,51 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    enum TARGET
-    {
-        MAX,
-        MIN
-    }
-
     class GraphOperation
     {
         public static SymmetricMatrix GetMaxSpeedMatrix(SymmetricMatrix speedMatrix)
         {
-            SymmetricMatrix maxSpeedMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
-
+            SymmetricMatrix timeMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
             for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
             {
-                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(TARGET.MAX, new SumFunctionSpeed());
-                List<double> speedList = dijkstraAlgorithm.DoDijkstraAlgorithm(speedMatrix, i);
-
-                for (int j = 0; j < speedList.Count; j++)
+                for (int j = 0; j < speedMatrix.GetMatrixSize(); j++)
                 {
-                    maxSpeedMatrix.SetVal(i, j, speedList[j]);
+                    if (speedMatrix.GetVal(i, j) != 0)
+                    {
+                        timeMatrix.SetVal(i, j, 1 / speedMatrix.GetVal(i, j));
+                    }
+                    else
+                    {
+                        timeMatrix.SetVal(i, j, 0);
+                    }
+                }
+            }
+
+            SymmetricMatrix minTimeMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
+            for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
+            {
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(new SumFunctionStd());
+                List<double> timeList = dijkstraAlgorithm.DoDijkstraAlgorithm(timeMatrix, i);
+
+                for (int j = 0; j < timeList.Count; j++)
+                {
+                    minTimeMatrix.SetVal(i, j, timeList[j]);
+                }
+            }
+
+            SymmetricMatrix maxSpeedMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
+            for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
+            {
+                for (int j = 0; j < speedMatrix.GetMatrixSize(); j++)
+                {
+                    if (minTimeMatrix.GetVal(i, j) != 0)
+                    {
+                        maxSpeedMatrix.SetVal(i, j, 1 / minTimeMatrix.GetVal(i, j));
+                    }
+                    else
+                    {
+                        maxSpeedMatrix.SetVal(i, j, 0);
+                    }
                 }
             }
 
@@ -38,7 +63,7 @@ namespace GeneticAlgorithms
 
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
             {
-                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(TARGET.MIN, new SumFunctionStd());
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(new SumFunctionStd());
                 List<double> distanceList = dijkstraAlgorithm.DoDijkstraAlgorithm(distancesMatrix, i);
 
                 for (int j = 0; j < distanceList.Count; j++)
@@ -46,7 +71,7 @@ namespace GeneticAlgorithms
                     shortestDistancesMatrix.SetVal(i, j, distanceList[j]);
                 }
             }
-
+            
             return shortestDistancesMatrix;
         }
         
