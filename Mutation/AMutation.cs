@@ -50,11 +50,14 @@ namespace GeneticAlgorithms
                 {
                     if (mutChromosomeNum == populationList.Count)
                     {
+                        int extraCycles = -2;
                         do
                         {
+                            extraCycles++;
                             List<Gen> chromosome = individ.GetChromosome();
                             do // Чтобы не заменилась аллель, такая что приведет к несуществующему гену
                             {
+                                extraCycles++;
                                 if (_mutationProbability >= RNGCSP.GetRandomNum(0, 101))
                                 {
                                     DoMutation(ref chromosome);
@@ -67,6 +70,8 @@ namespace GeneticAlgorithms
 
                             } while (!task.CheckIndivid(individ));
                         } while (!task.LimitationsFunction(individ));
+
+                        //Console.WriteLine("\n" + "Extra Cycles: " + extraCycles);
                     }
                 }
 

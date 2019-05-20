@@ -8,7 +8,7 @@ namespace GeneticAlgorithms
 {
     class MatrixOperation
     {
-        public static bool CompareMatrix(SymmetricMatrix symmetricMatrix1, SymmetricMatrix symmetricMatrix2)
+        public static bool CompareMatrix(CMatrix symmetricMatrix1, CMatrix symmetricMatrix2)
         {
             double accuracy = 0.000001;
 
@@ -32,7 +32,7 @@ namespace GeneticAlgorithms
             return true;
         }
 
-        public static void PrintMatrix(SymmetricMatrix symmetricMatrix)
+        public static void PrintMatrix(CMatrix symmetricMatrix)
         {
             for (int i = 0; i < symmetricMatrix.GetMatrixSize(); i++)
             {
@@ -44,7 +44,7 @@ namespace GeneticAlgorithms
             }
         }
 
-        public static double FindMinValInMatrix(SymmetricMatrix symmetricMatrix)
+        public static double FindMinValInMatrix(CMatrix symmetricMatrix)
         {
             double min = Program.INFINITY;
 
@@ -60,6 +60,77 @@ namespace GeneticAlgorithms
             }
 
             return min;
+        }
+
+        private static CMatrix GetSubMatrix(CMatrix matrix, int deleteRow, int deleteCollum)
+        {
+            CMatrix submatrix = new CMatrix(matrix.GetMatrixSize() - 1);
+            int additiveI = 0;
+
+            for (int i = 0; i < matrix.GetMatrixSize(); i++)
+            {
+                if (i == deleteRow)
+                {
+                    additiveI = 1;
+                    continue;
+                }
+
+                for (int j = 0; j < matrix.GetMatrixSize(); j++)
+                {
+                    if (j < deleteCollum)
+                    {
+                        submatrix.SetVal(i - additiveI, j, matrix.GetVal(i, j));
+                    }
+                    else if (j > deleteCollum)
+                    {
+                        submatrix.SetVal(i - additiveI, j - 1, matrix.GetVal(i, j));
+                    }
+                }
+            }
+
+            return submatrix;
+        }
+
+        public static double GetDeterminantRec(CMatrix matrix)
+        {
+            if (matrix.GetMatrixSize() == 1)
+            {
+                return matrix.GetVal(0, 0);
+            }
+
+            double res = 0;
+
+            for (int i = 0; i < matrix.GetMatrixSize(); i++)
+            {
+                double val = matrix.GetVal(i, 0);
+                if (val != 0)
+                {
+                    res += val * Math.Pow(-1, i) * GetDeterminantRec(GetSubMatrix(matrix, i, 0));
+                }
+            }
+
+            return res;
+        }
+
+        public static int GenNumOfSkeletonTrees(CMatrix symmetricMatrix)
+        {
+            CMatrix kirchhoffMatrix = new CMatrix(symmetricMatrix.GetMatrixSize());
+
+            for (int i = 0; i < symmetricMatrix.GetMatrixSize(); i++)
+            {
+                int edgeNum = 0;
+                for (int j = 0; j < symmetricMatrix.GetMatrixSize(); j++)
+                {
+                    if (symmetricMatrix.GetVal(i,j) != 0)
+                    {
+                        edgeNum++;
+                        kirchhoffMatrix.SetSimetricVal(i, j, -1);
+                    }
+                }
+                kirchhoffMatrix.SetSimetricVal(i, i, edgeNum);
+            }
+
+            return (int)GetDeterminantRec(GetSubMatrix(kirchhoffMatrix, 0, 0));
         }
     }
 }

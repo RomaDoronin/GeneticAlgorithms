@@ -18,7 +18,7 @@ namespace GeneticAlgorithms
         /// <summary>
         /// Рекурсивная часть алгоритма Дейкстры
         /// </summary>
-        void DijkstraAlgorithmRec(SymmetricMatrix weightsMatrix, ref List<bool> visitedVertex, ref List<double> weightsFromVertex, int currVertex, int startVertexNum)
+        void DijkstraAlgorithmRec(CMatrix weightsMatrix, ref List<bool> visitedVertex, ref List<double> weightsFromVertex, int currVertex, int startVertexNum)
         {
             visitedVertex[currVertex] = true;
 
@@ -58,7 +58,7 @@ namespace GeneticAlgorithms
         /// </summary>
         /// <param name="weightsMatrix">Матрица весов</param>
         /// <param name="startVertexNum">Стартовая вершина</param>
-        public List<double> DoDijkstraAlgorithm(SymmetricMatrix weightsMatrix, int startVertexNum)
+        public List<double> DoDijkstraAlgorithm(CMatrix weightsMatrix, int startVertexNum)
         {
             List<bool> visitedVertex = new List<bool>();
             List<double> weightsFromVertex = new List<double>();

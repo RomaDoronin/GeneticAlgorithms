@@ -14,13 +14,13 @@ namespace GeneticAlgorithms
         /// <summary>
         /// Входная матрица растояний сети
         /// </summary>
-        private SymmetricMatrix _speedMatrix;
+        private CMatrix _speedMatrix;
         /// <summary>
         /// Количество ребер
         /// </summary>
         private int edgeSize;
 
-        public WorstClientTask(SymmetricMatrix speedMatrix)
+        public WorstClientTask(CMatrix speedMatrix)
         {
             _speedMatrix = speedMatrix;
             edgeSize = 0;
@@ -41,12 +41,12 @@ namespace GeneticAlgorithms
         /// </summary>
         /// <param name="individ"></param>
         /// <returns></returns>
-        private SymmetricMatrix IndividToSpeedMatrix(Individ individ)
+        private CMatrix IndividToSpeedMatrix(Individ individ)
         {
             List<double> result = Decoder(individ).GetResult();
             int resultCount = 0;
 
-            SymmetricMatrix speedMatrix = new SymmetricMatrix(_speedMatrix.GetMatrixSize());
+            CMatrix speedMatrix = new CMatrix(_speedMatrix.GetMatrixSize());
             for (int i = 0; i < _speedMatrix.GetMatrixSize(); i++)
             {
                 for (int j = i; j < _speedMatrix.GetMatrixSize(); j++)
@@ -56,7 +56,7 @@ namespace GeneticAlgorithms
                     {
                         if (result[resultCount] == 1)
                         {
-                            speedMatrix.SetVal(i, j, val);
+                            speedMatrix.SetSimetricVal(i, j, val);
                         }
                         resultCount++;
                     }
@@ -154,19 +154,15 @@ namespace GeneticAlgorithms
                 chromosome[randGenNum] = gen;
                 individ.SetChromosome(chromosome);
 
-                SymmetricMatrix distancesMatrix = IndividToSpeedMatrix(individ);
+                CMatrix distancesMatrix = IndividToSpeedMatrix(individ);
 
                 if (GraphOperation.CheckNoCyclesInGraph(distancesMatrix))
                 {
                     //Console.Write(" +");
-                    if (GraphOperation.CheckGraphIsSkeleton(distancesMatrix))
+                    if (GraphOperation.CheckGraphIsConnected(distancesMatrix))
                     {
                         //Console.Write(" +");
-                        if (GraphOperation.CheckGraphIsConnected(distancesMatrix))
-                        {
-                            //Console.Write(" +");
-                            break;
-                        }
+                        break;
                     }
                 }
                 else
@@ -193,9 +189,9 @@ namespace GeneticAlgorithms
             // Проверка на то что решение образует остовное дерево
 
             // Инициализируем новую матрицу растояний
-            SymmetricMatrix distancesMatrix = IndividToSpeedMatrix(individ);
+            CMatrix distancesMatrix = IndividToSpeedMatrix(individ);
             
-            if (!GraphOperation.CheckNoCyclesInGraph(distancesMatrix) || !GraphOperation.CheckGraphIsSkeleton(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
+            if (!GraphOperation.CheckNoCyclesInGraph(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
                 return false;
 
             return true;
@@ -209,10 +205,10 @@ namespace GeneticAlgorithms
         public double TargetFunction(Individ individ)
         {
             // Инициализируем новую матрицу скоростней
-            SymmetricMatrix speedMatrix = IndividToSpeedMatrix(individ);
+            CMatrix speedMatrix = IndividToSpeedMatrix(individ);
 
             // Считаем матрицу максимальных скоростей
-            SymmetricMatrix maxSpeedMatrix = GraphOperation.GetMaxSpeedMatrix(speedMatrix);
+            CMatrix maxSpeedMatrix = GraphOperation.GetMaxSpeedMatrix(speedMatrix);
 
             // Поиск минимума в матрице
             return MatrixOperation.FindMinValInMatrix(maxSpeedMatrix);

@@ -118,25 +118,27 @@ namespace GeneticAlgorithms
         private static ITask CreateWorstClientTask()
         {
             int matrixSize;
-            SymmetricMatrix distancesMatrix;
+            CMatrix distancesMatrix;
 
             // Первый вариант, Ответ 1
             /*matrixSize = 8;
             distancesMatrix = new SymmetricMatrix(matrixSize);
-            distancesMatrix.SetVal(0, 1, 6); distancesMatrix.SetVal(0, 2, 8);
-            distancesMatrix.SetVal(1, 2, 8); distancesMatrix.SetVal(1, 3, 8); distancesMatrix.SetVal(1, 4, 5);
-            distancesMatrix.SetVal(2, 4, 2); distancesMatrix.SetVal(2, 7, 2);
-            distancesMatrix.SetVal(3, 4, 10); distancesMatrix.SetVal(3, 5, 4); distancesMatrix.SetVal(3, 6, 6);
-            distancesMatrix.SetVal(4, 5, 3); distancesMatrix.SetVal(4, 7, 1);*/
+            distancesMatrix.SetSimetricVal(0, 1, 6); distancesMatrix.SetSimetricVal(0, 2, 8);
+            distancesMatrix.SetSimetricVal(1, 2, 8); distancesMatrix.SetSimetricVal(1, 3, 8); distancesMatrix.SetSimetricVal(1, 4, 5);
+            distancesMatrix.SetSimetricVal(2, 4, 2); distancesMatrix.SetSimetricVal(2, 7, 2);
+            distancesMatrix.SetSimetricVal(3, 4, 10); distancesMatrix.SetSimetricVal(3, 5, 4); distancesMatrix.SetSimetricVal(3, 6, 6);
+            distancesMatrix.SetSimetricVal(4, 5, 3); distancesMatrix.SetSimetricVal(4, 7, 1);*/
 
             // Второй вариант
             // В реальных задачах каждая вершина имеет 2-5 ребер
-            matrixSize = 10;
+            matrixSize = 100;
+
+            // Настройка количества ребер у вершин
             int maxNumVertexEdge = 5;
             int diapUp = 3;
             int diapDown = 6;
 
-            distancesMatrix = new SymmetricMatrix(matrixSize);
+            distancesMatrix = new CMatrix(matrixSize);
             
             List<int> sectorList = new List<int>();
             for (int i = 0; i < matrixSize; i++)
@@ -164,12 +166,17 @@ namespace GeneticAlgorithms
                     sectorList = DecValInList(sectorList, i);
                     sectorList = DecValInList(sectorList, index);
 
-                    distancesMatrix.SetVal(i, index, RNGCSP.GetRandomNum(10, 31));
+                    distancesMatrix.SetSimetricVal(i, index, RNGCSP.GetRandomNum(10, 31));
                     edgeNum++;
-                    Console.Write("\r" + "Vertex: " + i + " | Edge Num: " + edgeNum);
+                    Console.Write("\r" + "Vertex: " + (i + 1) + " | Edge Num: " + edgeNum);
                 }
+                Console.Write("\r" + "Vertex: " + (i + 1) + " | Edge Num: " + edgeNum);
             }
 
+            if (matrixSize < 50)
+            {
+                Console.WriteLine("\n" + "Number of skeleton trees: " + MatrixOperation.GenNumOfSkeletonTrees(distancesMatrix));
+            }
             //distancesMatrix.PrintMatrix();
 
             return new WorstClientTask(distancesMatrix);
@@ -185,7 +192,7 @@ namespace GeneticAlgorithms
             AGenAlg genAlg = new BinaryGeneticAlgorithm(
                 false // Настройка вывода популяции
                 );
-            genAlg.SetMaxIterNum(INFINITY); // Настройка количества итераций генетического алгоритма
+            genAlg.SetMaxIterNum(/*INFINITY*/ 1000 ); // Настройка количества итераций генетического алгоритма
             genAlg.SetPoolsSize(
                 40, // Размер популяции
                 20, // Размер родительского пула

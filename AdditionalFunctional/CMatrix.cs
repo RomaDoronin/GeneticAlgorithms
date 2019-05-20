@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
-    class SymmetricMatrix
+    class CMatrix
     {
         private int _matrixSize;
         private List<double> _matrix;
 
-        public SymmetricMatrix(int matrixSize)
+        public CMatrix(int matrixSize)
         {
             _matrix = new List<double>();
             _matrixSize = matrixSize;
@@ -26,25 +26,17 @@ namespace GeneticAlgorithms
 
         public void SetVal(int indexI, int indexJ, double val)
         {
-            if (indexI > indexJ)
-            {
-                int index = indexI;
-                indexI = indexJ;
-                indexJ = index;
-            }
-
             _matrix[indexI * _matrixSize + indexJ] = val;
+        }
+
+        public void SetSimetricVal(int indexI, int indexJ, double val)
+        {
+            _matrix[indexI * _matrixSize + indexJ] = val;
+            _matrix[indexJ * _matrixSize + indexI] = val;
         }
 
         public double GetVal(int indexI, int indexJ)
         {
-            if (indexI > indexJ)
-            {
-                int index = indexI;
-                indexI = indexJ;
-                indexJ = index;
-            }
-
             return _matrix[indexI * _matrixSize + indexJ];
         }
 
@@ -59,10 +51,7 @@ namespace GeneticAlgorithms
             {
                 for (int j = 0; j < _matrixSize; j++)
                 {
-                    if (j >= i)
-                        Console.Write(_matrix[i * _matrixSize + j].ToString() + "	");
-                    else
-                        Console.Write(_matrix[j * _matrixSize + i].ToString() + "	");
+                    Console.Write(_matrix[i * _matrixSize + j].ToString() + "	");
                 }
                 Console.WriteLine();
             }

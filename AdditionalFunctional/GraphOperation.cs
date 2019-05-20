@@ -8,25 +8,25 @@ namespace GeneticAlgorithms
 {
     class GraphOperation
     {
-        public static SymmetricMatrix GetMaxSpeedMatrix(SymmetricMatrix speedMatrix)
+        public static CMatrix GetMaxSpeedMatrix(CMatrix speedMatrix)
         {
-            SymmetricMatrix timeMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
+            CMatrix timeMatrix = new CMatrix(speedMatrix.GetMatrixSize());
             for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
             {
                 for (int j = 0; j < speedMatrix.GetMatrixSize(); j++)
                 {
                     if (speedMatrix.GetVal(i, j) != 0)
                     {
-                        timeMatrix.SetVal(i, j, 1 / speedMatrix.GetVal(i, j));
+                        timeMatrix.SetSimetricVal(i, j, 1 / speedMatrix.GetVal(i, j));
                     }
                     else
                     {
-                        timeMatrix.SetVal(i, j, 0);
+                        timeMatrix.SetSimetricVal(i, j, 0);
                     }
                 }
             }
 
-            SymmetricMatrix minTimeMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
+            CMatrix minTimeMatrix = new CMatrix(speedMatrix.GetMatrixSize());
             for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
             {
                 DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(new SumFunctionStd());
@@ -34,22 +34,22 @@ namespace GeneticAlgorithms
 
                 for (int j = 0; j < timeList.Count; j++)
                 {
-                    minTimeMatrix.SetVal(i, j, timeList[j]);
+                    minTimeMatrix.SetSimetricVal(i, j, timeList[j]);
                 }
             }
 
-            SymmetricMatrix maxSpeedMatrix = new SymmetricMatrix(speedMatrix.GetMatrixSize());
+            CMatrix maxSpeedMatrix = new CMatrix(speedMatrix.GetMatrixSize());
             for (int i = 0; i < speedMatrix.GetMatrixSize(); i++)
             {
                 for (int j = 0; j < speedMatrix.GetMatrixSize(); j++)
                 {
                     if (minTimeMatrix.GetVal(i, j) != 0)
                     {
-                        maxSpeedMatrix.SetVal(i, j, 1 / minTimeMatrix.GetVal(i, j));
+                        maxSpeedMatrix.SetSimetricVal(i, j, 1 / minTimeMatrix.GetVal(i, j));
                     }
                     else
                     {
-                        maxSpeedMatrix.SetVal(i, j, 0);
+                        maxSpeedMatrix.SetSimetricVal(i, j, 0);
                     }
                 }
             }
@@ -57,9 +57,9 @@ namespace GeneticAlgorithms
             return maxSpeedMatrix;
         }
 
-        public static SymmetricMatrix GetShortestDistancesMatrix(SymmetricMatrix distancesMatrix)
+        public static CMatrix GetShortestDistancesMatrix(CMatrix distancesMatrix)
         {
-            SymmetricMatrix shortestDistancesMatrix = new SymmetricMatrix(distancesMatrix.GetMatrixSize());
+            CMatrix shortestDistancesMatrix = new CMatrix(distancesMatrix.GetMatrixSize());
 
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
             {
@@ -68,7 +68,7 @@ namespace GeneticAlgorithms
 
                 for (int j = 0; j < distanceList.Count; j++)
                 {
-                    shortestDistancesMatrix.SetVal(i, j, distanceList[j]);
+                    shortestDistancesMatrix.SetSimetricVal(i, j, distanceList[j]);
                 }
             }
             
@@ -83,7 +83,7 @@ namespace GeneticAlgorithms
         /// <param name="previousVertex">Предыдущая вершина</param>
         /// <param name="currVertex">текущая вершина</param>
         /// <returns></returns>
-        private static bool CheckNoCyclesInGraph(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int previousVertex, int currVertex)
+        private static bool CheckNoCyclesInGraph(CMatrix distancesMatrix, ref List<bool> visitedVertex, int previousVertex, int currVertex)
         {
             visitedVertex[currVertex] = true;
             for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
@@ -128,7 +128,7 @@ namespace GeneticAlgorithms
         /// <summary>
         /// Проверка что в граф нет циклов. Граф может быть не связным
         /// </summary>
-        public static bool CheckNoCyclesInGraph(SymmetricMatrix distancesMatrix)
+        public static bool CheckNoCyclesInGraph(CMatrix distancesMatrix)
         {
             List<bool> visitedVertex = new List<bool>();
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
@@ -139,7 +139,7 @@ namespace GeneticAlgorithms
             return CheckNoCyclesInGraph(distancesMatrix, ref visitedVertex, 0, 0);
         }
         
-        private static void BypassInDepthRec(SymmetricMatrix distancesMatrix, ref List<bool> visitedVertex, int currVertex)
+        private static void BypassInDepthRec(CMatrix distancesMatrix, ref List<bool> visitedVertex, int currVertex)
         {
             visitedVertex[currVertex] = true;
 
@@ -161,7 +161,7 @@ namespace GeneticAlgorithms
         /// <param name="distancesMatrix"></param>
         /// <param name="visitedVertex"></param>
         /// <param name="currVertex"></param>
-        public static bool CheckGraphIsConnected(SymmetricMatrix distancesMatrix)
+        public static bool CheckGraphIsConnected(CMatrix distancesMatrix)
         {
             List<bool> visitedVertex = new List<bool>();
             for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
@@ -174,35 +174,6 @@ namespace GeneticAlgorithms
             foreach (var vertex in visitedVertex)
             {
                 if (!vertex)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        
-        /// <summary>
-        /// Проверка что граф является остовным
-        /// </summary>
-        /// <param name="distancesMatrix"></param>
-        /// <returns></returns>
-        public static bool CheckGraphIsSkeleton(SymmetricMatrix distancesMatrix)
-        {
-            for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
-            {
-                bool isBreak = false;
-
-                for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
-                {
-                    if (distancesMatrix.GetVal(i, j) != 0)
-                    {
-                        isBreak = true;
-                        break;
-                    }
-                }
-
-                if (!isBreak)
                 {
                     return false;
                 }
