@@ -1,0 +1,6 @@
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Debug\GeneticAlgorithms.exe.config
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Debug\GeneticAlgorithms.exe
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Debug\GeneticAlgorithms.pdb
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Debug\GeneticAlgorithms.exe
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Debug\GeneticAlgorithms.pdb
+C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Debug\GeneticAlgorithms.csprojResolveAssemblyReference.cache
