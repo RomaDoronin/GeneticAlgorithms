@@ -1,12 +1,17 @@
 # Visual Studio
 /bin/
 /obj/
+/.vs/
 /Properties/
+/ipch/
 *.config
 *.csproj
+*.sln
+*.db
  
 # Builds
 /build/
+/Debug/
 *.bat
 *.apk
 *.app
