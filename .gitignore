@@ -8,6 +8,7 @@
 *.csproj
 *.sln
 *.db
+*.pdb
  
 # Builds
 /build/

@@ -1,7 +1,0 @@
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Release\GeneticAlgorithms.exe.config
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Release\GeneticAlgorithms.exe
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\bin\Release\GeneticAlgorithms.pdb
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Release\GeneticAlgorithms.exe
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Release\GeneticAlgorithms.pdb
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Release\GeneticAlgorithms.csprojResolveAssemblyReference.cache
-C:\Users\Doronin Roman\Documents\Visual Studio 2015\Projects\GeneticAlgorithms\GeneticAlgorithms\obj\Release\GeneticAlgorithms.csproj.CoreCompileInputs.cache
