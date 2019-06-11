@@ -1,6 +1,6 @@
 # Visual Studio
 /bin/
-/obj/
+src/obj/
 /.vs/
 /Properties/
 /ipch/
@@ -20,3 +20,4 @@
 
 # Merge files
 *.orig
+/src/obj

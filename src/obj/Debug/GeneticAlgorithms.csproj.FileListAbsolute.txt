@@ -1,6 +1,0 @@
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\src\obj\Debug\GeneticAlgorithms.csproj.CoreCompileInputs.cache
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\GeneticAlgorithms.exe.config
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\src\obj\Debug\GeneticAlgorithms.exe
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\src\obj\Debug\GeneticAlgorithms.pdb
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\GeneticAlgorithms.exe
-C:\Users\rdoronin\source\repos\GeneticAlgorithms\GeneticAlgorithms.pdb
