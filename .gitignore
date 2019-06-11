@@ -1,6 +1,5 @@
 # Visual Studio
 /bin/
-src/obj/
 /.vs/
 /Properties/
 /ipch/
