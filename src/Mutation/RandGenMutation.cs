@@ -14,34 +14,55 @@ namespace GeneticAlgorithms
     {
         private int _numOfMutGen;
 
-        public RandGenMutation(int mutationProbability, OPERATION_TARGET mutationTarget, int numOfMutGen) : base(mutationProbability, mutationTarget)
+        public RandGenMutation(int mutationProbability, OPERATION_TARGET mutationTarget, bool isDualMutation, int numOfMutGen) : base(mutationProbability, mutationTarget, isDualMutation)
         {
             _numOfMutGen = numOfMutGen;
         }
 
         protected override void DoMutation(ref List<Gen> chromosome)
         {
-            int mutGenNum = RNGCSP.GetRandomNum(0, chromosome.Count);
-
-            List<short> alleleList = new List<short>();
-            foreach (var allele in chromosome[mutGenNum].GetAlleleList())
+            int dualCount = 0;
+            do
             {
-                if (RNGCSP.GetRandomNum(0, 2) == 0)
+                int mutGenNum = RNGCSP.GetRandomNum(0, chromosome.Count);
+
+                List<short> alleleList = new List<short>();
+                foreach (var allele in chromosome[mutGenNum].GetAlleleList())
                 {
-                    alleleList.Add(allele);
-                }
-                else
-                {
-                    if (allele == 0)
+                    if (RNGCSP.GetRandomNum(0, 2) == 0)
                     {
-                        alleleList.Add(1);
+                        alleleList.Add(allele);
                     }
                     else
                     {
-                        alleleList.Add(0);
+                        if (allele == 0 && dualCount <= 0)
+                        {
+                            if (_isDualMutation)
+                            {
+                                dualCount++;
+                            }
+
+                            alleleList.Add(1);
+                        }
+                        else if (allele == 1 && dualCount >= 0)
+                        {
+                            if (_isDualMutation)
+                            {
+                                dualCount--;
+                            }
+
+                            alleleList.Add(0);
+                        }
+                        else
+                        {
+                            alleleList.Add(allele);
+                        }
                     }
                 }
-            }
+
+                chromosome[mutGenNum].SetAlleleList(alleleList);
+
+            } while (dualCount != 0);
 
             // На самом деле можно было бы просто написать
             //for (int i = 0; i < chromosome[mutGenNum].GetAlleleList().Count; i++)
@@ -49,8 +70,6 @@ namespace GeneticAlgorithms
             //    alleleList.Add((short)rngcsp.GetRandomNum(0, 2));
             //}
             // Потому что в случае бинарного представления это однозначно
-
-            chromosome[mutGenNum].SetAlleleList(alleleList);
         }
 
         protected override void SetMutChromosomeNumList(IPopulation population, ref List<int> mutChromosomeNumList)

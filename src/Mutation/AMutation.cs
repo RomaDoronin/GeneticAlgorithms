@@ -14,11 +14,16 @@ namespace GeneticAlgorithms
         /// </summary>
         private int _mutationProbability;
         private OPERATION_TARGET _mutationTarget;
+        /// <summary>
+        /// Двойственная мутация - мутация при хоторой количество "1" в хромосоме остается неизменным. тоесть гены мутируют парами
+        /// </summary>
+        protected bool _isDualMutation;
 
-        public AMutation(int mutationProbability, OPERATION_TARGET mutationTarget)
+        public AMutation(int mutationProbability, OPERATION_TARGET mutationTarget, bool isDualMutation)
         {
             _mutationProbability = mutationProbability;
             _mutationTarget = mutationTarget;
+            _isDualMutation = isDualMutation;
         }
 
         protected abstract void DoMutation(ref List<Gen> chromosome);
@@ -50,28 +55,29 @@ namespace GeneticAlgorithms
                 {
                     if (mutChromosomeNum == populationList.Count)
                     {
-                        int extraCycles = -2;
+                        int extraCycles = 0;
+                        Console.WriteLine();
                         do
                         {
-                            extraCycles++;
                             List<Gen> chromosome = individ.GetChromosome();
                             do // Чтобы не заменилась аллель, такая что приведет к несуществующему гену
                             {
                                 extraCycles++;
+
+                                //Console.WriteLine("Individ          : " + individ.ToString());
                                 if (_mutationProbability >= RNGCSP.GetRandomNum(0, 101))
                                 {
                                     DoMutation(ref chromosome);
                                 }
-
-                                //Console.WriteLine("Mutation chromosome: " + mutGen.ToString());
-                                //Console.WriteLine("Mutation gen: " + mutGenNum.ToString());
-
                                 individ.SetChromosome(chromosome);
+                                //Console.WriteLine("Mutation individ : " + individ.ToString());
+
+                                //Console.Write("\r" + "Missing mut: " + extraCycles);
 
                             } while (!task.CheckIndivid(individ));
                         } while (!task.LimitationsFunction(individ));
 
-                        //Console.WriteLine("\n" + "Extra Cycles: " + extraCycles);
+                        //Console.WriteLine("\nMatation " + mutChromosomeNum);
                     }
                 }
 

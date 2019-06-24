@@ -18,19 +18,21 @@ namespace GeneticAlgorithms
         /// <summary>
         /// Количество ребер
         /// </summary>
-        private int edgeSize;
+        private int _edgeSize;
+        private int _vertexSize;
 
         public WorstClientTask(CMatrix speedMatrix)
         {
             _speedMatrix = speedMatrix;
-            edgeSize = 0;
+            _vertexSize = speedMatrix.GetMatrixSize();
+            _edgeSize = 0;
             for (int i = 0; i < _speedMatrix.GetMatrixSize(); i++)
             {
                 for (int j = i; j < _speedMatrix.GetMatrixSize(); j++)
                 {
                     if (_speedMatrix.GetVal(i, j) != 0)
                     {
-                        edgeSize++;
+                        _edgeSize++;
                     }
                 }
             }
@@ -181,12 +183,28 @@ namespace GeneticAlgorithms
 
         public int GetSize()
         {
-            return edgeSize;
+            return _edgeSize;
         }
 
         public bool LimitationsFunction(Individ individ)
         {
             // Проверка на то что решение образует остовное дерево
+
+            /*int count = 0;
+            foreach (var ch in individ.ToString())
+            {
+                if (ch == '1')
+                {
+                    count++;
+                }
+
+                if (count > _vertexSize + 1)
+                {
+                    return false;
+                }
+            }
+
+            if ()*/
 
             // Инициализируем новую матрицу растояний
             CMatrix distancesMatrix = IndividToSpeedMatrix(individ);

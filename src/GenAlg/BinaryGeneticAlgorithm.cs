@@ -1,5 +1,5 @@
 ﻿//#define BACKPACK_300
-#define BACKPACK_800
+//#define BACKPACK_800
 
 using System;
 using System.Collections.Generic;
@@ -74,24 +74,25 @@ namespace GeneticAlgorithms
             while (!Stop())
             {
                 IPopulation matingPool = Selection(currPopulation);
-                PrintPopulation("Selection", matingPool);
+                PrintPopulation("Selection", matingPool); Console.WriteLine("Selection - OK");
 
                 IPopulation children = Сrossover(matingPool);
-                PrintPopulation("Crossover", children);
+                PrintPopulation("Crossover", children); Console.WriteLine("Crossover - OK");
 
                 Mutation(ref currPopulation, ref children);
-                PrintPopulation("Mutation", currPopulation);
+                PrintPopulation("Mutation", currPopulation); Console.WriteLine("Mutation - OK");
                 PrintPopulation("Mutation", children);
 
                 currPopulation = FormationNewPopulation(currPopulation, children);
-                PrintPopulation("Formation New Population", currPopulation);
+                PrintPopulation("Formation New Population", currPopulation); Console.WriteLine("Formation New Population - OK");
 
 #if BACKPACK_300
                 if (_max.maxVal >= 3343) break;
 #elif BACKPACK_800
                 if (_max.maxVal >= 8986) break;
 #else
-                if (_max.maxVal > 100) break;
+                // Максимум: 1.5274
+                if (_max.maxVal > 1.53) break;
 #endif
             }
 

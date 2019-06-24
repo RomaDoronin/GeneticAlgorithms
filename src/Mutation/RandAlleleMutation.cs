@@ -14,7 +14,8 @@ namespace GeneticAlgorithms
     {
         private int _numOfMutAllele;
 
-        public RandAlleleMutation(int mutationProbability, OPERATION_TARGET mutationTarget, int numOfMutAllele) : base(mutationProbability, mutationTarget)
+        // TODO: Сделать для этой мутации двойную мутацию 
+        public RandAlleleMutation(int mutationProbability, OPERATION_TARGET mutationTarget, bool isDualMutation, int numOfMutAllele) : base(mutationProbability, mutationTarget, isDualMutation)
         {
             _numOfMutAllele = numOfMutAllele;
         }

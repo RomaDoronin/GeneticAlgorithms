@@ -1,5 +1,5 @@
 ﻿//#define BACKPACK_300
-#define BACKPACK_800
+//#define BACKPACK_800
 //#define UNIT_TESTS
 
 using System;
@@ -131,7 +131,7 @@ namespace GeneticAlgorithms
 
             // Второй вариант
             // В реальных задачах каждая вершина имеет 2-5 ребер
-            matrixSize = 100;
+            matrixSize = 50;
 
             // Настройка количества ребер у вершин
             int maxNumVertexEdge = 5;
@@ -194,8 +194,8 @@ namespace GeneticAlgorithms
                 );
             genAlg.SetMaxIterNum(/*INFINITY*/ 1000 ); // Настройка количества итераций генетического алгоритма
             genAlg.SetPoolsSize(
-                40, // Размер популяции
-                20, // Размер родительского пула
+                20, // Размер популяции
+                10, // Размер родительского пула
                 10  // Количество получаемых потомков после скрещивания
                 );
 
@@ -212,7 +212,8 @@ namespace GeneticAlgorithms
             genAlg.SetMutation(new RandGenMutation(
                 100, // Вероятность мутации
                 OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
-                3 // Количество мутирующих генов
+                true, // Двойная мутация - сохраняет количество "0" и "1" в том же количестве, что и были
+                1 // Количество мутирующих генов
                 ));
 
             // ------------------------------------------------------------------------------------ Настройна селекции
@@ -235,7 +236,7 @@ namespace GeneticAlgorithms
                 new List<double>() { Krossingover.RAND_SET_BREAK_POINT } // Список точек для разбиения при кросинговере. Указываются числа от 0 до 1 невключительно. Хромасома делится на доли указанные в спике.
                 ));*/
 
-            genAlg.SetCross(new Recombination());
+            genAlg.SetCross(new Recombination(49));
 
             // ------------------------------------------------------------------------------------ Настройка выбора новой популяции
             genAlg.SetFormationNewPopulation(new LeaveBest());

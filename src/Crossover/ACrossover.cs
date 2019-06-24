@@ -34,6 +34,10 @@ namespace GeneticAlgorithms
 
             List<Individ> popList = new List<Individ>();
 
+            int missing_count = 0;
+            int child_count = 0;
+            Console.WriteLine();
+
             while (popList.Count < childSize)
             {
                 Individ parentFirst = new Individ();
@@ -53,6 +57,13 @@ namespace GeneticAlgorithms
                 if (LimitationsFunction(childFirst))
                 {
                     popList.Add(childFirst);
+                    child_count++;
+                    //Console.Write("\nChild: " + child_count + "\n");
+                }
+                else
+                {
+                    missing_count++;
+                    //Console.Write("\rMissing: " + missing_count);
                 }
 
                 Individ childSecond = new Individ();
@@ -60,6 +71,13 @@ namespace GeneticAlgorithms
                 if (LimitationsFunction(childSecond))
                 {
                     popList.Add(childSecond);
+                    child_count++;
+                    //Console.Write("\nChild: " + child_count + "\n");
+                }
+                else
+                {
+                    missing_count++;
+                    //Console.Write("\rMissing: " + missing_count);
                 }
 
                 if (parentNumbers.Count == 0)
