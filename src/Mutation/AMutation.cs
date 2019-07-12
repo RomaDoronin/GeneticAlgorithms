@@ -57,25 +57,27 @@ namespace GeneticAlgorithms
                     {
                         int extraCycles = 0;
                         Console.WriteLine();
-                        do
+                        List<Gen> chromosome = individ.GetChromosome();
+                        do // Чтобы не заменилась аллель, такая что приведет к несуществующему гену
                         {
-                            List<Gen> chromosome = individ.GetChromosome();
-                            do // Чтобы не заменилась аллель, такая что приведет к несуществующему гену
+                            extraCycles++;
+
+                            //Console.WriteLine("Individ          : " + individ.ToString());
+                            if (_mutationProbability >= RNGCSP.GetRandomNum(0, 101))
                             {
-                                extraCycles++;
+                                DoMutation(ref chromosome);
+                            }
+                            individ.SetChromosome(chromosome);
+                            //Console.WriteLine("Mutation individ : " + individ.ToString());
 
-                                //Console.WriteLine("Individ          : " + individ.ToString());
-                                if (_mutationProbability >= RNGCSP.GetRandomNum(0, 101))
-                                {
-                                    DoMutation(ref chromosome);
-                                }
-                                individ.SetChromosome(chromosome);
-                                //Console.WriteLine("Mutation individ : " + individ.ToString());
+                            //Console.Write("\r" + "Missing mut: " + extraCycles);
 
-                                //Console.Write("\r" + "Missing mut: " + extraCycles);
+                        } while (!task.CheckIndivid(individ));
 
-                            } while (!task.CheckIndivid(individ));
-                        } while (!task.LimitationsFunction(individ));
+                        if (!task.LimitationsFunction(individ))
+                        {
+                            individ.SetFineToFitnessFunction(1);
+                        }
 
                         //Console.WriteLine("\nMatation " + mutChromosomeNum);
                     }

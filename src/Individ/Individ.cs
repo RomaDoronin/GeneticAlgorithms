@@ -17,10 +17,15 @@ namespace GeneticAlgorithms
         /// Хромосома
         /// </summary>
         private List<Gen> _chromosome;
+        /// <summary>
+        /// Штраф к финтесфункции за нарушение функции ограничений
+        /// </summary>
+        private double _fineToFitnessFunction;
 
         public Individ()
         {
             _chromosome = new List<Gen>();
+            _fineToFitnessFunction = 0;
         }
 
         public Individ(Individ individ)
@@ -31,6 +36,8 @@ namespace GeneticAlgorithms
             {
                 _chromosome.Add(gen);
             }
+
+            _fineToFitnessFunction = individ._fineToFitnessFunction;
         }
 
         public void SetChromosome(List<Gen> chromosome)
@@ -52,6 +59,16 @@ namespace GeneticAlgorithms
             }
 
             return chromosome;
+        }
+
+        public void SetFineToFitnessFunction(double fineToFitnessFunction)
+        {
+            _fineToFitnessFunction = fineToFitnessFunction;
+        }
+
+        public double GetFineToFitnessFunction()
+        {
+            return _fineToFitnessFunction;
         }
 
         public override string ToString()

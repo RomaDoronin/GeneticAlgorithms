@@ -74,7 +74,7 @@ namespace GeneticAlgorithms
             while (!Stop())
             {
                 IPopulation matingPool = Selection(currPopulation);
-                PrintPopulation("Selection", matingPool); Console.WriteLine("Selection - OK");
+                PrintPopulation("Selection", matingPool); Console.WriteLine("\nSelection - OK");
 
                 IPopulation children = Сrossover(matingPool);
                 PrintPopulation("Crossover", children); Console.WriteLine("Crossover - OK");
@@ -92,7 +92,7 @@ namespace GeneticAlgorithms
                 if (_max.maxVal >= 8986) break;
 #else
                 // Максимум: 1.5274
-                if (_max.maxVal > 1.53) break;
+                if (_max.maxVal > 100) break;
 #endif
             }
 

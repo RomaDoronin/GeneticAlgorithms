@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GeneticAlgorithms
 {
     /// <summary>
-    /// В задаче мы имеем кабельную сеть. Кадный камель имеет свою скорость передачи данных. Требуется максимизировать минимальную скорость передачи среди всех клиентов/узлов/вершин
+    /// В задаче мы имеем кабельную сеть. Кадный кабель имеет свою скорость передачи данных. Требуется максимизировать минимальную скорость передачи среди всех клиентов/узлов/вершин
     /// </summary>
     class WorstClientTask : ITask
     {
@@ -66,6 +66,24 @@ namespace GeneticAlgorithms
             }
 
             return speedMatrix;
+        }
+
+        private int GetMatrixEdgeNum(CMatrix matrix)
+        {
+            int edgeCount = 0;
+
+            for (int i = 0; i < matrix.GetMatrixSize(); i++)
+            {
+                for (int j = i + 1; j < matrix.GetMatrixSize(); j++)
+                {
+                    if (matrix.GetVal(i, j) == 1)
+                    {
+                        edgeCount++;
+                    }
+                }
+            }
+
+            return edgeCount;
         }
 
         // Реализация интерфейса ITask
@@ -188,27 +206,14 @@ namespace GeneticAlgorithms
 
         public bool LimitationsFunction(Individ individ)
         {
-            // Проверка на то что решение образует остовное дерево
-
-            /*int count = 0;
-            foreach (var ch in individ.ToString())
-            {
-                if (ch == '1')
-                {
-                    count++;
-                }
-
-                if (count > _vertexSize + 1)
-                {
-                    return false;
-                }
-            }
-
-            if ()*/
-
             // Инициализируем новую матрицу растояний
             CMatrix distancesMatrix = IndividToSpeedMatrix(individ);
-            
+
+            if (GetMatrixEdgeNum(distancesMatrix) != (distancesMatrix.GetMatrixSize() - 1))
+            {
+                return false;
+            }
+
             if (!GraphOperation.CheckNoCyclesInGraph(distancesMatrix) || !GraphOperation.CheckGraphIsConnected(distancesMatrix))
                 return false;
 
@@ -222,6 +227,11 @@ namespace GeneticAlgorithms
 
         public double TargetFunction(Individ individ)
         {
+            if (individ.GetFineToFitnessFunction() == 1)
+            {
+                return 0;
+            }
+
             // Инициализируем новую матрицу скоростней
             CMatrix speedMatrix = IndividToSpeedMatrix(individ);
 
@@ -229,7 +239,7 @@ namespace GeneticAlgorithms
             CMatrix maxSpeedMatrix = GraphOperation.GetMaxSpeedMatrix(speedMatrix);
 
             // Поиск минимума в матрице
-            return MatrixOperation.FindMinValInMatrix(maxSpeedMatrix);
+            return MatrixOperation.FindMinValInMatrix(maxSpeedMatrix) * (1 - individ.GetFineToFitnessFunction());
         }
     }
 }

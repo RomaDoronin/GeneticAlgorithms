@@ -131,7 +131,7 @@ namespace GeneticAlgorithms
 
             // Второй вариант
             // В реальных задачах каждая вершина имеет 2-5 ребер
-            matrixSize = 50;
+            matrixSize = 10;
 
             // Настройка количества ребер у вершин
             int maxNumVertexEdge = 5;
@@ -173,10 +173,10 @@ namespace GeneticAlgorithms
                 Console.Write("\r" + "Vertex: " + (i + 1) + " | Edge Num: " + edgeNum);
             }
 
-            if (matrixSize < 50)
+            /*if (matrixSize < 50)
             {
                 Console.WriteLine("\n" + "Number of skeleton trees: " + MatrixOperation.GenNumOfSkeletonTrees(distancesMatrix));
-            }
+            }*/
             //distancesMatrix.PrintMatrix();
 
             return new WorstClientTask(distancesMatrix);
@@ -190,13 +190,13 @@ namespace GeneticAlgorithms
 
             // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm(
-                false // Настройка вывода популяции
+                true // Настройка вывода популяции
                 );
-            genAlg.SetMaxIterNum(/*INFINITY*/ 1000 ); // Настройка количества итераций генетического алгоритма
+            genAlg.SetMaxIterNum(INFINITY /*1000*/ ); // Настройка количества итераций генетического алгоритма
             genAlg.SetPoolsSize(
-                20, // Размер популяции
-                10, // Размер родительского пула
-                10  // Количество получаемых потомков после скрещивания
+                12, // Размер популяции
+                6, // Размер родительского пула
+                6  // Количество получаемых потомков после скрещивания
                 );
 
             // ------------------------------------------------------------------------------------ Настройка популяции
@@ -212,7 +212,7 @@ namespace GeneticAlgorithms
             genAlg.SetMutation(new RandGenMutation(
                 100, // Вероятность мутации
                 OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
-                true, // Двойная мутация - сохраняет количество "0" и "1" в том же количестве, что и были
+                false, // Двойная мутация - сохраняет количество "0" и "1" в том же количестве, что и были
                 1 // Количество мутирующих генов
                 ));
 
@@ -236,7 +236,7 @@ namespace GeneticAlgorithms
                 new List<double>() { Krossingover.RAND_SET_BREAK_POINT } // Список точек для разбиения при кросинговере. Указываются числа от 0 до 1 невключительно. Хромасома делится на доли указанные в спике.
                 ));*/
 
-            genAlg.SetCross(new Recombination(49));
+            genAlg.SetCross(new Recombination()); // 49
 
             // ------------------------------------------------------------------------------------ Настройка выбора новой популяции
             genAlg.SetFormationNewPopulation(new LeaveBest());

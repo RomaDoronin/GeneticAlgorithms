@@ -54,31 +54,19 @@ namespace GeneticAlgorithms
 
                 Individ childFirst = new Individ();
                 childFirst.SetChromosome(childchromosomeFirst);
-                if (LimitationsFunction(childFirst))
+                if (!LimitationsFunction(childFirst))
                 {
-                    popList.Add(childFirst);
-                    child_count++;
-                    //Console.Write("\nChild: " + child_count + "\n");
+                    childFirst.SetFineToFitnessFunction(1);
                 }
-                else
-                {
-                    missing_count++;
-                    //Console.Write("\rMissing: " + missing_count);
-                }
+                popList.Add(childFirst);
 
                 Individ childSecond = new Individ();
                 childSecond.SetChromosome(childchromosomeSecond);
-                if (LimitationsFunction(childSecond))
+                if (!LimitationsFunction(childSecond))
                 {
-                    popList.Add(childSecond);
-                    child_count++;
-                    //Console.Write("\nChild: " + child_count + "\n");
+                    childSecond.SetFineToFitnessFunction(1);
                 }
-                else
-                {
-                    missing_count++;
-                    //Console.Write("\rMissing: " + missing_count);
-                }
+                popList.Add(childSecond);
 
                 if (parentNumbers.Count == 0)
                 {
