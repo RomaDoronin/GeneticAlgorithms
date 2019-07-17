@@ -12,7 +12,7 @@ namespace GeneticAlgorithms
         private static RNGCryptoServiceProvider rnd = new RNGCryptoServiceProvider();
 
         /// <summary>
-        /// генерация случайного значения в диапазоне [minValue, maxValue)
+        /// Генерация случайного значения в диапазоне [minValue, maxValue)
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>

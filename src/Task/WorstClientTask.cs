@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithms
 {
+    public struct SEdge
+    {
+        public int row;
+        public int col;
+
+        public SEdge(int _row, int _col)
+        {
+            row = _row;
+            col = _col;
+        }
+    }
+
     /// <summary>
     /// В задаче мы имеем кабельную сеть. Кадный кабель имеет свою скорость передачи данных. Требуется максимизировать минимальную скорость передачи среди всех клиентов/узлов/вершин
     /// </summary>
@@ -19,71 +31,46 @@ namespace GeneticAlgorithms
         /// Количество ребер
         /// </summary>
         private int _edgeSize;
+        /// <summary>
+        /// Количество вершин
+        /// </summary>
         private int _vertexSize;
+        /// <summary>
+        /// Дерево решений для кодирования остовных деревьев
+        /// </summary>
+        private List<List<long>> _decisionTree;
+        /// <summary>
+        /// Количество листьев в дереве решений - количество получаемых графов с помощью дерева решений
+        /// </summary>
+        private static long _numVariantInDecisionTree;
+        private static List<SEdge> _edgeList;
 
         public WorstClientTask(CMatrix speedMatrix)
         {
             _speedMatrix = speedMatrix;
             _vertexSize = speedMatrix.GetMatrixSize();
-            _edgeSize = 0;
+            _edgeList = new List<SEdge>();
             for (int i = 0; i < _speedMatrix.GetMatrixSize(); i++)
             {
                 for (int j = i; j < _speedMatrix.GetMatrixSize(); j++)
                 {
                     if (_speedMatrix.GetVal(i, j) != 0)
                     {
-                        _edgeSize++;
+                        _edgeList.Add(new SEdge(i, j));
                     }
                 }
             }
-        }
+            _edgeSize = _edgeList.Count;
 
-        /// <summary>
-        /// Функция перевода данных из особи в матрицу расстояний
-        /// </summary>
-        /// <param name="individ"></param>
-        /// <returns></returns>
-        private CMatrix IndividToSpeedMatrix(Individ individ)
-        {
-            List<double> result = Decoder(individ).GetResult();
-            int resultCount = 0;
-
-            CMatrix speedMatrix = new CMatrix(_speedMatrix.GetMatrixSize());
-            for (int i = 0; i < _speedMatrix.GetMatrixSize(); i++)
+            int l = _edgeSize - _vertexSize + 2;
+            List<long> RefList = new List<long>();
+            for (int i = 0; i < _vertexSize - 2; i++)
             {
-                for (int j = i; j < _speedMatrix.GetMatrixSize(); j++)
-                {
-                    double val = _speedMatrix.GetVal(i, j);
-                    if (val != 0)
-                    {
-                        if (result[resultCount] == 1)
-                        {
-                            speedMatrix.SetSimetricVal(i, j, val);
-                        }
-                        resultCount++;
-                    }
-                }
+                RefList.Add(1);
             }
-
-            return speedMatrix;
-        }
-
-        private int GetMatrixEdgeNum(CMatrix matrix)
-        {
-            int edgeCount = 0;
-
-            for (int i = 0; i < matrix.GetMatrixSize(); i++)
-            {
-                for (int j = i + 1; j < matrix.GetMatrixSize(); j++)
-                {
-                    if (matrix.GetVal(i, j) == 1)
-                    {
-                        edgeCount++;
-                    }
-                }
-            }
-
-            return edgeCount;
+            _decisionTree = new List<List<long>>();
+            _decisionTree.Add(RefList);
+            _numVariantInDecisionTree = DecisionTree.CreateDecisionTree(_vertexSize, l, _decisionTree);
         }
 
         // Реализация интерфейса ITask
@@ -101,12 +88,42 @@ namespace GeneticAlgorithms
         /// </summary>
         public Individ Coder(VectorSolutionDouble solution)
         {
+            // Перевести набор ребер в остатки
+            int l = _edgeSize - _vertexSize + 2;
+            List<int> remnantsSet = Remnants.EdgeToRemnants(solution, l, _edgeSize);
+            //Printers.PrintListWithTitleInOneLine(remnantsSet, "Remainder");
+
+            // Ходим по отрезкам
+            List<List<long>> modDecisionTree = new List<List<long>>();
+            for (int count = 0; count < _decisionTree.Count; count++)
+            {
+                modDecisionTree.Add(new List<long>() { 1 });
+
+                foreach (var leaf in _decisionTree[count])
+                {
+                    modDecisionTree[count].Add(leaf);
+                }
+            }
+
+            // Выбираем первое ребро
+            int row = modDecisionTree.Count - 1 - remnantsSet[0];
+            int col = modDecisionTree[0].Count - 1;
+            long leftBound = 0;
+            for (int count = 0; count < remnantsSet[0]; count++)
+            {
+                leftBound += modDecisionTree[modDecisionTree.Count - 1 - count][col];
+            }
+            remnantsSet.RemoveAt(0);
+            long codeNumber = Remnants.DescentBySegments(remnantsSet, modDecisionTree, row, col, leftBound);
+
+            List<short> result = Binary.NumToBinary(codeNumber, _numVariantInDecisionTree);
+
             List<Gen> chromosome = new List<Gen>();
 
-            foreach (var val in solution.GetResult())
+            foreach (var val in result)
             {
                 Gen gen = new Gen();
-                gen.SetAlleleList(new List<short>() { (short)val } );
+                gen.SetAlleleList(new List<short>() { val } );
                 chromosome.Add(gen);
             }
 
@@ -116,100 +133,121 @@ namespace GeneticAlgorithms
         }
 
         /// <summary>
-        /// Декодирование варианта решения в хромосому
+        /// Декодирование варианта решения из хромосомы
         /// </summary>
         public VectorSolutionDouble Decoder(Individ individ)
         {
-            List<double> result = new List<double>();
-
+            List<short> binary = new List<short>();
             foreach (var gen in individ.GetChromosome())
             {
-                foreach (var allele in gen.GetAlleleList())
+                binary.Add(gen.GetAlleleList()[0]);
+            }
+
+            long codeNumber = Binary.BinaryToNum(binary, _numVariantInDecisionTree);
+
+            List<List<long>> modDecisionTree = new List<List<long>>();
+            for (int count = 0; count < _decisionTree.Count; count++)
+            {
+                modDecisionTree.Add(new List<long>() { 1 });
+
+                foreach (var leaf in _decisionTree[count])
                 {
-                    result.Add(allele);
+                    modDecisionTree[count].Add(leaf);
                 }
             }
 
+            List<int> adjacencyMatrix = new List<int>();
+            for (int i = 0; i < _vertexSize * _vertexSize; i++)
+            {
+                adjacencyMatrix.Add(0);
+            }
+
+            int l = modDecisionTree.Count;
+
+            List<int> result = new List<int>();
+            long resSum = 0;
+            int rowEl = l - 1;
+            int colEl = _vertexSize - 2;
+
+            for (int count = 0; count < l; count++)
+            {
+                rowEl = l - 1 - count;
+                resSum += modDecisionTree[rowEl][colEl];
+                if (codeNumber <= resSum)
+                {
+                    result.Add(count);
+                    break;
+                }
+            }
+
+            Remnants.FindingResidualSequence(modDecisionTree, rowEl, colEl, resSum - modDecisionTree[rowEl][colEl], codeNumber, result, 0);
+
+            //Printers.PrintListWithTitleInOneLine(result, "Remainder");
+
+            List<double> resultDouble = Remnants.RemnantsToVertex(result, _edgeSize, l);
+
+            //Printers.PrintListWithTitleInOneLine(resultDouble, "Vertex");
+
             VectorSolutionDouble vectorSolution = new VectorSolutionDouble();
-            vectorSolution.SetResult(result);
+            vectorSolution.SetResult(resultDouble);
             return vectorSolution;
         }
-
-        private void InitRandList(ref List<int> randList)
-        {
-            for (int i = 0; i < GetSize(); i++)
-            {
-                randList.Add(i);
-            }
-        }
-
+        
         /// <summary>
         /// Генерация решения
+        /// Строим действительно остовные деревья с помощью алгоритма построения
         /// </summary>
         public Individ GenerateInitialSolution()
         {
-            //Console.WriteLine("GenerateInitialSolution start");
-            Individ individ = new Individ();
-
-            List<Gen> chromosome = new List<Gen>();
-            for (int i = 0; i < GetSize(); i++)
-            {
-                Gen gen = new Gen();
-                gen.SetAlleleList(new List<short>() { 0 });
-                chromosome.Add(gen);
-            }
-
+            List<double> edgeList = new List<double>();
             List<int> randList = new List<int>();
-            InitRandList(ref randList);
+            Settes.InitNaturalList(randList, _edgeSize);
 
             while (true)
             {
-                Gen gen = new Gen();
-                gen.SetAlleleList(new List<short>() { 1 });
-
+                // Генерим значения из списка чтобы ребра не повторялись
                 int randListIndex = RNGCSP.GetRandomNum(0, randList.Count);
-                int randGenNum = randList[randListIndex];
-                //Console.Write(randGenNum.ToString());
+                int randEdgeNum = randList[randListIndex];
                 randList.RemoveAt(randListIndex);
-                chromosome[randGenNum] = gen;
-                individ.SetChromosome(chromosome);
 
-                CMatrix distancesMatrix = IndividToSpeedMatrix(individ);
+                edgeList.Add(randEdgeNum);
+                
+                // Переводим набор ребер в матрицу скоростей для проверки на наличие циклов и связанность графа
+                CMatrix speedMatrix = SpeedMatrix.EdgeListToSpeedMatrix(edgeList, _edgeList, _speedMatrix);
 
-                if (GraphOperation.CheckNoCyclesInGraph(distancesMatrix))
+                if (GraphOperation.CheckNoCyclesInGraph(speedMatrix))
                 {
-                    //Console.Write(" +");
-                    if (GraphOperation.CheckGraphIsConnected(distancesMatrix))
+                    if (GraphOperation.CheckGraphIsConnected(speedMatrix))
                     {
-                        //Console.Write(" +");
                         break;
                     }
                 }
                 else
                 {
-                    //Console.Write(" -");
-                    // Возможно надо будет вообще убирать ребро из пула выбора
-                    gen.SetAlleleList(new List<short>() { 0 });
-                    chromosome[randGenNum] = gen;
+                    // Если мы не брейкнулись, удаляем новое ребро
+                    edgeList.RemoveAt(edgeList.Count - 1);
                 }
-
-                //Console.WriteLine();
+                
+                // Повторяем до тех пор пока не получим связный граф без циклов
             }
 
-            return individ;
+            VectorSolutionDouble vectorSolution = new VectorSolutionDouble();
+            vectorSolution.SetResult(edgeList);
+            vectorSolution.Sort();
+            return Coder(vectorSolution);
         }
 
         public int GetSize()
         {
-            return _edgeSize;
+            return (int)MathFunction.Log2(_numVariantInDecisionTree) + 1;
         }
 
         public bool LimitationsFunction(Individ individ)
         {
             // Инициализируем новую матрицу растояний
-            CMatrix distancesMatrix = IndividToSpeedMatrix(individ);
+            CMatrix distancesMatrix = SpeedMatrix.IndividToSpeedMatrix(individ, this, _edgeList, _speedMatrix);
 
-            if (GetMatrixEdgeNum(distancesMatrix) != (distancesMatrix.GetMatrixSize() - 1))
+            if (MatrixOperation.GetMatrixEdgeNum(distancesMatrix) != (distancesMatrix.GetMatrixSize() - 1))
             {
                 return false;
             }
@@ -233,7 +271,7 @@ namespace GeneticAlgorithms
             }
 
             // Инициализируем новую матрицу скоростней
-            CMatrix speedMatrix = IndividToSpeedMatrix(individ);
+            CMatrix speedMatrix = SpeedMatrix.IndividToSpeedMatrix(individ, this, _edgeList, _speedMatrix);
 
             // Считаем матрицу максимальных скоростей
             CMatrix maxSpeedMatrix = GraphOperation.GetMaxSpeedMatrix(speedMatrix);

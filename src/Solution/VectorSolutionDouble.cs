@@ -46,5 +46,48 @@ namespace GeneticAlgorithms
 
             return outStr;
         }
+
+        public void Sort()
+        {
+            SortRec(0, _vector.Count - 1);
+        }
+
+        private void SortRec(int first, int last)
+        {
+            int i = first, j = last;
+            double x = _vector[(first + last) / 2];
+            
+            do
+            {
+                while (_vector[i] < x)
+                {
+                    i++;
+                }
+
+                while (_vector[j] > x)
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    if (_vector[i] > _vector[j])
+                    {
+                        ListOperation.Swap(_vector, i, j);
+                    }
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (i < last)
+            {
+                SortRec(i, last);
+            }
+            if (first < j)
+            {
+                SortRec(first, j);
+            }
+        }
     }
 }

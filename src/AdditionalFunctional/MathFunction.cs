@@ -19,5 +19,17 @@ namespace GeneticAlgorithms
 
             return count;
         }
+
+        public static long Log2(long x)
+        {
+            long count = 0;
+            while (x / 2 != 0)
+            {
+                count++;
+                x /= 2;
+            }
+
+            return count;
+        }
     }
 }

@@ -132,5 +132,23 @@ namespace GeneticAlgorithms
 
             return (int)GetDeterminantRec(GetSubMatrix(kirchhoffMatrix, 0, 0));
         }
+
+        public static int GetMatrixEdgeNum(CMatrix matrix)
+        {
+            int edgeCount = 0;
+
+            for (int i = 0; i < matrix.GetMatrixSize(); i++)
+            {
+                for (int j = i + 1; j < matrix.GetMatrixSize(); j++)
+                {
+                    if (matrix.GetVal(i, j) == 1)
+                    {
+                        edgeCount++;
+                    }
+                }
+            }
+
+            return edgeCount;
+        }
     }
 }

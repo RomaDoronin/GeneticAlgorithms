@@ -185,12 +185,12 @@ namespace GeneticAlgorithms
         static void Main(string[] args)
         {
 #if UNIT_TESTS
-            UnitTests.UTGraphOperation.UnitTestsStart();
+            UnitTests.UnitTests.StartAllUnitTest();
 #else
 
             // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm(
-                true // Настройка вывода популяции
+                false // Настройка вывода популяции
                 );
             genAlg.SetMaxIterNum(INFINITY /*1000*/ ); // Настройка количества итераций генетического алгоритма
             genAlg.SetPoolsSize(
