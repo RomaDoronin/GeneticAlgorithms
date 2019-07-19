@@ -25,6 +25,12 @@ namespace GeneticAlgorithms
             }
         }
 
+        public Gen(short val)
+        {
+            Gen gen = new Gen();
+            gen.SetAlleleList(new List<short>() { val });
+        }
+
         public void SetAlleleList(List<short> alleleList) => _alleleList = alleleList;
 
         public List<short> GetAlleleList()

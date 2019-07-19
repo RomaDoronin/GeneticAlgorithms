@@ -8,23 +8,6 @@ namespace GeneticAlgorithms.UnitTests
 {
     class UTGraphOperation
     {
-        public static double Sum(List<double> list)
-        {
-            if (list.Count == 1)
-            {
-                return list[0];
-            }
-
-            double sumT = 0.0;
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                sumT += 1 / list[i];
-            }
-
-            return 1 / sumT;
-        }
-
         public static void UnitTestsStart()
         {
             // Дерево
@@ -48,13 +31,13 @@ namespace GeneticAlgorithms.UnitTests
             }            
             CMatrix maxSpeedMatrix1 = new CMatrix(8);
             {
-                maxSpeedMatrix1.SetSimetricVal(0, 1, Sum(new List<double>() { 8, 8 })); maxSpeedMatrix1.SetSimetricVal(0, 2, 8); maxSpeedMatrix1.SetSimetricVal(0, 3, Sum(new List<double>() { 8, 2, 3, 4 })); maxSpeedMatrix1.SetSimetricVal(0, 4, Sum(new List<double>() { 8,2 })); maxSpeedMatrix1.SetSimetricVal(0, 5, Sum(new List<double>() { 8,2,3 })); maxSpeedMatrix1.SetSimetricVal(0, 6, Sum(new List<double>() { 8,2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(0, 7, Sum(new List<double>() { 8,2,1 }));
-                maxSpeedMatrix1.SetSimetricVal(1, 2, 8); maxSpeedMatrix1.SetSimetricVal(1, 3, Sum(new List<double>() { 8,2,3,4 })); maxSpeedMatrix1.SetSimetricVal(1, 4, Sum(new List<double>() { 8,2 })); maxSpeedMatrix1.SetSimetricVal(1, 5, Sum(new List<double>() { 8,2,3 })); maxSpeedMatrix1.SetSimetricVal(1, 6, Sum(new List<double>() { 8,2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(1, 7, Sum(new List<double>() { 8,2,1 }));
-                maxSpeedMatrix1.SetSimetricVal(2, 3, Sum(new List<double>() { 2,3,4 })); maxSpeedMatrix1.SetSimetricVal(2, 4, 2); maxSpeedMatrix1.SetSimetricVal(2, 5, Sum(new List<double>() { 2,3 })); maxSpeedMatrix1.SetSimetricVal(2, 6, Sum(new List<double>() { 2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(2, 7, Sum(new List<double>() { 2,1 }));
-                maxSpeedMatrix1.SetSimetricVal(3, 4, Sum(new List<double>() { 4,3 })); maxSpeedMatrix1.SetSimetricVal(3, 5, 4); maxSpeedMatrix1.SetSimetricVal(3, 6, 6); maxSpeedMatrix1.SetSimetricVal(3, 7, Sum(new List<double>() { 4,3,1 }));
-                maxSpeedMatrix1.SetSimetricVal(4, 5, 3); maxSpeedMatrix1.SetSimetricVal(4, 6, Sum(new List<double>() { 3,4,6 })); maxSpeedMatrix1.SetSimetricVal(4, 7, 1);
-                maxSpeedMatrix1.SetSimetricVal(5, 6, Sum(new List<double>() { 4,6 })); maxSpeedMatrix1.SetSimetricVal(5, 7, Sum(new List<double>() {3,1}));
-                maxSpeedMatrix1.SetSimetricVal(6, 7, Sum(new List<double>() { 1,3,4,6 }));
+                maxSpeedMatrix1.SetSimetricVal(0, 1, ListOperation.InverseSumInverseNumbers(new List<double>() { 8, 8 })); maxSpeedMatrix1.SetSimetricVal(0, 2, 8); maxSpeedMatrix1.SetSimetricVal(0, 3, ListOperation.InverseSumInverseNumbers(new List<double>() { 8, 2, 3, 4 })); maxSpeedMatrix1.SetSimetricVal(0, 4, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2 })); maxSpeedMatrix1.SetSimetricVal(0, 5, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,3 })); maxSpeedMatrix1.SetSimetricVal(0, 6, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(0, 7, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,1 }));
+                maxSpeedMatrix1.SetSimetricVal(1, 2, 8); maxSpeedMatrix1.SetSimetricVal(1, 3, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,3,4 })); maxSpeedMatrix1.SetSimetricVal(1, 4, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2 })); maxSpeedMatrix1.SetSimetricVal(1, 5, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,3 })); maxSpeedMatrix1.SetSimetricVal(1, 6, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(1, 7, ListOperation.InverseSumInverseNumbers(new List<double>() { 8,2,1 }));
+                maxSpeedMatrix1.SetSimetricVal(2, 3, ListOperation.InverseSumInverseNumbers(new List<double>() { 2,3,4 })); maxSpeedMatrix1.SetSimetricVal(2, 4, 2); maxSpeedMatrix1.SetSimetricVal(2, 5, ListOperation.InverseSumInverseNumbers(new List<double>() { 2,3 })); maxSpeedMatrix1.SetSimetricVal(2, 6, ListOperation.InverseSumInverseNumbers(new List<double>() { 2,3,4,6 })); maxSpeedMatrix1.SetSimetricVal(2, 7, ListOperation.InverseSumInverseNumbers(new List<double>() { 2,1 }));
+                maxSpeedMatrix1.SetSimetricVal(3, 4, ListOperation.InverseSumInverseNumbers(new List<double>() { 4,3 })); maxSpeedMatrix1.SetSimetricVal(3, 5, 4); maxSpeedMatrix1.SetSimetricVal(3, 6, 6); maxSpeedMatrix1.SetSimetricVal(3, 7, ListOperation.InverseSumInverseNumbers(new List<double>() { 4,3,1 }));
+                maxSpeedMatrix1.SetSimetricVal(4, 5, 3); maxSpeedMatrix1.SetSimetricVal(4, 6, ListOperation.InverseSumInverseNumbers(new List<double>() { 3,4,6 })); maxSpeedMatrix1.SetSimetricVal(4, 7, 1);
+                maxSpeedMatrix1.SetSimetricVal(5, 6, ListOperation.InverseSumInverseNumbers(new List<double>() { 4,6 })); maxSpeedMatrix1.SetSimetricVal(5, 7, ListOperation.InverseSumInverseNumbers(new List<double>() {3,1}));
+                maxSpeedMatrix1.SetSimetricVal(6, 7, ListOperation.InverseSumInverseNumbers(new List<double>() { 1,3,4,6 }));
             }
 
             // Граф

@@ -73,7 +73,8 @@ namespace GeneticAlgorithms
             _numVariantInDecisionTree = DecisionTree.CreateDecisionTree(_vertexSize, l, _decisionTree);
         }
 
-        // Реализация интерфейса ITask
+        /////////////////////////////////
+        /// Реализация интерфейса ITask
 
         /// <summary>
         /// Данная задача в дополнительных проверках особи не нуждается

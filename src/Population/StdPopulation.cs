@@ -9,45 +9,15 @@ namespace GeneticAlgorithms
     class StdPopulation : IPopulation
     {
         private List<Individ> _individList;
-        //private int _iterator;
-        //private bool _isEnd;
-
-        // Дополнительный функционал
+        
         public StdPopulation()
         {
             _individList = new List<Individ>();
         }
 
-        // Реализация интерфейса
+        /////////////////////////////////
+        /// Реализация интерфейса
 
-        // Внешний итератор
-        //public Individ GetFirstIndivid()
-        //{
-        //    _iterator = 0;
-        //    _isEnd = false;
-        //    Individ individ = new Individ(_individList[_iterator]);
-        //    return individ;
-        //}        
-        //public Individ GetNextIndivid()
-        //{
-        //    _iterator++;
-        //    Individ individ;
-
-        //    if (_iterator == _individList.Count)
-        //    {
-        //        _isEnd = true;
-        //        individ = new Individ();
-        //    }
-        //    else
-        //    {
-        //        individ = new Individ(_individList[_iterator]);
-        //    }
-
-             
-        //    return individ;
-        //}
-        //public bool IsEnd() => _isEnd;
-        
         public List<Individ> GetPopulationList()
         {
             List<Individ> individList = new List<Individ>();
@@ -58,6 +28,7 @@ namespace GeneticAlgorithms
 
             return individList;
         }
+
         public void SetPopulationList(List<Individ> popList) => _individList = popList;
 
         public void AddIndivid(Individ individ) => _individList.Add(individ);

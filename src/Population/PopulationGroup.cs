@@ -10,16 +10,15 @@ namespace GeneticAlgorithms
     {
         private List<IPopulation> _populationList = new List<IPopulation>();
 
-        //private int _iterator;
-        //private bool _isEnd;
-
         // Новый функционал
         public void AddPopulation(ref IPopulation population)
         {
             _populationList.Add(population);
         }
 
-        // Поддержка интерфейса IPopulation
+        /////////////////////////////////
+        /// Поддержка интерфейса IPopulation
+
         public void AddIndivid(Individ individ)
         {
             Console.WriteLine("[ WARNING ] : При добавление к группе особи(individ) она добавляется в первую популяцию в группе");
@@ -37,36 +36,6 @@ namespace GeneticAlgorithms
 
             return sizeSum;
         }
-
-        //public Individ GetFirstIndivid()
-        //{
-        //    _iterator = 0;
-        //    _isEnd = false;
-        //    return _populationList[_iterator].GetFirstIndivid();
-        //}
-
-        //public Individ GetNextIndivid()
-        //{
-        //    Individ individ;
-        //    if (!_populationList[_iterator].IsEnd())
-        //    {
-        //        individ = _populationList[_iterator].GetNextIndivid();
-
-        //        if ((_iterator == _populationList.Count - 1) && (_populationList[_iterator].IsEnd()))
-        //        {
-        //            _isEnd = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _iterator++;
-        //        individ = _populationList[_iterator].GetFirstIndivid();
-        //    }
-
-        //    return individ;
-        //}
-
-        //public bool IsEnd() =>_isEnd;
 
         public List<Individ> GetPopulationList()
         {

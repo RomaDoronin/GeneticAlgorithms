@@ -20,5 +20,21 @@ namespace GeneticAlgorithms
                 naturalList.Add(i);
             }
         }
+
+        public static void SetRandCell(int countPOne, int numberOfOne, List<Gen> genList, List<int> randIndexList)
+        {
+            while (countPOne != numberOfOne)
+            {
+                int index = RNGCSP.GetRandomNum(0, randIndexList.Count);
+                genList[randIndexList[index]] = new Gen(1);
+                randIndexList.RemoveAt(index);
+                countPOne++;
+            }
+
+            foreach (var index in randIndexList)
+            {
+                genList[index] = new Gen(0);
+            }
+        }
     }
 }

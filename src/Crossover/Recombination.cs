@@ -28,41 +28,6 @@ namespace GeneticAlgorithms
             _numberOfOne = numberOfOne;
         }
 
-        private List<T> ListCopy<T>(List<T> list)
-        {
-            List<T> c_list = new List<T>();
-            foreach (var val in list)
-            {
-                c_list.Add(val);
-            }
-
-            return c_list;
-        }
-
-        private Gen GetGen(short val)
-        {
-            Gen gen = new Gen();
-            gen.SetAlleleList(new List<short>() { val });
-
-            return gen;
-        }
-
-        private void SetRandCell(int countPOne, List<Gen> genList, List<int> randIndexList)
-        {
-            while (countPOne != _numberOfOne)
-            {
-                int index = RNGCSP.GetRandomNum(0, randIndexList.Count);
-                genList[randIndexList[index]] = GetGen(1);
-                randIndexList.RemoveAt(index);
-                countPOne++;
-            }
-
-            foreach (var index in randIndexList)
-            {
-                genList[index] = GetGen(0);
-            }
-        }
-
         protected override void DoCrossover(List<Gen> chromosomeFirst, List<Gen> chromosomeSecond, ref List<Gen> childchromosomeFirst, ref List<Gen> childchromosomeSecond)
         {
             if (_numberOfOne == ANY)
@@ -102,26 +67,26 @@ namespace GeneticAlgorithms
                             if (chromosomeFirst[i].GetAlleleList()[j] == 1)
                             {
                                 countPOne++;
-                                childchromosomeFirst.Add(GetGen(1));
+                                childchromosomeFirst.Add(new Gen(1));
                             }
                             else
                             {
 
-                                childchromosomeFirst.Add(GetGen(0));
+                                childchromosomeFirst.Add(new Gen(0));
                             }
                         }
                         else
                         {
 
-                            childchromosomeFirst.Add(GetGen(-1));
+                            childchromosomeFirst.Add(new Gen(-1));
                             randIndexList.Add(i * chromosomeFirst[i].GetAlleleList().Count + j);
                         }
                     }
                 }
 
-                childchromosomeSecond = ListCopy<Gen>(childchromosomeFirst);
-                SetRandCell(countPOne, childchromosomeFirst, ListCopy<int>(randIndexList));
-                SetRandCell(countPOne, childchromosomeSecond, ListCopy<int>(randIndexList));
+                childchromosomeSecond = ListOperation.Copy<Gen>(childchromosomeFirst);
+                Settes.SetRandCell(countPOne, _numberOfOne, childchromosomeFirst, ListOperation.Copy<int>(randIndexList));
+                Settes.SetRandCell(countPOne, _numberOfOne, childchromosomeSecond, ListOperation.Copy<int>(randIndexList));
             }
         }
     }

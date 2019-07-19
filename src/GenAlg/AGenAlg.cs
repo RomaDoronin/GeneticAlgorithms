@@ -66,16 +66,26 @@ namespace GeneticAlgorithms
             return _task.TargetFunction(individ);
         }
 
-        // Создание начальной популяции
+        /// <summary>
+        /// Создание начальной популяции
+        /// </summary>
+        /// <returns></returns>
         protected abstract IPopulation CreatePopulation();
 
-        // Отбор пула родителей
+        /// <summary>
+        /// Отбор пула родителей
+        /// </summary>
+        /// <param name="currPopulation"></param>
+        /// <returns></returns>
         protected IPopulation Selection(IPopulation currPopulation)
         {
             return _selection.Selection(currPopulation, _task.TargetFunction, ref _max, _matingPoolSize);
         }
 
-        // Проверка на достижение результата
+        /// <summary>
+        /// Проверка на достижение результата
+        /// </summary>
+        /// <returns></returns>
         protected abstract bool Stop();
 
         /// <summary>
