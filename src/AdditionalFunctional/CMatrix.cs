@@ -56,5 +56,21 @@ namespace GeneticAlgorithms
                 Console.WriteLine();
             }
         }
+
+        public override string ToString()
+        {
+            String outStr = " ";
+
+            for (int i = 0; i < _matrixSize; i++)
+            {
+                for (int j = 0; j < _matrixSize; j++)
+                {
+                    outStr += _matrix[i * _matrixSize + j].ToString() + "	";
+                }
+                outStr += "\n";
+            }
+
+            return outStr;
+        }
     }
 }

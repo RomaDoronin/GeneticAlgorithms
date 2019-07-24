@@ -114,6 +114,7 @@ namespace GeneticAlgorithms
             {
                 leftBound += modDecisionTree[modDecisionTree.Count - 1 - count][col];
             }
+            //Printers.PrintListWithTitleInOneLine(remnantsSet, "Remnants");
             remnantsSet.RemoveAt(0);
             long codeNumber = Remnants.DescentBySegments(remnantsSet, modDecisionTree, row, col, leftBound);
 

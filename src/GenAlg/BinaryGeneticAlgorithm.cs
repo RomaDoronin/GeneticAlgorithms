@@ -36,12 +36,21 @@ namespace GeneticAlgorithms
                 }
 
                 int count = 0;
-                Console.WriteLine(opName);
+                Console.WriteLine("\n" + opName);
                 foreach (var individ in iteratorPopList)
                 {
                     List<Gen> chromosome = individ.GetChromosome();
                     double targFuncRes = FitnessFunction(individ);
-                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + (((int)(targFuncRes * 1000)) / 1000.0).ToString() + " - " + ((int)((targFuncRes * 100) / sum)).ToString() + "%");
+                    string acc;
+                    if (sum != 0)
+                    {
+                        acc = ((int)((targFuncRes * 100) / sum)).ToString();
+                    }
+                    else
+                    {
+                        acc = "0";
+                    }
+                    Console.WriteLine("[" + count.ToString() + "] " + individ.ToString() + " - " + (((int)(targFuncRes * 1000)) / 1000.0).ToString() + " - " + acc + "%");
                     count++;
                 }
             }

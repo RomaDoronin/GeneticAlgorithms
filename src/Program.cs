@@ -2,11 +2,14 @@
 //#define BACKPACK_800
 //#define UNIT_TESTS
 
+//#define NEW_MATRIX
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace GeneticAlgorithms
 {
@@ -133,13 +136,16 @@ namespace GeneticAlgorithms
             // В реальных задачах каждая вершина имеет 2-5 ребер
             matrixSize = 10;
 
+#if NEW_MATRIX
             // Настройка количества ребер у вершин
             int maxNumVertexEdge = 5;
             int diapUp = 3;
             int diapDown = 6;
+#endif
 
             distancesMatrix = new CMatrix(matrixSize);
-            
+
+#if NEW_MATRIX
             List<int> sectorList = new List<int>();
             for (int i = 0; i < matrixSize; i++)
             {
@@ -172,12 +178,39 @@ namespace GeneticAlgorithms
                 }
                 Console.Write("\r" + "Vertex: " + (i + 1) + " | Edge Num: " + edgeNum);
             }
+#endif
 
             /*if (matrixSize < 50)
             {
                 Console.WriteLine("\n" + "Number of skeleton trees: " + MatrixOperation.GenNumOfSkeletonTrees(distancesMatrix));
             }*/
             //distancesMatrix.PrintMatrix();
+
+#if NEW_MATRIX
+            File.WriteAllText("C:\\Users\\rdoronin\\source\\repos\\GeneticAlgorithms\\distances_matrix.txt", distancesMatrix.ToString());
+#else
+            FileStream file = new FileStream("C:\\Users\\rdoronin\\source\\repos\\GeneticAlgorithms\\distances_matrix.txt", FileMode.Open);
+            StreamReader reader = new StreamReader(file);
+
+            for (int i = 0; i < distancesMatrix.GetMatrixSize(); i++)
+            {
+                String str = reader.ReadLine();
+                int count = 0;
+                for (int j = 0; j < distancesMatrix.GetMatrixSize(); j++)
+                {
+                    String subStr = "";
+                    while (str[count] != '\t')
+                    {
+                        subStr += str[count];
+                        count++;
+                    }
+                    count++;
+                    distancesMatrix.SetSimetricVal(i, j, Convert.ToDouble(subStr));
+                }
+            }
+
+            reader.Close();
+#endif
 
             return new WorstClientTask(distancesMatrix);
         }
@@ -190,14 +223,14 @@ namespace GeneticAlgorithms
 
             // ------------------------------------------------------------------------------------ Настройка генетичекого алгоритма
             AGenAlg genAlg = new BinaryGeneticAlgorithm(
-                false // Настройка вывода популяции
-                );
-            genAlg.SetMaxIterNum(INFINITY /*1000*/ ); // Настройка количества итераций генетического алгоритма
+                                                        true // Настройка вывода популяции
+                                                       );
+            genAlg.SetMaxIterNum(/*INFINITY*/2000); // Настройка количества итераций генетического алгоритма
             genAlg.SetPoolsSize(
-                12, // Размер популяции
-                6, // Размер родительского пула
-                6  // Количество получаемых потомков после скрещивания
-                );
+                                64, // Размер популяции
+                                32, // Размер родительского пула
+                                32  // Количество получаемых потомков после скрещивания
+                               );
 
             // ------------------------------------------------------------------------------------ Настройка популяции
             genAlg.SetPopulation(new StdPopulation());
@@ -210,11 +243,11 @@ namespace GeneticAlgorithms
                 ));*/
 
             genAlg.SetMutation(new RandGenMutation(
-                100, // Вероятность мутации
-                OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
-                false, // Двойная мутация - сохраняет количество "0" и "1" в том же количестве, что и были
-                1 // Количество мутирующих генов
-                ));
+                                                   100, // Вероятность мутации
+                                                   OPERATION_TARGET.ALL, // Выбор объекта муктации (дети, родители, все)
+                                                   false, // Двойная мутация - сохраняет количество "0" и "1" в том же количестве, что и были
+                                                   1 // Количество мутирующих генов
+                                                  ));
 
             // ------------------------------------------------------------------------------------ Настройна селекции
             /*genAlg.SetSelect(new CuttingSelection());*/
@@ -224,9 +257,9 @@ namespace GeneticAlgorithms
                 ));*/
 
             genAlg.SetSelect(new TournamentSelection(
-                2, // Размер турнирной группы
-                true // Детерминированный выбор или нет. При детерминированном выборе из группы берется "лучший" с вероятность 1, при недетерминированном выборе выбирается "лучший" по принцципу рулетки
-                ));
+                                                     2, // Размер турнирной группы
+                                                     true // Детерминированный выбор или нет. При детерминированном выборе из группы берется "лучший" с вероятность 1, при недетерминированном выборе выбирается "лучший" по принцципу рулетки
+                                                    ));
 
             // ------------------------------------------------------------------------------------ Настройка выбора "родителей"
             genAlg.SetSelectParent(new RandomlyWithoutRepetitions());
@@ -236,7 +269,7 @@ namespace GeneticAlgorithms
                 new List<double>() { Krossingover.RAND_SET_BREAK_POINT } // Список точек для разбиения при кросинговере. Указываются числа от 0 до 1 невключительно. Хромасома делится на доли указанные в спике.
                 ));*/
 
-            genAlg.SetCross(new Recombination()); // 49
+            genAlg.SetCross(new Recombination());
 
             // ------------------------------------------------------------------------------------ Настройка выбора новой популяции
             genAlg.SetFormationNewPopulation(new LeaveBest());

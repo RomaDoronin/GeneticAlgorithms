@@ -41,13 +41,17 @@ namespace GeneticAlgorithms
         {
             if (remnantsSet.Count > 0)
             {
-                if (remnantsSet[0] > 0) // UP
+                long left = decisionTree[row][col - 1];
+
+                if (remnantsSet[0] > 0)
                 {
+                    // UP [↑]
                     remnantsSet[0]--;
-                    return DescentBySegments(remnantsSet, decisionTree, row - 1, col, leftBound + decisionTree[row][col - 1]);
+                    return DescentBySegments(remnantsSet, decisionTree, row - 1, col, leftBound + left);
                 }
-                else // DOWN
+                else
                 {
+                    // LEFT [←]
                     remnantsSet.RemoveAt(0);
                     return DescentBySegments(remnantsSet, decisionTree, row, col - 1, leftBound);
                 }
@@ -70,7 +74,7 @@ namespace GeneticAlgorithms
         /// <param name="storage"></param>
         public static void FindingResidualSequence(List<List<long>> decisionTree, int row, int col, long leftBound, long codeNumber, List<int> result, int storage)
         {
-            if (col > 0)
+            if (col > 0 && row > 0)
             {
                 long left = decisionTree[row][col - 1];
 
